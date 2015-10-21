@@ -7,6 +7,7 @@
  */
 
 foreach (glob($_SERVER['DOCUMENT_ROOT'] . "/common/*.php") as $filename) {
+    if (strpos($filename,"configuration_public.php") === false)
     include_once $filename;
 }
 
