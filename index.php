@@ -7,9 +7,11 @@
  */
 
 foreach (glob($_SERVER['DOCUMENT_ROOT'] . "/common/*.php") as $filename) {
-    if (strpos($filename,"configuration_public.php") === false)
-    include_once $filename;
+    if (strpos($filename,"configuration_public.php") === false) {
+        include_once $filename;
+    }
 }
+
 
 foreach (glob($_SERVER['DOCUMENT_ROOT'] . "/controller/*.php") as $filename) {
     include_once $filename;

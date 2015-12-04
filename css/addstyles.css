@@ -116,3 +116,37 @@ div.message.content,
     background: transparent;
     height: 40px;
 }
+
+
+form.no-replace .no-replace-loading-content,
+.replace-loading-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -25px;
+    margin-top: -25px;
+    z-index: 100;
+    opacity: 0;
+}
+
+form.no-replace .no-replace-loading-content img,
+.replace-loading-content img {
+    width: 50px;
+    height: 50px;
+}
+
+form.no-replace.submitting .no-replace-loading-content,
+.replace-loading-content.show {
+    opacity: 1;
+}
+
+form.submitting {
+    opacity: 0.6;
+}
+
+form.submitting input,
+form.submitting select,
+form.submitting textarea {
+    pointer-events: none;
+    tab-index: -1;
+}

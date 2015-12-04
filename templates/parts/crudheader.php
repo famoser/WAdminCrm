@@ -16,4 +16,4 @@ include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/header.php"; ?>
         <?php
         }
         include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/messagetemplate.php"; ?>
-
+        <div class="replace-loading-content"> <img src="/images/puff.svg" alt="wird geladen..."></div>
