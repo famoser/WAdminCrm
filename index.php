@@ -6,6 +6,8 @@
  * Time: 10:00
  */
 
+session_start();
+
 include_once $_SERVER['DOCUMENT_ROOT'] . "/common/configuration.php";
 
 foreach (glob($_SERVER['DOCUMENT_ROOT'] . "/framework/*", GLOB_ONLYDIR) as $folder) {
@@ -24,8 +26,6 @@ foreach ($includedFolders as $folder) {
         }
     }
 }
-
-session_start();
 
 // $_GET und $_POST zusammenfasen
 $request = array_merge($_GET, $_POST);
