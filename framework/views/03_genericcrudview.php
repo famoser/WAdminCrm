@@ -5,7 +5,6 @@
  * Date: 01.07.2015
  * Time: 18:50
  */
-include_once $_SERVER['DOCUMENT_ROOT'] . "/view/genericview.php";
 
 class GenericCrudView extends GenericView
 {

@@ -5,7 +5,6 @@
  * Date: 01.07.2015
  * Time: 09:36
  */
-include_once $_SERVER['DOCUMENT_ROOT'] . "/view/viewbase.php";
 
 class MessageView extends ViewBase
 {
