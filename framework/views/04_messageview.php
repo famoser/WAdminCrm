@@ -36,7 +36,7 @@ class MessageView extends ViewBase
 
         ob_start();
 
-        include $_SERVER['DOCUMENT_ROOT'] . "/templates/maincontroller/message.php";;
+        include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/message.php";
         $output = ob_get_contents();
         $output = sanitize_output($output);
         ob_end_clean();

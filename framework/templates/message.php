@@ -7,9 +7,7 @@
  */
 ?>
 
-<?php if (!IsAjaxRequest()) {
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/centerheader.php";
-} ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/header_center.php"; ?>
 <div class="clearfix">
     <?php
     DoLog($this->message, $this->loglevel);
@@ -26,6 +24,5 @@
         }
     } ?>
 </div>
-<?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/footer.php";
-?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_content.php"; ?>

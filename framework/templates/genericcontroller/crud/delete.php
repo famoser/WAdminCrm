@@ -7,7 +7,7 @@
  */
 ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/crudheader.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/header_crud.php"; ?>
 
     <form action="<?php echo $this->controller ?>/<?php echo $this->link ?>/<?php echo GetValue($this->_['obj'], "Id") ?>/"
         method="post">
@@ -22,4 +22,4 @@
         </div>
     </form>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/crudfooter.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_crud.php"; ?>

@@ -6,13 +6,38 @@
  * Time: 22:23
  */
 
-function CanAccessGenericController($params)
+function CanAccessGenericControllerParams($params)
 {
     $user = GetActiveUser();
-    $allowedParams = unserialize(ENABLED_CONTROLLERS);
-    return
-        in_array($params[0], $allowedParams)
-    && $user !== false;
+    if ($user == false)
+        return false;
+
+    $allowedParams = json_decode(CONTROLLERS);
+
+    foreach ($allowedParams as $controller) {
+        if ($controller->url == $params[0])
+            return true;
+    }
+
+    return false;
+}
+
+function CanAccessAnyMenu()
+{
+    $user = GetActiveUser();
+    if ($user == false)
+        return false;
+
+    return true;
+}
+
+function CanAccessGenericController($controller)
+{
+    $user = GetActiveUser();
+    if ($user == false)
+        return false;
+
+    return true;
 }
 
 function CanAccessApiController($params)
@@ -21,6 +46,11 @@ function CanAccessApiController($params)
 }
 
 function CanAccessMainController($params)
+{
+    return true;
+}
+
+function CanAccessSpecificGenericController($controller)
 {
     return true;
 }

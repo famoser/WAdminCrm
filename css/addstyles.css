@@ -118,8 +118,7 @@ div.message.content,
 }
 
 
-form.no-replace .no-replace-loading-content,
-.replace-loading-content {
+.loading-content {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -129,14 +128,13 @@ form.no-replace .no-replace-loading-content,
     opacity: 0;
 }
 
-form.no-replace .no-replace-loading-content img,
-.replace-loading-content img {
+.loading-content img {
     width: 50px;
     height: 50px;
 }
 
-form.no-replace.submitting .no-replace-loading-content,
-.replace-loading-content.show {
+form.no-replace.submitting .loading-content,
+.loading-content.show {
     opacity: 1;
 }
 

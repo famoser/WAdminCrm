@@ -6,7 +6,7 @@
  * Time: 10:15
  */
 ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/_headerPart.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/_headerPart.php"; ?>
     <body>
     <div class="mobile-container">
     <div id="loadingbar"></div>
@@ -33,7 +33,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="support">
-                        <p><a href="mailto:wadmin@florianalexandermoser.ch">Support kontaktieren</a></p>
+                        <p><a href="mailto:me@famoser.ch">Support kontaktieren</a></p>
                     </div>
                 </div>
             </div>
@@ -42,11 +42,11 @@
 
     <div id="topbar" class="clearfix">
         <div class="container">
-            <?php include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/menu.php"; ?>
+            <?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/menu.php"; ?>
         </div>
     </div>
 
     <div id="tab-content-slider">
         <div class="container">
             <div id="tab-content" class="clearfix">
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/messagetemplate.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/messagetemplate.php"; ?>

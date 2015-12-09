@@ -528,7 +528,7 @@ form.no-replace input[type=submit] {
     margin-bottom: 0;
 }
 
-form.no-replace .no-replace-loading-content {
+form.no-replace .loading-content {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -538,12 +538,12 @@ form.no-replace .no-replace-loading-content {
     opacity: 0;
 }
 
-form.no-replace .no-replace-loading-content img {
+form.no-replace .loading-content img {
     width: 50px;
     height: 50px;
 }
 
-form.no-replace.submitting .no-replace-loading-content{
+form.no-replace.submitting .loading-content{
     opacity: 1;
 }
 

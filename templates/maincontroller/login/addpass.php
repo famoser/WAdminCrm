@@ -7,9 +7,8 @@
  */
 ?>
 
-<?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/centerheader.php";
-?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/header_crud.php"; ?>
     <form id="login" class="no-ajax" action="activateAccount/<?php echo $this->_["admin"]->AuthHash; ?>" method="post">
         <p class="lead">Willkommen <b><?php echo $this->_["admin"]->GetIdentification(); ?></b>, bitte legen Sie ihr Passwort fest</p>
         <input type="hidden" name="AuthHash" value="<?php echo $this->_["admin"]->AuthHash; ?>">
@@ -20,7 +19,5 @@
 
         <?php echo GetSubmit("Passwort setzten"); ?>
     </form>
-<?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/footer.php";
-?>
 
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_content.php"; ?>

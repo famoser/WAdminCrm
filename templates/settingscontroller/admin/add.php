@@ -6,7 +6,9 @@
  * Time: 12:18
  */
 ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/crudheader.php"; ?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/header_crud.php"; ?>
+
     <form class="form-horizontal" action="settings/addadmin" method="post">
         <p>Nach dem Erstellen des Adminaccounts wird eine Nachricht an diese E-Mail Adresse gesendet. Die E-Mail enthält
             einen Link, durch den der Admin seinen neuen Account aktivieren kann.</p>
@@ -29,4 +31,4 @@
             </div>
         </div>
     </form>
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/crudfooter.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_crud.php"; ?>

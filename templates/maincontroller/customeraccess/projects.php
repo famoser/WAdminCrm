@@ -5,9 +5,8 @@
  * Date: 13.09.2015
  * Time: 14:42
  */?>
-<?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/nomenuheader.php";
-?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/header_content.php"; ?>
 
     <div class="col-md-9 content">
         <h1>projects</h1>
@@ -41,6 +40,4 @@
     </div>
 
 
-<?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/footer.php";
-?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_content.php"; ?>

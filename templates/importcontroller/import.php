@@ -5,9 +5,8 @@
  * Date: 01.06.2015
  * Time: 20:53
  */ ?>
-<?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/header.php";
-?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/header_content.php"; ?>
     <div class="col-md-12 content">
         <h1>Import</h1>
 
@@ -34,6 +33,5 @@
             <p><a href="import">zurück</a></p>
         <?php } ?>
     </div>
-<?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/footer.php";
-?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_content.php"; ?>

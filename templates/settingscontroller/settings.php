@@ -6,18 +6,17 @@
  * Time: 10:42
  */
 ?>
-<?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/header.php";
-?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/header_content.php"; ?>
+
     <div class="col-md-3 right-content">
         <div class="col-md-12 content">
+            <?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/loading-replacement.php" ?>
             <form class="clearfix no-replace clear-after-submit" action="settings" method="post">
                 <input type="hidden" name="changepass" value="changepass">
                 <input name="Password1" id="Passwort1" placeholder="Neues Passwort festlegen" type="password">
                 <input name="Password2" id="Passwort2" placeholder="Neues Passwort wiederholen" type="password">
                 <input type="submit" value="Speichern">
-
-                <?php include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/loading-replacement.php" ?>
             </form>
         </div>
 
@@ -88,6 +87,5 @@
         </table>
     </div>
 
-<?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/footer.php";
-?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_content.php"; ?>

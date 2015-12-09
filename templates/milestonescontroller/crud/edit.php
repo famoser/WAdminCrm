@@ -6,8 +6,8 @@
  * Time: 11:20
  */
 ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/crudheader.php"; ?>
 
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/header_crud.php"; ?>
     <form action="milestones/<?php echo $this->link ?>/<?php echo GetValue($this->_['obj'], "Id") ?>/" method="post">
 
         <input type="hidden" name="<?php echo $this->link ?>" value="true"/>
@@ -73,4 +73,4 @@
         </div>
     </form>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/crudfooter.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_crud.php"; ?>

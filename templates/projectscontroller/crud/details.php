@@ -5,11 +5,9 @@
  * Date: 13.09.2015
  * Time: 19:38
  */ ?>
-<?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/header.php";
 
-include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/project/details.php";
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/header_content.php"; ?>
 
-if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/footer.php";
-?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/templates/projectscontroller/parts/details.php"; ?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_content.php"; ?>

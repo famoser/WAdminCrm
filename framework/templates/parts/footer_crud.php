@@ -7,5 +7,5 @@
  */?>
 </div>
 <?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/footer.php";
+    include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_content.php";
 ?>

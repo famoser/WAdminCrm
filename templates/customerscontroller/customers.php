@@ -6,9 +6,8 @@
  * Time: 10:15
  */
 ?>
-<?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/header.php";
-?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/header_content.php"; ?>
     <div class="col-md-3 right-content">
         <div class="col-md-12 content">
             <a href="customers/add" class="tilebutton dialogbutton" data-dialog-title="add new customer"
@@ -70,7 +69,4 @@
         </table>
     </div>
 
-
-<?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/footer.php";
-?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_content.php"; ?>

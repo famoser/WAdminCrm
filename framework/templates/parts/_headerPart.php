@@ -15,6 +15,7 @@
     <meta http-equiv="Cache-Control" content="private">
 
     <meta name="author" content="Florian Moser">
+
     <meta name="robots" content="noindex, nofollow">
     <meta name="description" content="<?php echo $this->page_description; ?>">
 

@@ -6,9 +6,8 @@
  * Time: 10:15
  */
 ?>
-<?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/centerheader.php";
-?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/header_crud.php"; ?>
 
     <form id="login" class="no-ajax" action="/" method="post">
 
@@ -19,6 +18,5 @@
         <?php echo GetSubmit("Einloggen") ?>
     </form>
 
-<?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/templates/parts/footer.php";
-?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_content.php"; ?>

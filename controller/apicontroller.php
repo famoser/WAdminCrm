@@ -1,12 +1,11 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Florian Moser
  * Date: 09.09.2015
  * Time: 23:43
  */
-include_once $_SERVER['DOCUMENT_ROOT'] . "/controller/controllerbase.php";
-
 class ApiController extends ControllerBase
 {
     private $request = null;
@@ -30,13 +29,13 @@ class ApiController extends ControllerBase
      */
     public function Display()
     {
-        //not authentication required to access this controller, be carefull
-        $view = $this->NotFound();
-        if ($this->params[0] == "log") {
-            if (isset($this->request)  && isset($this->request["message"]) && isset($this->request["loglevel"]))
-                DoLog($this->request["message"], $this->request["loglevel"]);
-            $view = new RawView("/templates/parts/messagetemplate.php");
-        }
+        $view = null;
+        if (IsReservedApiAddress($this->params,$this->request))
+            $view = GetReservedApiAdressView($this->params, $this->request);
+
+        if ($view == null)
+            $view = $this->NotFound();
+
         return $view->loadTemplate();
     }
 }

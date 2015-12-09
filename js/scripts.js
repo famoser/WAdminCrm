@@ -299,7 +299,7 @@ function registerComponents(docheckLog) {
         if ($form.hasClass("submitting"))
             return;
         $form.addClass("submitting");
-        $(".replace-loading-content", $form.parent()).addClass("show");
+        $(".loading-content", $form.parent()).addClass("show");
 
         var method = $(this).attr('method');
         var action = $(this).attr('action');
@@ -325,7 +325,7 @@ function registerComponents(docheckLog) {
             async: true,
             success: function (data) {
                 $form.removeClass("submitting");
-                $(".replace-loading-content", $form.parent()).removeClass("show");
+                $(".loading-content", $form.parent()).removeClass("show");
                 if (!noreplace) {
                     replaceElement.replaceWith(data);
                 } else {

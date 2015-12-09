@@ -81,10 +81,10 @@ function format_Money($money, $isZeroValid = true)
 {
     if ($money == 0)
         if ($isZeroValid)
-            return "- CHF";
+            return "- ".CURRENCY;
         else
             return "-";
-    return number_format($money, 2) . " CHF";
+    return number_format($money, 2) . " ". CURRENCY;
 }
 
 function format_Percentage($value, $total)

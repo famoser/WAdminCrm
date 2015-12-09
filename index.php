@@ -11,9 +11,10 @@ session_start();
 include_once $_SERVER['DOCUMENT_ROOT'] . "/common/configuration.php";
 
 foreach (glob($_SERVER['DOCUMENT_ROOT'] . "/framework/*", GLOB_ONLYDIR) as $folder) {
-    foreach (glob($folder . "/*.php") as $filename) {
-        include_once $filename;
-    }
+    if ($folder != $_SERVER['DOCUMENT_ROOT'] . "/framework/templates")
+        foreach (glob($folder . "/*.php") as $filename) {
+            include_once $filename;
+        }
 }
 
 $includedFolders = unserialize(INCLUDED_FOLDERS);
@@ -35,7 +36,7 @@ $requestFiles = $_FILES;
 $params = formatParams($_SERVER['REQUEST_URI']);
 define("ACTIVE_PARAMS", serialize($params));
 
-if (CanAccessGenericController($params)) {
+if (CanAccessGenericControllerParams($params)) {
     $controllerName = strtoupper(substr($params[0], 0, 1)) . substr($params[0], 1) . "Controller";
     $params = RemoveFirstEntryInArray($params);
 
