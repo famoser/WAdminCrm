@@ -8,7 +8,7 @@
 
 function IsReservedApiAddress($params, $request)
 {
-    if ($params == "log") {
+    if ($params[0] == "log") {
         return true;
     }
     return false;
@@ -16,10 +16,10 @@ function IsReservedApiAddress($params, $request)
 
 function GetReservedApiAdressView($params, $request)
 {
-    if ($params == "log") {
+    if ($params[0] == "log") {
         if (isset($request) && isset($request["message"]) && isset($request["loglevel"]))
             DoLog($request["message"], $request["loglevel"]);
-        return new RawView("/templates/parts/messagetemplate.php");
+        return new RawView("/framework/templates/parts/messagetemplate.php");
     }
     return null;
 }
