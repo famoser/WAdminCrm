@@ -21,7 +21,7 @@
         </div>
 
         <div class="col-md-12 content">
-            <a href="settings/addadmin" class="tilebutton dialogbutton" data-dialog-title="Neuer Admin erfassen"
+            <a href="settings/admin/add" class="tilebutton dialogbutton" data-dialog-title="Neuer Admin erfassen"
                data-dialog-size="wide" data-dialog-type="primary">Neuer Admin erfassen
             </a>
         </div>
@@ -69,12 +69,12 @@
                     <td>
                         <div class="btn-group">
 
-                            <a href="/settings/editadmin/<?php echo $admin->Id; ?>"
+                            <a href="/settings/admin/edit/<?php echo $admin->Id; ?>"
                                class="tilebutton dialogbutton"
                                data-dialog-title="edit" data-dialog-type="warning" role="button">
                                 <span class="flaticon-pencil124"></span>
                             </a>
-                            <a href="/settings/deleteadmin/<?php echo $admin->Id; ?>"
+                            <a href="/settings/admin/delete/<?php echo $admin->Id; ?>"
                                class="tilebutton dialogbutton"
                                data-dialog-title="delete" data-dialog-type="danger" role="button">
                                 <span class="flaticon-cancel22"></span>

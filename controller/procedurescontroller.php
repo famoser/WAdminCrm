@@ -71,8 +71,10 @@ class ProceduresController extends ControllerBase
                     if ($milest != null) {
                         $pm->MilestoneId = $milest->Id;
                         $procedurebefore = GetSingleByCondition("procedures", array("MilestoneId" => $milest->Id),false,"EndDateTime DESC");
-                        if ($procedurebefore != null)
+                        if ($procedurebefore != null &&  strtotime($procedurebefore->EndDateTime) > strtotime("now - 5 hours"))
                             $pm->StartDateTime = $procedurebefore->EndDateTime;
+                        else
+                            $pm->StartDateTime = date(DATETIME_FORMAT_DATABASE, strtotime("now - 1 hour"));
                         $pm->PaymentPerHour = $milest->PaymentPerHour;
                     }
                     return $this->genericController->Display($pm);

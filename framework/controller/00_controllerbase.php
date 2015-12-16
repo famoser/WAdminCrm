@@ -17,4 +17,10 @@ class ControllerBase
     {
         return new MessageView("Sie haben kein Zugriff auf diese Seite", LOG_LEVEL_USER_ERROR, 403);
     }
+
+    function getMenu()
+    {
+        $res = array();
+        return $res;
+    }
 }

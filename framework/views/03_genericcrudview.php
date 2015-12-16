@@ -45,7 +45,7 @@ class GenericCrudView extends GenericView
     {
         ob_start();
         if ($this->mode == "delete") {
-            include $_SERVER['DOCUMENT_ROOT'] . "/templates/genericcontroller/crud/delete.php";
+            include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/genericcontroller/crud/delete.php";
         } else {
             include $_SERVER['DOCUMENT_ROOT'] . "/templates/" . $this->controller . "controller/" . $this->folder . $this->mode . ".php";
         }

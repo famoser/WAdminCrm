@@ -54,41 +54,60 @@ class SettingsController extends ControllerBase
             }
             $view->assign('admins', GetAllOrderedBy("admins", "Id"));
         } else {
-            $view = new GenericCrudView($this->params[0], array("deleteadmin" => "delete", "addadmin" => "add"), "settings", "admin");
+            if ($this->params[0] == "admin") {
+                $view = new GenericCrudView($this->params[1], array("add" => "edit"), "settings", "admin");
+                if ($this->params[1] == "add") {
+                    if (isset($this->request["add"]) && $this->request["add"] == "true") {
+                        unset($this->request["add"]);
 
-            if ($this->params[0] == "addadmin") {
-                if (isset($this->request["addadmin"]) && $this->request["addadmin"] == "true") {
-                    unset($this->request["addadmin"]);
+                        $res = AddAdmin($this->request);
 
-                    $res = AddAdmin($this->request);
-
-                    if ($res) {
-                        $obj = GetById("admins", $res);
-                        if ($obj !== false) {
-                            DoLog("Admin wurde hinzugefügt, E-Mail wurde versendet.", LOG_LEVEL_INFO);
-                        } else {
-                            DoLog("Admin wurde hinzugefügt, E-Mail wurde versendet.", LOG_LEVEL_SYSTEM_ERROR);
+                        if ($res) {
+                            $obj = GetById("admins", $res);
+                            if ($obj !== false) {
+                                DoLog("Admin wurde hinzugefügt, E-Mail wurde versendet.", LOG_LEVEL_INFO);
+                            } else {
+                                DoLog("Admin wurde hinzugefügt, E-Mail wurde versendet.", LOG_LEVEL_SYSTEM_ERROR);
+                            }
                         }
                     }
-                }
-                $view->assign("persons", GetAllOrderedBy("persons", "LastName, FirstName"));
-                $view->assign("obj", null);
-            } else if ($this->params[0] == "deleteadmin" && isset($this->params[1]) && is_numeric($this->params[1])) {
-                if (isset($this->request["delete"]) && $this->request["delete"] == "true") {
-                    $res = DeleteById("admins", $this->params[1]);
-                    if ($res) {
-                        $view = new MessageView("Admin wurde gelöscht", LOG_LEVEL_INFO);
-                    } else
-                        $view = new MessageView("Admin konnte nicht gelöscht werden.", LOG_LEVEL_SYSTEM_ERROR);
-                } else {
-                    $obj = GetById("admins", $this->params[1]);
+                    $view->assign("obj", null);
+                } else if ($this->params[1] == "edit") {
+                    if (isset($this->request["edit"]) && $this->request["edit"] == "true") {
+                        unset($this->request["edit"]);
+                        $this->request["Id"] = $this->params[2];
+                        $res = Update("admins", $this->request);
+                        if ($res) {
+                            DoLog("Admin wurde bearbeitet", LOG_LEVEL_INFO);
+                        } else
+                            $view = new MessageView("Admin konnte nicht bearbeitet werden.", LOG_LEVEL_SYSTEM_ERROR);
+                    }
+                    $obj = GetById("admins", $this->params[2]);
                     if ($obj !== false) {
-                        $obj->Person = GetById("persons", $obj->PersonId);
                         $view->assign("obj", $obj);
                     } else {
                         $view = new MessageView("Admin wurde nicht gefunden.", LOG_LEVEL_SYSTEM_ERROR);
                     }
+
+                } else if ($this->params[1] == "delete" && isset($this->params[2]) && is_numeric($this->params[2])) {
+                    if (isset($this->request["delete"]) && $this->request["delete"] == "true") {
+                        $res = DeleteById("admins", $this->params[2]);
+                        if ($res) {
+                            $view = new MessageView("Admin wurde gelöscht", LOG_LEVEL_INFO);
+                        } else
+                            $view = new MessageView("Admin konnte nicht gelöscht werden.", LOG_LEVEL_SYSTEM_ERROR);
+                    } else {
+                        $obj = GetById("admins", $this->params[2]);
+                        if ($obj !== false) {
+                            $view->assign("obj", $obj);
+                        } else {
+                            $view = new MessageView("Admin wurde nicht gefunden.", LOG_LEVEL_SYSTEM_ERROR);
+                        }
+                    }
+                } else {
+                    $view = $this->NotFound();
                 }
+
             } else if ($this->params[0] == "download") {
                 if ($this->params[1] == "database")
                     DownloadDatabaseAndExit();
