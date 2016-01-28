@@ -32,6 +32,17 @@ class ProjectModel
         return $totalcost;
     }
 
+    function TotalWorkingTime()
+    {
+        $total_time = 0;
+        if ($this->Milestones != null) {
+            foreach ($this->Milestones as $milestone) {
+                $total_time += $milestone->TotalWorkingTime();
+            }
+        }
+        return $total_time;
+    }
+
     function GetFlatIdentification()
     {
         return $this->Name;

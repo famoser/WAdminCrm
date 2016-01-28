@@ -81,11 +81,19 @@ function format_Money($money, $isZeroValid = true)
 {
     if ($money == 0)
         if ($isZeroValid)
-            return "- ".CURRENCY;
+            return "- " . CURRENCY;
         else
             return "-";
-    return number_format($money, 2) . " ". CURRENCY;
+    return number_format($money, 2) . " " . CURRENCY;
 }
+
+function format_WorkingTime($timeSpan)
+{
+    $std = $timeSpan / 60;
+    $min = $timeSpan % 60;
+    return number_format($std, 0) . " Stunden, " . $min . " Minuten";
+}
+
 
 function format_Percentage($value, $total)
 {

@@ -27,6 +27,12 @@ class ProcedureModel
         return $totalcost;
     }
 
+    function TotalWorkingTime()
+    {
+        $total_time = format_TimeSpanMinutes($this->StartDateTime, $this->EndDateTime);
+        return $total_time;
+    }
+
     function GetFlatIdentification()
     {
         return $this->Name;

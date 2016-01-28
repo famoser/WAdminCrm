@@ -35,6 +35,17 @@ class MilestoneModel
         return $totalcost;
     }
 
+    function TotalWorkingTime()
+    {
+        $total_time = 0;
+        if ($this->Procedures != null) {
+            foreach ($this->Procedures as $procedures) {
+                $total_time += $procedures->TotalWorkingTime();
+            }
+        }
+        return $total_time;
+    }
+
     function GetFlatIdentification()
     {
         return $this->Name;

@@ -14,10 +14,14 @@
         <?php } else { ?>
             <p class="no-margin">Kosten bis jetzt: <?php echo format_Money($this->_["project"]->TotalCost()) ?></p>
         <?php } ?>
+        <p class="no-margin">Arbeitszeit bis
+            jetzt: <?php echo format_WorkingTime($this->_["project"]->TotalWorkingTime()) ?></p>
     </div>
 
     <div class="col-md-12 content">
-        <p class="no-margin"><a href="mailto:florian.a.moser@bluewin.ch">Florian Moser kontaktieren</a></p>
+        <p class="no-margin">
+            <a href="mailto:me@famoser.ch">Florian Moser kontaktieren</a>
+        </p>
     </div>
 </div>
 
