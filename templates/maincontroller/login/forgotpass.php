@@ -7,13 +7,13 @@
  */
 ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/header_crud.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/header_crud.php"; ?>
 
     <form id="login" class="no-ajax" action="forgotpass" method="post">
         <p>Geben Sie Ihre E-Mail an, mit der Sie hier registriert sind.
             Sofern diese E-Mail im System gefunden wird, bekommen Sie eine Email zugesendet mit Informationen, wie Sie das Passwort zurücksetzten können</p>
-        <input type="hidden" name="AuthHash" value="<?php echo $this->_["admin"]->AuthHash; ?>"
-        <input type="hidden" name="Id" value="<?php echo $this->_["admin"]->Id; ?>"
+        <input type="hidden" name="AuthHash" value="<?php echo $this->_["Admin"]->AuthHash; ?>"
+        <input type="hidden" name="Id" value="<?php echo $this->_["Admin"]->Id; ?>"
 
         <?php echo GetInput(null,"email", "Passwort", "email", null, "Ihre Email"); ?><br/>
 
@@ -21,4 +21,4 @@
     </form>
 
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_content.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/footer_content.php"; ?>

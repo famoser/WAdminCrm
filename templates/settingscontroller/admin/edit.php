@@ -7,7 +7,7 @@
  */
 ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/header_crud.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/header_crud.php"; ?>
 
     <form class="form-horizontal" action="settings/admin/<?php echo $this->link ?>/<?php echo GetValue($this->_['obj'], "Id") ?>" method="post">
         <p>Nach dem Erstellen des Adminaccounts wird eine Nachricht an diese E-Mail Adresse gesendet. Die E-Mail enthält
@@ -37,4 +37,4 @@
             </div>
         </div>
     </form>
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_crud.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/footer_crud.php"; ?>

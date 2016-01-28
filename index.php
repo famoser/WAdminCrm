@@ -10,8 +10,8 @@ session_start();
 
 include_once $_SERVER['DOCUMENT_ROOT'] . "/common/configuration.php";
 
-foreach (glob($_SERVER['DOCUMENT_ROOT'] . "/framework/*", GLOB_ONLYDIR) as $folder) {
-    if ($folder != $_SERVER['DOCUMENT_ROOT'] . "/framework/templates")
+foreach (glob($_SERVER['DOCUMENT_ROOT'] . "/Framework/*", GLOB_ONLYDIR) as $folder) {
+    if ($folder != $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates")
         foreach (glob($folder . "/*.php") as $filename) {
             include_once $filename;
         }
@@ -37,16 +37,16 @@ $params = formatParams($_SERVER['REQUEST_URI']);
 define("ACTIVE_PARAMS", serialize($params));
 
 if (CanAccessGenericControllerParams($params)) {
-    $controllerName = strtoupper(substr($params[0], 0, 1)) . substr($params[0], 1) . "Controller";
-    $params = RemoveFirstEntryInArray($params);
+    $controllerName = strtoupper(substr($params[0], 0, 1)) . substr($params[0], 1) . "Controllers";
+    $params = remove_first_enrty_in_array($params);
 
-    // Controller erstellen
+    // Controllers erstellen
     $controller = new $controllerName($request, $requestFiles, $params);
     // Inhalt der Webanwendung ausgeben.
     echo $controller->Display();
 } else {
     if ($params[0] == "api" && CanAccessApiController($params)) {
-        $params = RemoveFirstEntryInArray($params);
+        $params = remove_first_enrty_in_array($params);
         $controller = new ApiController($request, $requestFiles, $params);
         echo $controller->Display();
     } else if (CanAccessMainController($params)) {

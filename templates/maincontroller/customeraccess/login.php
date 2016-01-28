@@ -6,8 +6,8 @@
  * Time: 01:02
  */?>
 
-<?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/header_center.php";
+<?php if (!is_ajax_request())
+    include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/header_center.php";
 ?>
 
 <h1>Willkommen! Bitte geben Sie Ihr Passwort ein, um Zugriff zu erhalten</h1>
@@ -17,4 +17,4 @@
     </form>
 
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_content.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/footer_content.php"; ?>

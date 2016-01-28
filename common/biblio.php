@@ -8,8 +8,8 @@
 
 function GetActiveUser()
 {
-    if (isset($_SESSION["admin"]))
-        return unserialize($_SESSION["admin"]);
+    if (isset($_SESSION["Admin"]))
+        return unserialize($_SESSION["Admin"]);
     else
         return false;
 }
@@ -27,11 +27,11 @@ function LoginCustomer($customer) {
 
 function SetActiveUser($usr)
 {
-    $_SESSION["admin"] = serialize($usr);
+    $_SESSION["Admin"] = serialize($usr);
 }
 
 function RemoveActiveUser()
 {
-    if (isset($_SESSION["admin"]))
-        unset($_SESSION["admin"]);
+    if (isset($_SESSION["Admin"]))
+        unset($_SESSION["Admin"]);
 }

@@ -7,7 +7,7 @@
  */
 ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/header_crud.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/header_crud.php"; ?>
 
     <form id="login" class="no-ajax" action="/" method="post">
 
@@ -19,4 +19,4 @@
     </form>
 
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_content.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/footer_content.php"; ?>

@@ -15,7 +15,7 @@ define("DEFAULTDESCRIPTION", "Ein Tool für Customer Relationship Managment, Kon
 define("DEFAULTTITLE", "CRM");
 define("APPLICATION_TITLE", "Customer Relationship Managment");
 define("AFTER_LOGIN_PAGE", "customers");
-define("INCLUDED_FOLDERS", serialize(array("common", "controller", "classes/models", "services", "view", "templates/helpers")));
+define("INCLUDED_FOLDERS", serialize(array("common", "Controllers", "Classes/Database", "Services", "view", "Templates/Helpers")));
 define("EXCLUDED_FILES", serialize(array($_SERVER['DOCUMENT_ROOT'] . "/common/configuration_public.php")));
 define("CONTROLLERS", '
 [

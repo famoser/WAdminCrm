@@ -6,7 +6,7 @@
  * Time: 10:15
  */
 ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/_headerPart.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/_headerPart.php"; ?>
     <body>
     <div class="mobile-container">
     <div id="loadingbar"></div>
@@ -42,11 +42,11 @@
 
     <div id="topbar" class="clearfix">
         <div class="container">
-            <?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/menu.php"; ?>
+            <?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/menu.php"; ?>
         </div>
     </div>
 
     <div id="tab-content-slider">
         <div class="container">
             <div id="tab-content" class="clearfix">
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/messagetemplate.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/message_template.php"; ?>

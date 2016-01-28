@@ -6,6 +6,6 @@
  * Time: 10:51
  */?>
 </div>
-<?php if (!IsAjaxRequest())
-    include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_content.php";
+<?php if (!is_ajax_request())
+    include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/footer_content.php";
 ?>

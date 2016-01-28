@@ -55,7 +55,7 @@ if (XRegExp) {
                 output.push(tokenResult.output);
                 pos += (tokenResult.match[0].length || 1);
             } else {
-                // Check for native multicharacter metasequences (excluding character classes) at
+                // Check for native multicharacter metasequences (excluding character Classes) at
                 // the current position
                 if (match = nativ.exec.call(nativeTokens[currScope], pattern.slice(pos))) {
                     output.push(match[0]);
@@ -120,7 +120,7 @@ if (XRegExp) {
         nativeTokens = {};
 
     // `nativeTokens` match native multicharacter metasequences only (including deprecated octals,
-    // excluding character classes)
+    // excluding character Classes)
     nativeTokens[XRegExp.INSIDE_CLASS] = /^(?:\\(?:[0-3][0-7]{0,2}|[4-7][0-7]?|x[\dA-Fa-f]{2}|u[\dA-Fa-f]{4}|c[A-Za-z]|[\s\S]))/;
     nativeTokens[XRegExp.OUTSIDE_CLASS] = /^(?:\\(?:0(?:[0-3][0-7]{0,2}|[4-7][0-7]?)?|[1-9]\d*|x[\dA-Fa-f]{2}|u[\dA-Fa-f]{4}|c[A-Za-z]|[\s\S])|\(\?[:=!]|[?*+]\?|{\d+(?:,\d*)?}\??)/;
 

@@ -1347,7 +1347,7 @@ EOT;
 
     /**
      * Use a fake POP3 server to test POP-before-SMTP auth
-     * With a known-good login
+     * With a known-good Login
      */
     public function testPopBeforeSmtpGood()
     {
@@ -1356,7 +1356,7 @@ EOT;
         $this->pids[] = $pid;
 
         sleep(2);
-        //Test a known-good login
+        //Test a known-good Login
         $this->assertTrue(
             POP3::popBeforeSmtp('localhost', 1100, 10, 'user', 'test', $this->Mail->SMTPDebug),
             'POP before SMTP failed'
@@ -1368,7 +1368,7 @@ EOT;
 
     /**
      * Use a fake POP3 server to test POP-before-SMTP auth
-     * With a known-bad login
+     * With a known-bad Login
      */
     public function testPopBeforeSmtpBad()
     {
@@ -1378,7 +1378,7 @@ EOT;
         $this->pids[] = $pid;
 
         sleep(2);
-        //Test a known-bad login
+        //Test a known-bad Login
         $this->assertFalse(
             POP3::popBeforeSmtp('localhost', 1101, 10, 'user', 'xxx', $this->Mail->SMTPDebug),
             'POP before SMTP should have failed'

@@ -6,13 +6,13 @@
  * Time: 18:16
  */
 
-function RemoveFirstEntryInArray($arr)
+function remove_first_enrty_in_array($arr)
 {
     unset($arr[0]);
     return array_values($arr);
 }
 
-function IsAjaxRequest()
+function is_ajax_request()
 {
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
         return true;

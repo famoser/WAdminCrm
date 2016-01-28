@@ -5,9 +5,14 @@
  * Date: 25.05.2015
  * Time: 15:11
  */
+namespace famoser\WAdminCrm\Services;
 
-function SendMail($to, $toname, $betreff, $message)
+use famoser\WAdminCrm\Libraries\PhpMailerHook;
+
+class EmailService
 {
-    IncludeIfNecessary("/libraries/PHPMailer.php");
-    return SendEmailFromServer($to, $toname, $betreff, $message);
+    function SendMail($to, $toname, $betreff, $message)
+    {
+        return PhpMailerHook::SendEmailFromServer($to, $toname, $betreff, $message);
+    }
 }

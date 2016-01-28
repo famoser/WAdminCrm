@@ -6,7 +6,7 @@
  * Time: 14:42
  */?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/header_content.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/header_content.php"; ?>
 
     <div class="col-md-9 content">
         <h1>projects</h1>
@@ -40,4 +40,4 @@
     </div>
 
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/framework/templates/parts/footer_content.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/footer_content.php"; ?>
