@@ -8,19 +8,9 @@
  */
 namespace famoser\WAdminCrm\Controllers;
 
-use famoser\WAdminCrm\Framework\Controllers\ControllerBase;
-use famoser\WAdminCrm\Framework\Views\RawView;
+use famoser\WAdminCrm\Framework\Controllers\ApiControllerBase;
 
-class ApiController extends ControllerBase
+class ApiController extends ApiControllerBase
 {
-    public function Display()
-    {
-        if ($this->params[0] == "log") {
-            if (isset($request) && isset($request["message"]) && isset($request["loglevel"]))
-                DoLog($request["message"], $request["loglevel"]);
-            $this->setView(new RawView("/Framework/Templates/Parts/message_template.php"));
-        }
 
-        return $this->evaluateView();
-    }
 }

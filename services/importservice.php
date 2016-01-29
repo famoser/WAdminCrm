@@ -7,9 +7,9 @@
  */
 namespace famoser\WAdminCrm\Services;
 
-class ImportService
+class ImportService extends GenericService
 {
-    function ImportDatabase($execute, $filename)
+    public function ImportDatabase($execute, $filename)
     {
         if (!$execute) {
             DoLog("Diese Datei enthält eine Sicherung der Datenbank. Die Datenbank wir dadurch auf den Zeitpunkt des Exportes zurückgesetzt. Dieser Vorgang kann nicht rückgängig gemacht werden!", LOG_LEVEL_USER_ERROR);

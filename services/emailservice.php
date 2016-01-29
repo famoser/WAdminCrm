@@ -9,9 +9,9 @@ namespace famoser\WAdminCrm\Services;
 
 use famoser\WAdminCrm\Libraries\PhpMailerHook;
 
-class EmailService
+class EmailService extends GenericService
 {
-    function SendMail($to, $toname, $betreff, $message)
+    public function SendMail($to, $toname, $betreff, $message)
     {
         return PhpMailerHook::SendEmailFromServer($to, $toname, $betreff, $message);
     }

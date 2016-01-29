@@ -7,9 +7,9 @@
  */
 namespace famoser\WAdminCrm\Services;
 
-class ExportService
+class ExportService extends GenericService
 {
-    function DownloadDatabaseAndExit()
+    public function DownloadDatabaseAndExit()
     {
         $filename = $_SERVER['DOCUMENT_ROOT'] . "/export/" . date("Y-m-d-H-i") . ".sql";
 

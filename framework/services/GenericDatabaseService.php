@@ -10,7 +10,7 @@ namespace famoser\WAdminCrm\Services;
 
 use PDO;
 
-class GenericDatabaseService
+class GenericDatabaseService extends GenericService
 {
     function GetById($table, $id, $addRealtionships = true)
     {
