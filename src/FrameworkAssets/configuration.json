@@ -1,0 +1,52 @@
+{
+  "Application": {
+    "Url": "https://crm.florianalexandermoser.ch/",
+    "Name": "Customer Relationship Management",
+    "Description": "Ein Tool für Projektmanagement, Customer Relationship Managment und Buchhaltung. Konzept & Umsetzung von Florian Moser",
+    "Author": "Florian Moser"
+  },
+  "Framework": {
+    "DebugMode": true,
+    "Services": {
+      "EmailService": {
+        "SenderEmail": "server@florianalexandermoser.ch",
+        "SenderName": "server@florianalexandermoser.ch",
+        "RespondToEmail": "info@famoser.ch",
+        "RespondToName": "Florian Moser",
+        "ServerHost": "asmtp.mail.hostpoint.ch",
+        "ServerSecure": "tls",
+        "ServerPort": 587,
+        "ServerUsername": "server@florianalexandermoser.ch",
+        "ServerPassword": "IJYKC7XO"
+      },
+      "DatabaseService": {
+        "Connections": [
+          {
+            "Default": true,
+            "Name": "hostpoint",
+            "Type": "MySql",
+            "Host": "floria74.mysql.db.internal",
+            "Database": "floria74_scms",
+            "User": "floria74_scms",
+            "Password": "tzaOA2GH"
+          }
+        ]
+      },
+      "LocaleService": {
+        "DefaultLanguage": "de",
+        "LanguageResources": [
+          {
+            "Language": "de",
+            "Locale": "de_CH",
+            "ResourceFiles": [
+              "de_strings.json"
+            ],
+            "FormatFiles": [
+              "de_formats.json"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "DateTime": {
+    "Database": "Y-m-d H:i:s",
+    "Input": "d.m.Y H:i",
+    "Display": "d.m.Y H:i"
+  },
+  "Date": {
+    "Database": "Y-m-d",
+    "Input": "d.m.Y",
+    "Display": "d.m.Y"
+  },
+  "Time": {
+    "Database": "H:i:s",
+    "Input": "H:i",
+    "Display": "H:i"
+  }
+}
