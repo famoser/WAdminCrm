@@ -379,7 +379,7 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
 	private $_sharedFormulas;
 
 	/**
-	 * The shared formula Parts in a sheet. One FORMULA record contributes with one value if it
+	 * The shared formula _parts in a sheet. One FORMULA record contributes with one value if it
 	 * refers to a shared formula.
 	 *
 	 * @var array
@@ -772,7 +772,7 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
 			// Initialize objs
 			$this->_objs = array();
 
-			// Initialize shared formula Parts
+			// Initialize shared formula _parts
 			$this->_sharedFormulaParts = array();
 
 			// Initialize shared formulas
@@ -1474,7 +1474,7 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
 					//	Not supported by PHPExcel
 					break;
 
-				case 0x0D:	//	Titles of Parts
+				case 0x0D:	//	Titles of _parts
 					//	Not supported by PHPExcel
 					break;
 

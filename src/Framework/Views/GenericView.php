@@ -6,28 +6,32 @@
  * Time: 18:57
  */
 
-namespace famoser\phpFrame\Framework\Views;
+namespace famoser\phpFrame\Views;
 
-class GenericView extends ViewBase
+
+class GenericView extends MenuView
 {
-    protected $controller = null;
-    protected $view = null;
-    public function __construct($controller, $submenu = null, $title = null, $description = null)
+    private $controller = null;
+    private $view = null;
+    private $folder = null;
+    private $fromFramework = null;
+
+    public function __construct($controller, $view = "index", $folder = null, $fromFramework = false)
     {
+        parent::__construct();
         $this->controller = $controller;
-        $this->view = $controller;
-        parent::__construct($submenu, $title, $description);
+        $this->view = $view;
+        $this->fromFramework = $fromFramework;
+        if (strlen($folder) > 0)
+            $this->folder = $folder . "/";
     }
 
     public function loadTemplate()
     {
-        ob_start();
-
-        include $_SERVER['DOCUMENT_ROOT'] . "/Templates/" . $this->controller . "controller/" . $this->view . ".php";
-        $output = ob_get_contents();
-        $output = sanitize_output($output);
-        ob_end_clean();
-
-        return $output;
+        if ($this->fromFramework){
+            return $this->loadFile($_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/" . $this->controller . "/" . $this->folder . $this->view . ".php");
+        } else {
+            return $this->loadFile($_SERVER['DOCUMENT_ROOT'] . "/Templates/" . $this->controller . "/" . $this->folder . $this->view . ".php");
+        }
     }
 }

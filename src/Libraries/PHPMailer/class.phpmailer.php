@@ -1772,7 +1772,7 @@ class PHPMailer
         }
         // RFC1341 part 5 says 7bit is assumed if not specified
         if ($this->Encoding != '7bit') {
-            // RFC 2045 section 6.4 says multipart MIME Parts may only use 7bit, 8bit or binary CTE
+            // RFC 2045 section 6.4 says multipart MIME _parts may only use 7bit, 8bit or binary CTE
             if ($ismultipart) {
                 if ($this->Encoding == '8bit') {
                     $result .= $this->headerLine('Content-Transfer-Encoding', '8bit');

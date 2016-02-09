@@ -9,72 +9,54 @@
 namespace famoser\phpFrame\Services;
 
 use Famoser\phpFrame\Core\Logging\Logger;
+use famoser\phpFrame\Helpers\FileHelper;
 
 class SettingsService extends ServiceBase
 {
     public function __construct()
     {
-        $configFilePath = dirname(dirname(__DIR__)) . "/FrameworkAssets/configuration.json";
-        if (file_exists($configFilePath)) {
-            $configJson = file_get_contents($configFilePath);
-            if (strlen($configJson) > 0) {
-                $this->config = json_decode($configJson, true);
-            } else {
-                Logger::getInstance()->logFatal("configuration file is empty at " . $configFilePath);
-            }
-        } else {
+        parent::__construct();
+        $configFilePath = $this->getSourceDir() . "/FrameworkAssets/configuration.json";
+        $resp = FileHelper::getInstance()->getJsonArray($configFilePath);
+        if ($resp === false)
             Logger::getInstance()->logFatal("could not find configuration file at " . $configFilePath);
-        }
+
+        $this->config = $resp;
+    }
+
+    public function getSourceDir()
+    {
+        return dirname(dirname(__DIR__));
     }
 
     /**
-     * @param $const string key from configuration file, or enum from SettingService::ENUM
+     * @param $name string key from configuration file, or enum from SettingService::ENUM
      * @return array|string returns array for key, and string for SettingService::ENUM
      */
-    public function getValueFor($const)
+    public function getValueFor($name)
     {
-        if (is_numeric($const)) {
-            if ($const >= SettingsService::SOURCE_DIR && $const <= SettingsService::TEMP_DIR)
-                return $this->getDirConst($const);
-            else if ($const >= SettingsService::DIRECTORY_SEPARATOR && $const <= SettingsService::DIRECTORY_SEPARATOR)
-                return $this->getPhpConst($const);
-            else {
-                Logger::getInstance()->logFatal("Unknown Setting: " . $const);
-                return "";
-            }
-        } else {
-            return $this->getConfiguration($const);
-        }
+        if (isset($this->config[$name]))
+            return $this->config[$name];
+
+        Logger::getInstance()->logError("Unknown Setting: " . $name);
+        return "";
     }
 
     /**
-     * @param $const string key from configuration file, or enum from SettingService::ENUM
-     * @return array|string returns array for key, and string for SettingService::ENUM
+     * @param string $className
+     * @return array|string
      */
-    public function getFrameworkConfig(Singleton $instance)
+    public function getFrameworkConfig(string $className)
     {
-
-        if (is_numeric($const)) {
-            if ($const >= SettingsService::SOURCE_DIR && $const <= SettingsService::TEMP_DIR)
-                return $this->getDirConst($const);
-            else if ($const >= SettingsService::DIRECTORY_SEPARATOR && $const <= SettingsService::DIRECTORY_SEPARATOR)
-                return $this->getPhpConst($const);
-            else {
-                Logger::getInstance()->logFatal("Unknown Setting: " . $const);
-                return "";
-            }
-        } else {
-            return $this->getConfiguration($const);
+        $namespace = "Famoser\\phpFrame\\";
+        if (strpos($className, $namespace) === 0) {
+            $name = str_replace($namespace, "", $className);
+            if (isset($this->config["Framework"]["Services"][$name]))
+                return $this->config["Framework"]["Services"][$name];
+            Logger::getInstance()->logError("Unknown Setting for Framework Service: " . $name);
+            return "";
         }
-    }
-
-    private function getConfiguration($key)
-    {
-        if (isset($this->config[$key]))
-            return $this->config[$key];
-        else {
-            Logger::getInstance()->logFatal("Unknown Config key: " . $key);
-            return array();
-        }
+        Logger::getInstance()->logError("Invalid call. Please use the getValueFor method");
+        return "";
     }
 }

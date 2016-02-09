@@ -6,43 +6,24 @@
  * Time: 09:36
  */
 
-namespace famoser\phpFrame\Framework\Views;
+namespace famoser\phpFrame\Views;
 
 class MessageView extends ViewBase
 {
     protected $message;
-    protected $loglevel;
-    protected $httpHeader;
+    protected $logLevel;
     protected $showLink;
 
-    public function __construct($message, $loglevel = LOG_LEVEL_INFO, $httpCode = null, $showLink = true)
+    public function __construct($message, $logLevel = LOG_LEVEL_INFO, $showLink = true)
     {
         $this->message = $message;
-        $this->loglevel = $loglevel;
-        $this->httpHeader = $httpCode;
+        $this->logLevel = $logLevel;
         $this->showLink = $showLink;
         parent::__construct();
     }
 
-    /**
-     * loads the template
-     */
     public function loadTemplate()
     {
-        if ($this->httpHeader == 404)
-            header("HTTP/1.0 404 Not Found");
-        if ($this->httpHeader == 403)
-            header("HTTP/1.0 403 Forbidden");
-        if ($this->httpHeader == 401)
-            header("HTTP/1.1 401 Unauthorized");
-
-        ob_start();
-
-        include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/message.php";
-        $output = ob_get_contents();
-        $output = sanitize_output($output);
-        ob_end_clean();
-
-        return $output;
+        return $this->loadFile($_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/message.php");
     }
 }

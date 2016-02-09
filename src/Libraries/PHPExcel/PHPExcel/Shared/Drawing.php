@@ -192,7 +192,7 @@ class PHPExcel_Shared_Drawing
         //    Structure: http://www.fastgraph.com/help/bmp_header_format.html
         if (substr($header,0,4)=="424d")
         {
-            //    Cut it in Parts of 2 bytes
+            //    Cut it in _parts of 2 bytes
             $header_parts    =    str_split($header,2);
 
             //    Get the width        4 bytes

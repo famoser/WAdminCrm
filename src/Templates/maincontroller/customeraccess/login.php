@@ -7,7 +7,7 @@
  */?>
 
 <?php if (!is_ajax_request())
-    include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/header_center.php";
+    include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/header_center.php";
 ?>
 
 <h1>Willkommen! Bitte geben Sie Ihr Passwort ein, um Zugriff zu erhalten</h1>
@@ -17,4 +17,4 @@
     </form>
 
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/footer_content.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/footer_content.php"; ?>

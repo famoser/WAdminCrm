@@ -7,7 +7,7 @@
  */
 ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/header_crud.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/header_crud.php"; ?>
 
     <form id="login" class="no-ajax" action="forgotpass" method="post">
         <p>Geben Sie Ihre E-Mail an, mit der Sie hier registriert sind.
@@ -21,4 +21,4 @@
     </form>
 
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/footer_content.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/footer_content.php"; ?>

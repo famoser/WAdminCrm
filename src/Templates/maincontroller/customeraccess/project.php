@@ -6,9 +6,9 @@
  * Time: 19:38
  */ ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/header_content.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/header_content.php"; ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Templates/ProjectsController/Parts/read.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Templates/ProjectsController/_parts/read.php"; ?>
 
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/footer_content.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/footer_content.php"; ?>

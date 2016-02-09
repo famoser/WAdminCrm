@@ -888,7 +888,7 @@ class PHPExcel_ReferenceHelper
 			// Get coordinates of $pCellReference
 			list($newColumn, $newRow) = PHPExcel_Cell::coordinateFromString( $pCellReference );
 
-			// Verify which Parts should be updated
+			// Verify which _parts should be updated
 			$updateColumn = (($newColumn{0} != '$') && ($beforeColumn{0} != '$') &&
 							 PHPExcel_Cell::columnIndexFromString($newColumn) >= PHPExcel_Cell::columnIndexFromString($beforeColumn));
 			$updateRow = (($newRow{0} != '$') && ($beforeRow{0} != '$') &&

@@ -9,34 +9,42 @@
 namespace famoser\phpFrame\Helpers;
 
 
+use DateTime;
+use Famoser\phpFrame\Core\Logging\Logger;
+use Famoser\phpFrame\Models\Locale\Language;
+use famoser\phpFrame\Services\LocaleService;
+use famoser\phpFrame\Services\SettingsService;
+
 class FormatHelper extends HelperBase
 {
+    private $formats;
+
     public function __construct()
     {
-
+        $this->formats = LocaleService::getInstance()->getFormats();
     }
 
-    function format_Text($input)
+    public function textOrPlaceholder($input)
     {
         if ($input == "")
             return "-";
         return $input;
     }
 
-    function format_DateTimeNumbers($input)
+    public function dateTimeShort($input)
     {
         $res = "";
-        $time = GetDateObject($input);
+        $time = $this->parseDateTimeObject($input);
         if ($time !== false) {
             $res .= $time->format(DATETIME_FORMAT_DISPLAY);
         }
         return $res;
     }
 
-    function format_DateTimeText($input, $input2 = null)
+    public function dateTimeText($input, $input2 = null)
     {
         $res = "";
-        $time = GetDateObject($input);
+        $time = $this->parseDateTimeObject($input);
         if ($time !== false) {
             $date = format_DateText($input);
             $res = $date . " um " . $time->format("H:i");
@@ -53,9 +61,9 @@ class FormatHelper extends HelperBase
         return $res;
     }
 
-    function format_DateText($input)
+    public function dateText($input)
     {
-        $time1 = GetDateObject($input);
+        $time1 = $this->parseDateTimeObject($input);
         if ($time1 !== false) {
             $days = unserialize(LOCALE_DAYS_SER);
             $months = unserialize(LOCALE_MONTHS_SER);
@@ -65,10 +73,10 @@ class FormatHelper extends HelperBase
         return "-";
     }
 
-    function format_TimeSpanText($input1, $input2)
+    public function format_TimeSpanText($input1, $input2)
     {
-        $time1 = GetDateObject($input1);
-        $time2 = GetDateObject($input2);
+        $time1 = $this->parseDateTimeObject($input1);
+        $time2 = $this->parseDateTimeObject($input2);
 
         if ($time1 == false || $time2 == false)
             return "";
@@ -76,10 +84,10 @@ class FormatHelper extends HelperBase
         return (abs($time1->getTimestamp() - $time2->getTimestamp()) / 60) . " minutes";
     }
 
-    function format_TimeSpanMinutes($input1, $input2)
+    public function format_TimeSpanMinutes($input1, $input2)
     {
-        $time1 = GetDateObject($input1);
-        $time2 = GetDateObject($input2);
+        $time1 = $this->parseDateTimeObject($input1);
+        $time2 = $this->parseDateTimeObject($input2);
 
         if ($time1 == false || $time2 == false)
             return 0;
@@ -87,7 +95,7 @@ class FormatHelper extends HelperBase
         return abs($time1->getTimestamp() - $time2->getTimestamp()) / 60;
     }
 
-    function format_Money($money, $isZeroValid = true)
+    public function format_Money($money, $isZeroValid = true)
     {
         if ($money == 0)
             if ($isZeroValid)
@@ -97,7 +105,7 @@ class FormatHelper extends HelperBase
         return number_format($money, 2) . " " . CURRENCY;
     }
 
-    function format_WorkingTime($timeSpan)
+    public function format_WorkingTime($timeSpan)
     {
         $std = $timeSpan / 60;
         $min = $timeSpan % 60;
@@ -105,15 +113,15 @@ class FormatHelper extends HelperBase
     }
 
 
-    function format_Percentage($value, $total)
+    public function format_Percentage($value, $total)
     {
         $percentage = $value / $total * 100;
         return number_format($percentage, 0);
     }
 
-    function GetDateObject($input)
+    public function parseDateTimeObject($input)
     {
-        $time = DateTime::createFromFormat(DATETIME_FORMAT_DATABASE, $input);
+        $time = DateTime::createFromFormat($this->formats["DateTime"]["Database"], $input);
         if ($time == false)
             $time = DateTime::createFromFormat(DATE_FORMAT_DATABASE, $input);
         if ($time == false)

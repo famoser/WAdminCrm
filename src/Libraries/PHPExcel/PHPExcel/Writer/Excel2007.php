@@ -54,7 +54,7 @@ class PHPExcel_Writer_Excel2007 extends PHPExcel_Writer_Abstract implements PHPE
 	private $_office2003compatibility = false;
 
 	/**
-	 * Private writer Parts
+	 * Private writer _parts
 	 *
 	 * @var PHPExcel_Writer_Excel2007_WriterPart[]
 	 */
@@ -148,7 +148,7 @@ class PHPExcel_Writer_Excel2007 extends PHPExcel_Writer_Abstract implements PHPE
 									'relsribbonobjects' => 'PHPExcel_Writer_Excel2007_RelsRibbon'
 								 );
 
-    	//	Initialise writer Parts
+    	//	Initialise writer _parts
 		//		and Assign their parent IWriters
 		foreach ($writerPartsArray as $writer => $class) {
 			$this->_writerParts[$writer] = new $class($this);
@@ -326,7 +326,7 @@ class PHPExcel_Writer_Excel2007 extends PHPExcel_Writer_Abstract implements PHPE
 					$chartCount = $this->_spreadSheet->getSheet($i)->getChartCount();
 				}
 
-				// Add drawing and image relationship Parts
+				// Add drawing and image relationship _parts
 				if (($drawingCount > 0) || ($chartCount > 0)) {
 					// Drawing relationships
 					$objZip->addFromString('xl/drawings/_rels/drawing' . ($i + 1) . '.xml.rels', $this->getWriterPart('Rels')->writeDrawingRelationships($this->_spreadSheet->getSheet($i),$chartRef1, $this->_includeCharts));
@@ -335,7 +335,7 @@ class PHPExcel_Writer_Excel2007 extends PHPExcel_Writer_Abstract implements PHPE
 					$objZip->addFromString('xl/drawings/drawing' . ($i + 1) . '.xml', $this->getWriterPart('Drawing')->writeDrawings($this->_spreadSheet->getSheet($i),$chartRef2,$this->_includeCharts));
 				}
 
-				// Add comment relationship Parts
+				// Add comment relationship _parts
 				if (count($this->_spreadSheet->getSheet($i)->getComments()) > 0) {
 					// VML Comments
 					$objZip->addFromString('xl/drawings/vmlDrawing' . ($i + 1) . '.vml', $this->getWriterPart('Comments')->writeVMLComments($this->_spreadSheet->getSheet($i)));
@@ -344,7 +344,7 @@ class PHPExcel_Writer_Excel2007 extends PHPExcel_Writer_Abstract implements PHPE
 					$objZip->addFromString('xl/comments' . ($i + 1) . '.xml', $this->getWriterPart('Comments')->writeComments($this->_spreadSheet->getSheet($i)));
 				}
 
-				// Add header/footer relationship Parts
+				// Add header/footer relationship _parts
 				if (count($this->_spreadSheet->getSheet($i)->getHeaderFooter()->getImages()) > 0) {
 					// VML Drawings
 					$objZip->addFromString('xl/drawings/vmlDrawingHF' . ($i + 1) . '.vml', $this->getWriterPart('Drawing')->writeVMLHeaderFooterImages($this->_spreadSheet->getSheet($i)));

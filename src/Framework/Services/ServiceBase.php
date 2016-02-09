@@ -9,9 +9,18 @@
 namespace famoser\phpFrame\Services;
 
 
-use Famoser\WAdminCrm\Framework\Core\Singleton\Singleton;
+
+use Famoser\phpFrame\Core\Singleton\Singleton;
 
 class ServiceBase extends Singleton
 {
+    protected $config;
 
+    public function __construct($getConfig = false)
+    {
+        if ($getConfig) {
+            $className = get_called_class();
+            $this->config = SettingsService::getInstance()->getFrameworkConfig($className);
+        }
+    }
 }

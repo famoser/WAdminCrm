@@ -25,6 +25,7 @@ function hi_framework()
     /*
      *  error_reporting(E_ALL);
      *  ini_set('display_errors', 1);
+     *  RuntimeService-> original add params
      */
 
     //register autoload

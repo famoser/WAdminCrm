@@ -1028,7 +1028,7 @@ class PHPExcel_Writer_Excel5_Worksheet extends PHPExcel_Writer_Excel5_BIFFwriter
 		$record	  = 0x01B8;					   // Record identifier
 		$length	  = 0x00000;					  // Bytes to follow
 
-		// Pack the undocumented Parts of the hyperlink stream
+		// Pack the undocumented _parts of the hyperlink stream
 		$unknown1	= pack("H*", "D0C9EA79F9BACE118C8200AA004BA90B02000000");
 		$unknown2	= pack("H*", "E0C9EA79F9BACE118C8200AA004BA90B");
 
@@ -1076,7 +1076,7 @@ class PHPExcel_Writer_Excel5_Worksheet extends PHPExcel_Writer_Excel5_BIFFwriter
 		// Strip URL type
 		$url = preg_replace('/^internal:/', '', $url);
 
-		// Pack the undocumented Parts of the hyperlink stream
+		// Pack the undocumented _parts of the hyperlink stream
 		$unknown1	= pack("H*", "D0C9EA79F9BACE118C8200AA004BA90B02000000");
 
 		// Pack the option flags
@@ -1175,7 +1175,7 @@ class PHPExcel_Writer_Excel5_Worksheet extends PHPExcel_Writer_Excel5_BIFFwriter
 		$dir_long_len  = pack("V", strlen($dir_long)	   );
 		$stream_len	= pack("V", 0);//strlen($dir_long) + 0x06);
 
-		// Pack the undocumented Parts of the hyperlink stream
+		// Pack the undocumented _parts of the hyperlink stream
 		$unknown1 = pack("H*",'D0C9EA79F9BACE118C8200AA004BA90B02000000'	   );
 		$unknown2 = pack("H*",'0303000000000000C000000000000046'			   );
 		$unknown3 = pack("H*",'FFFFADDE000000000000000000000000000000000000000');

@@ -7,7 +7,7 @@
  */
 ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/_headerPart.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/_headerPart.php"; ?>
 
 <body>
 <div class="mobile-container">
@@ -29,5 +29,5 @@
 
 <div class="center-content-wrapper">
     <div class="container">
-        <?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/message_template.php"; ?>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/message_template.php"; ?>
         <div class="center-content content">

@@ -6,35 +6,33 @@
  * Time: 14:42
  */ ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/header_content.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/header_content.php"; ?>
 
     <div class="col-md-3 right-content">
         <div class="col-md-12 content">
-            <a href="projects/add/<?php
-            if (count($this->_["customers"]) == 1)
-                echo $this->_["customers"][0]->Id; ?>" class="tilebutton dialogbutton"
-               data-dialog-title="add new project"
-               data-dialog-size="wide" data-dialog-type="primary">add new project<?php
-                if (count($this->_["customers"]) == 1)
-                    echo " to this customer"; ?>
+            <a href="milestones/add/<?php
+            if (count($this->_["projects"]) == 1)
+                echo $this->_["projects"][0]->Id; ?>" class="tilebutton dialogbutton"
+               data-dialog-title="add new milestone"
+               data-dialog-size="wide" data-dialog-type="primary">add new milestone <?php
+                if (count($this->_["projects"]) == 1)
+                    echo "to this project"; ?>
             </a>
         </div>
 
         <div class="col-md-12 content">
-            <input type="text" class="searchinput" placeholder="Suche nach..." data-table-id="projects">
+            <input type="text" class="searchinput" placeholder="Suche nach..." data-table-id="milestones">
         </div>
     </div>
 
-
     <div class="col-md-9 no-padding">
-        <?php foreach ($this->_["customers"] as $customer) { ?>
-
+        <?php foreach ($this->_["projects"] as $project) { ?>
             <div class="content">
                 <h2>
-                    <?php echo $customer->GetIdentification() ?>
+                    <a href="projects/bycustomer/<?php echo $project->CustomerId ?>"><?php echo $project->GetIdentification() ?></a>
                 </h2>
 
-                <table class="table table-hover sortable" id="projects">
+                <table class="table table-hover sortable" id="milestones">
                     <thead>
                     <tr>
                         <th data-sort="string">
@@ -44,34 +42,31 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($customer->Projects as $project) {
+                    <?php foreach ($project->Milestones as $milestone) {
                         ?>
                         <tr>
                             <td>
-                                <a href="/milestones/byproject/<?php echo $project->Id; ?>"><?php echo $project->GetIdentification(); ?></a>
+                                <a href="/procedures/bymilestone/<?php echo $milestone->Id; ?>"><?php echo $milestone->GetIdentification(); ?></a>
                             </td>
                             <td>
                                 <div class="btn-group">
-                                    <?php if ($project->IsCompletedBool)
+                                    <?php if ($milestone->IsCompletedBool)
                                         echo '<span class="flaticon-check64 tilebutton"></span>';
                                     ?>
-                                    <a class="tilebutton onlyicon" href="projects/<?php echo $project->Id; ?>">
-                                        <span class="flaticon-chart47">customer view</span>
-                                    </a>
-                                    <a id="editbutton_<?php echo $project->Id; ?>"
-                                       href="/projects/edit/<?php echo $project->Id; ?>"
+                                    <a id="editbutton_<?php echo $milestone->Id; ?>"
+                                       href="/milestones/edit/<?php echo $milestone->Id; ?>"
                                        class="tilebutton dialogbutton onlyicon"
-                                       data-dialog-idbutton0="deletebutton_<?php echo $project->Id; ?>"
+                                       data-dialog-idbutton0="deletebutton_<?php echo $milestone->Id; ?>"
                                        data-dialog-title="Bearbeiten"
                                        data-dialog-type="warning"
                                        data-dialog-size="wide"
                                        role="button">
                                         <span class="flaticon-pencil124">bearbeiten</span>
                                     </a>
-                                    <a id="deletebutton_<?php echo $project->Id; ?>"
-                                       href="/projects/delete/<?php echo $project->Id; ?>"
+                                    <a id="deletebutton_<?php echo $milestone->Id; ?>"
+                                       href="/milestones/delete/<?php echo $milestone->Id; ?>"
                                        class="tilebutton dialogbutton onlyicon"
-                                       data-dialog-idbutton0="editbutton_<?php echo $project->Id; ?>"
+                                       data-dialog-idbutton0="editbutton_<?php echo $milestone->Id; ?>"
                                        data-dialog-title="Löschen"
                                        data-dialog-type="danger"
                                        role="button">
@@ -89,4 +84,5 @@
     </div>
 
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/footer_content.php"; ?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/footer_content.php"; ?>

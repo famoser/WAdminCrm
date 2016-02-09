@@ -9,10 +9,13 @@
 namespace famoser\phpFrame\Controllers;
 
 
+use famoser\phpFrame\Framework\Views\GenericCrudView;
+use famoser\phpFrame\Framework\Views\GenericView;
+use famoser\phpFrame\Framework\Views\MessageView;
+use famoser\phpFrame\Services\GenericDatabaseService;
+
 class GenericController extends ControllerBase
 {
-    private $request = null;
-    private $params = null;
     private $table = null;
     private $object = null;
     private $orderby = null;
@@ -21,15 +24,10 @@ class GenericController extends ControllerBase
     private $submenu = null;
     private $nrelations = null;
 
-    /**
-     * Konstruktor, erstellet den Controller.
-     *
-     * @param Array $request Array aus $_GET & $_POST.
-     */
-    public function __construct($request, $params, $table, $object, $orderBy, $replaces = null, $controllerreplaces = null, $submenu = null, $nrelations = null)
+    public function __construct($request, $params, $files, $table, $object, $orderBy, $replaces = null, $controllerreplaces = null, $submenu = null, $nrelations = null)
     {
-        $this->request = $request;
-        $this->params = $params;
+        parent::__construct($request, $params, $files);
+
         /*
         $this->table = "persons";
         $this->object = "Person";
@@ -62,7 +60,7 @@ class GenericController extends ControllerBase
     {
         if (count($this->params) == 0 || $this->params[0] == "" || $this->IsReplaced("")) {
             $view = new GenericView($this->table, $this->submenu);
-            $view->assign($this->table, GetAllOrderedBy($this->table, $this->orderby));
+            $view->assign($this->table, GenericDatabaseService::getInstance()->GetAllOrderedBy($this->table, $this->orderby));
         } else {
             $view = new GenericCrudView($this->params[0], $this->replaces, $this->table);
             if ($this->params[0] == "add" || $this->IsReplaced("add")) {
@@ -76,14 +74,14 @@ class GenericController extends ControllerBase
                         }
                     }
 
-                    $res = AddOrUpdate($this->table, $this->request);
-                    $obj = GetById($this->table, $res);
+                    $res = GenericDatabaseService::getInstance()->AddOrUpdate($this->table, $this->request);
+                    $obj = GenericDatabaseService::getInstance()->GetById($this->table, $res);
                     if ($obj !== false) {
                         DoLog($this->object . " was added", LOG_LEVEL_INFO);
                         $view->assign("obj", $obj);
                         if ($this->nrelations != null) {
                             foreach ($this->nrelations as $relation) {
-                                $view->assign($relation["table"], GetAllOrderedBy($relation["table"], $relation["orderby"]));
+                                $view->assign($relation["table"], GenericDatabaseService::getInstance()->GetAllOrderedBy($relation["table"], $relation["orderby"]));
                             }
                         }
                         $view->changeMode("edit");
@@ -94,7 +92,7 @@ class GenericController extends ControllerBase
                     $view->assign("obj", $place1);
                     if ($this->nrelations != null) {
                         foreach ($this->nrelations as $relation) {
-                            $view->assign($relation["table"], GetAllOrderedBy($relation["table"], $relation["orderby"]));
+                            $view->assign($relation["table"], GenericDatabaseService::getInstance()->GetAllOrderedBy($relation["table"], $relation["orderby"]));
                         }
                     }
                 }
@@ -103,20 +101,20 @@ class GenericController extends ControllerBase
                     unset($this->request["edit"]);
 
                     $this->request["Id"] = $this->params[1];
-                    $res = AddOrUpdate($this->table, $this->request);
+                    $res = GenericDatabaseService::getInstance()->AddOrUpdate($this->table, $this->request);
                     if ($res)
                         DoLog($this->object . " was updated", LOG_LEVEL_INFO);
                     else
                         DoLog($this->object . " could not be updated", LOG_LEVEL_SYSTEM_ERROR);
                 }
 
-                $obj = GetById($this->table, $this->params[1]);
+                $obj = GenericDatabaseService::getInstance()->GetById($this->table, $this->params[1]);
                 if ($obj !== false) {
                     $view->assign("obj", $obj);
 
                     if ($this->nrelations != null) {
                         foreach ($this->nrelations as $relation) {
-                            $view->assign($relation["table"], GetAllOrderedBy($relation["table"], $relation["orderby"]));
+                            $view->assign($relation["table"], GenericDatabaseService::getInstance()->GetAllOrderedBy($relation["table"], $relation["orderby"]));
                         }
                     }
                 } else {
@@ -126,13 +124,13 @@ class GenericController extends ControllerBase
                 if (isset($this->request["delete"]) && $this->request["delete"] == "true") {
 
 
-                    $res = DeleteById($this->table, $this->params[1]);
+                    $res = GenericDatabaseService::getInstance()->DeleteById($this->table, $this->params[1]);
                     if ($res) {
                         $view = new MessageView($this->object . " was deleted", LOG_LEVEL_INFO);
                     } else
                         $view = new MessageView($this->object . " could not be deleted", LOG_LEVEL_SYSTEM_ERROR);
                 }
-                $obj = GetById($this->table, $this->params[1]);
+                $obj = GenericDatabaseService::getInstance()->GetById($this->table, $this->params[1]);
                 if ($obj !== false) {
                     $view->assign("obj", $obj);
                 } else {

@@ -5,25 +5,19 @@
  * Date: 09.09.2015
  * Time: 23:44
  */
-namespace famoser\phpFrame\Framework\Views;
+namespace famoser\phpFrame\Views;
 
-class RawView
+class RawView extends ViewBase
 {
     protected $path = null;
     public function __construct($path)
     {
+        parent::__construct();
         $this->path = $path;
     }
 
     public function loadTemplate()
     {
-        ob_start();
-
-        include $_SERVER['DOCUMENT_ROOT'] . $this->path;
-        $output = ob_get_contents();
-        $output = sanitize_output($output);
-        ob_end_clean();
-
-        return $output;
+        return $this->loadFile($_SERVER['DOCUMENT_ROOT'] . $this->path);
     }
 }

@@ -7,7 +7,7 @@
  */
 ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/header_content.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/header_content.php"; ?>
     <div class="col-md-3 right-content">
         <div class="col-md-12 content">
             <a href="customers/add" class="tilebutton dialogbutton" data-dialog-title="add new customer"
@@ -69,4 +69,4 @@
         </table>
     </div>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/footer_content.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/footer_content.php"; ?>

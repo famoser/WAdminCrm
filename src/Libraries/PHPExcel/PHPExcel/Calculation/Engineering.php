@@ -688,7 +688,7 @@ class PHPExcel_Calculation_Engineering {
 	/**
 	 * _parseComplex
 	 *
-	 * Parses a complex number into its real and imaginary Parts, and an I or J suffix
+	 * Parses a complex number into its real and imaginary _parts, and an I or J suffix
 	 *
 	 * @param	string		$complexNumber	The complex number
 	 * @return	string[]	Indexed on "real", "imaginary" and "suffix"

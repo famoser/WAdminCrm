@@ -9,7 +9,7 @@ define("FRAMEWORK_VERSION", "1");
 /* Base Settings */
 
 define("AFTER_LOGIN_PAGE", "customers");
-define("INCLUDED_FOLDERS", serialize(array("common", "controller", "Models/models", "Services", "view", "Templates/Helpers")));
+define("INCLUDED_FOLDERS", serialize(array("common", "controller", "Models/Models", "Services", "view", "Templates/Helpers")));
 define("EXCLUDED_FILES", serialize(array($_SERVER['DOCUMENT_ROOT'] . "/common/configuration_public.php")));
 define("CONTROLLERS", '
 [

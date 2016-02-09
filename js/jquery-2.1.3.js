@@ -7551,7 +7551,7 @@ var
 	rurl = /^([\w.+-]+:)(?:\/\/(?:[^\/?#]*@|)([^\/?#:]*)(?::(\d+)|)|)/,
 
 	/* Prefilters
-	 * 1) They are useful to introduce custom dataTypes (see Crud/jsonp.js for an example)
+	 * 1) They are useful to introduce custom dataTypes (see _crud/jsonp.js for an example)
 	 * 2) These are called:
 	 *    - BEFORE asking for a transport
 	 *    - AFTER param serialization (s.data is a string if s.processData is true)
@@ -7574,7 +7574,7 @@ var
 	// Document location
 	ajaxLocation = window.location.href,
 
-	// Segment location into Parts
+	// Segment location into _parts
 	ajaxLocParts = rurl.exec( ajaxLocation.toLowerCase() ) || [];
 
 // Base "constructor" for jQuery.ajaxPrefilter and jQuery.ajaxTransport
@@ -7634,7 +7634,7 @@ function inspectPrefiltersOrTransports( structure, options, originalOptions, jqX
 	return inspect( options.dataTypes[ 0 ] ) || !inspected[ "*" ] && inspect( "*" );
 }
 
-// A special extend for Crud options
+// A special extend for _crud options
 // that takes "flat" options (not to be deep extended)
 // Fixes #9887
 function ajaxExtend( target, src ) {
@@ -7653,7 +7653,7 @@ function ajaxExtend( target, src ) {
 	return target;
 }
 
-/* Handles responses to an Crud request:
+/* Handles responses to an _crud request:
  * - finds the right dataType (mediates between content-type and expected dataType)
  * - returns the corresponding response
  */

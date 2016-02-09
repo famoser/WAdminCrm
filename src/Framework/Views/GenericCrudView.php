@@ -6,7 +6,9 @@
  * Time: 18:50
  */
 
-namespace famoser\phpFrame\Framework\Views;
+namespace famoser\phpFrame\Views;
+
+use Famoser\phpFrame\Core\Logging\Logger;
 
 class GenericCrudView extends GenericView
 {
@@ -14,47 +16,43 @@ class GenericCrudView extends GenericView
     protected $folder;
     protected $replaces;
 
-    public function __construct($mode, $replaces, $controller, $folder = null, $submenu = null, $title = null, $description = null)
-    {
-        $this->replaces = $replaces;
-        $this->link = $mode;
-        $this->setMode($mode);
+    const CRUD_CREATE = 1;
+    const CRUD_READ = 2;
+    const CRUD_UPDATE = 3;
+    const CRUD_DELETE = 4;
 
-        if ($folder === null)
-            $this->folder = "Crud/";
-        if ($folder === "")
-            $this->folder = "";
-        if (strlen($folder) > 0)
-            $this->folder = $folder . "/";
-        parent::__construct($controller, $submenu = null, $title = null, $description = null);
-    }
+    const CRUD_GENERIC_DELETE = 14;
 
-    public function changeMode($newmode)
+    public function __construct($controller, $mode, array $replaces = null)
     {
-        $this->setMode($newmode);
-    }
-
-    private function setMode($newmode)
-    {
-        if ($this->replaces != null && is_array($this->replaces) && isset($this->replaces[$newmode]))
-            $this->mode = $this->replaces[$newmode];
-        else
-            $this->mode = $newmode;
-        $this->assign("mode", $this->mode);
-    }
-
-    public function loadTemplate()
-    {
-        ob_start();
-        if ($this->mode == "delete") {
-            include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/genericcontroller/Crud/delete.php";
+        if ($mode >= 10) {
+            $mode -= 10;
+            parent::__construct("GenericController", $this->getFilenameFromMode($this->getMode($mode, $replaces)), "_crud", true);
         } else {
-            include $_SERVER['DOCUMENT_ROOT'] . "/Templates/" . $this->controller . "controller/" . $this->folder . $this->mode . ".php";
+            parent::__construct($controller, $this->getFilenameFromMode($this->getMode($mode, $replaces)), "_crud");
         }
-        $output = ob_get_contents();
-        $output = sanitize_output($output);
-        ob_end_clean();
+    }
 
-        return $output;
+    private function getMode($mode, $replaces)
+    {
+        if ($replaces != null && is_array($replaces) && isset($replaces[$mode]))
+            return $replaces[$mode];
+        else
+            return $mode;
+    }
+
+    private function getFilenameFromMode($mode)
+    {
+        if ($mode == GenericCrudView::CRUD_CREATE)
+            return "create";
+        else if ($mode == GenericCrudView::CRUD_READ)
+            return "read";
+        else if ($mode == GenericCrudView::CRUD_UPDATE)
+            return "update";
+        else if ($mode == GenericCrudView::CRUD_DELETE)
+            return "delete";
+        else
+            Logger::getInstance()->logFatal("Invalid crud action! Please use one of the constants in GenericCrudView");
+        return "";
     }
 }

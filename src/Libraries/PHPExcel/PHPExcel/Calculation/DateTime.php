@@ -501,7 +501,7 @@ class PHPExcel_Calculation_DateTime {
 			//	We've been fed a time value without any date
 			return 0.0;
 		} elseif (count($t1) == 2) {
-			//	We only have two Parts of the date: either day/month or month/year
+			//	We only have two _parts of the date: either day/month or month/year
 			if ($yearFound) {
 				array_unshift($t1,1);
 			} else {

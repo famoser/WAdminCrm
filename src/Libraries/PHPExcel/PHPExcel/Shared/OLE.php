@@ -467,7 +467,7 @@ class PHPExcel_Shared_OLE
 			return "\x00\x00\x00\x00\x00\x00\x00\x00";
 		}
 
-		// factor used for separating numbers into 4 bytes Parts
+		// factor used for separating numbers into 4 bytes _parts
 		$factor = pow(2, 32);
 
 		// days from 1-1-1601 until the beggining of UNIX era
@@ -512,7 +512,7 @@ class PHPExcel_Shared_OLE
 			return new PEAR_Error("Expecting 8 byte string");
 		}
 
-		// factor used for separating numbers into 4 bytes Parts
+		// factor used for separating numbers into 4 bytes _parts
 		$factor = pow(2,32);
 		list(, $high_part) = unpack('V', substr($string, 4, 4));
 		list(, $low_part) = unpack('V', substr($string, 0, 4));

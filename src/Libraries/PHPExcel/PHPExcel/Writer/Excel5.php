@@ -210,7 +210,7 @@ class PHPExcel_Writer_Excel5 extends PHPExcel_Writer_Abstract implements PHPExce
 		  $OLE_SummaryInformation->append($this->_summaryInformation);
 		}
 
-		// define OLE Parts
+		// define OLE _parts
 		$arrRootData = array($OLE);
 		// initialize OLE Properties file
 		if(isset($OLE_SummaryInformation)){

@@ -7,11 +7,11 @@
  */
 ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/header_content.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/header_content.php"; ?>
 
     <div class="col-md-3 right-content">
         <div class="col-md-12 content">
-            <?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/loading_replacement.php" ?>
+            <?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/loading_replacement.php" ?>
             <form class="clearfix no-replace clear-after-submit" action="settings" method="post">
                 <input type="hidden" name="changepass" value="changepass">
                 <input name="Password1" id="Passwort1" placeholder="Neues Passwort festlegen" type="password">
@@ -88,4 +88,4 @@
     </div>
 
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/Parts/footer_content.php"; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/footer_content.php"; ?>

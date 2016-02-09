@@ -844,7 +844,7 @@
                 return $this;
             };
 
-            // Icon spinning, helpful for indicating Crud loading status.
+            // Icon spinning, helpful for indicating _crud loading status.
             $button.toggleSpin = function (spin) {
                 var $this = this;
                 var dialog = $this.dialog;

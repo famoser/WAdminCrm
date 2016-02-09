@@ -332,7 +332,7 @@ class PHPExcel_Worksheet_AutoFilter
 				$dtVal = date('Ymd',$dateValue);
 				$dateSet = $dateSet['date'];
 			} else {
-				//	date and time Parts
+				//	date and time _parts
 				$dtVal = date('YmdHis',$dateValue);
 				$dateSet = $dateSet['dateTime'];
 			}

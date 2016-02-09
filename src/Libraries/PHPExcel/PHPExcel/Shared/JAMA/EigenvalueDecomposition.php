@@ -819,7 +819,7 @@ class EigenvalueDecomposition {
 
 
 	/**
-	 *	Return the real Parts of the eigenvalues
+	 *	Return the real _parts of the eigenvalues
 	 *
 	 *	@access public
 	 *	@return real(diag(D))
@@ -830,7 +830,7 @@ class EigenvalueDecomposition {
 
 
 	/**
-	 *	Return the imaginary Parts of the eigenvalues
+	 *	Return the imaginary _parts of the eigenvalues
 	 *
 	 *	@access public
 	 *	@return imag(diag(D))

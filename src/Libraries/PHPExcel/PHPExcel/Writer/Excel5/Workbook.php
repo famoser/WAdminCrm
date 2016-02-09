@@ -823,7 +823,7 @@ class PHPExcel_Writer_Excel5_Workbook extends PHPExcel_Writer_Excel5_BIFFwriter
 		// size of the formula (in bytes)
 		$sz = strlen($formulaData);
 
-		// combine the Parts
+		// combine the _parts
 		$data = pack('vCCvvvCCCC', $options, 0, $nlen, $sz, 0, $sheetIndex, 0, 0, 0, 0)
 			. $name . $formulaData;
 		$length = strlen($data);
@@ -859,7 +859,7 @@ class PHPExcel_Writer_Excel5_Workbook extends PHPExcel_Writer_Excel5_BIFFwriter
 		// size of the formula (in bytes)
 		$sz = strlen($extra);
 
-		// combine the Parts
+		// combine the _parts
 		$data = pack('vCCvvvCCCCC', $options, 0, 1, $sz, 0, $sheetIndex, 0, 0, 0, 0, 0)
 			. $name . $extra;
 		$length = strlen($data);

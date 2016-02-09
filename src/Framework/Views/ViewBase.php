@@ -6,7 +6,7 @@
  * Date: 23.05.2015
  * Time: 14:14
  */
-namespace famoser\phpFrame\Framework\Views;
+namespace famoser\phpFrame\Views;
 
 class ViewBase
 {
@@ -15,11 +15,10 @@ class ViewBase
      * werden sollen.
      */
     protected $_ = array();
-    protected $page_title = DEFAULTTITLE;
-    protected $page_description = DEFAULTDESCRIPTION;
-    protected $subMenu = array();
+    private $page_title = DEFAULTTITLE;
+    private $page_description = DEFAULTDESCRIPTION;
 
-    public function __construct($subMenu = null, $title = null, $description = null)
+    public function __construct($title = null, $description = null)
     {
         $this->params = unserialize(ACTIVE_PARAMS);
 
@@ -27,26 +26,21 @@ class ViewBase
             $this->page_title = $title;
         if ($description != null)
             $this->page_description = $description;
-        if ($subMenu != null)
-            $this->subMenu = $subMenu;
     }
 
-    public function addSubMenuEntry($href, $content, $appendAtStart = false)
+    public function setPageTitle($title)
     {
-        $arr = array();
-        $arr["href"] = $href;
-        $arr["content"] = $content;
-        if ($appendAtStart) {
-            $mainArr = array();
-            $mainArr[] = $arr;
-            array_push($mainArr, $this->subMenu);
-        } else {
-            $this->subMenu[] = $arr;
-        }
+        $this->page_title = $title;
     }
+
+    public function setPageDescription($description)
+    {
+        $this->page_description = $description;
+    }
+
 
     /**
-     * Ordnet eine Variable einem bestimmten Schl&uuml;ssel zu.
+     * Ordnet eine Variable einem bestimmten Schlüssel zu.
      *
      * @param String $key Schlüssel
      * @param String $value Variable
@@ -54,5 +48,20 @@ class ViewBase
     public function assign($key, $value)
     {
         $this->_[$key] = $value;
+    }
+
+    /**
+     * loads the template
+     */
+    protected function loadFile($file)
+    {
+        ob_start();
+
+        include $file;
+        $output = ob_get_contents();
+        $output = sanitize_output($output);
+        ob_end_clean();
+
+        return $output;
     }
 }
