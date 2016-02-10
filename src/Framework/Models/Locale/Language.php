@@ -9,7 +9,7 @@
 namespace Famoser\phpFrame\Models\Locale;
 
 
-use Famoser\phpFrame\Core\Logging\Logger;
+use Famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\FileHelper;
 
 class Language
@@ -39,7 +39,7 @@ class Language
                 $configFilePath = $this->folder . DIRECTORY_SEPARATOR . $resourceFile;
                 $resp = FileHelper::getInstance()->getJsonArray($configFilePath);
                 if ($resp === false)
-                    Logger::getInstance()->logFatal("could not find resource file at " . $configFilePath);
+                    LogHelper::getInstance()->logFatal("could not find resource file at " . $configFilePath);
                 else
                     $resourceArr = array_merge($resp, $resourceArr);
             }
@@ -56,7 +56,7 @@ class Language
                 $configFilePath = $this->folder . DIRECTORY_SEPARATOR . $formatFile;
                 $resp = FileHelper::getInstance()->getJsonArray($configFilePath);
                 if ($resp === false)
-                    Logger::getInstance()->logFatal("could not find format file at " . $configFilePath);
+                    LogHelper::getInstance()->logFatal("could not find format file at " . $configFilePath);
                 else
                     $this->formats = array_merge($resp, $this->formats);
             }

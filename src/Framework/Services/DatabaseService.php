@@ -9,7 +9,7 @@
 namespace famoser\phpFrame\Services;
 
 
-use Famoser\phpFrame\Core\Logging\Logger;
+use Famoser\phpFrame\Core\Logging\LogHelper;
 use PDO;
 
 class DatabaseService extends ServiceBase
@@ -69,7 +69,7 @@ class DatabaseService extends ServiceBase
         if ($connection["Type"] == "MySql") {
             return $this->makePdo("mysql:host=" . $connection["Host"] . ";dbname=" . $connection["Database"] . ";charset=utf8", $connection["User"], $connection["Password"], DatabaseService::DRIVER_TYPE_MYSQL);
         } else {
-            Logger::getInstance()->logError("Unknown connection type: " . $connection["Type"], $connection);
+            LogHelper::getInstance()->logError("Unknown connection type: " . $connection["Type"], $connection);
             return null;
         }
     }

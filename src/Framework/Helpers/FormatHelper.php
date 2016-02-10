@@ -10,7 +10,7 @@ namespace famoser\phpFrame\Helpers;
 
 
 use DateTime;
-use Famoser\phpFrame\Core\Logging\Logger;
+use Famoser\phpFrame\Core\Logging\LogHelper;
 use Famoser\phpFrame\Models\Locale\Language;
 use famoser\phpFrame\Services\LocaleService;
 use famoser\phpFrame\Services\SettingsService;

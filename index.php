@@ -38,7 +38,7 @@ define("ACTIVE_PARAMS", serialize($params));
 
 if (CanAccessGenericControllerParams($params)) {
     $controllerName = strtoupper(substr($params[0], 0, 1)) . substr($params[0], 1) . "Controllers";
-    $params = remove_first_enrty_in_array($params);
+    $params = remove_first_entry_in_array($params);
 
     // Controllers erstellen
     $controller = new $controllerName($request, $requestFiles, $params);
@@ -46,7 +46,7 @@ if (CanAccessGenericControllerParams($params)) {
     echo $controller->Display();
 } else {
     if ($params[0] == "api" && CanAccessApiController($params)) {
-        $params = remove_first_enrty_in_array($params);
+        $params = remove_first_entry_in_array($params);
         $controller = new ApiController($request, $requestFiles, $params);
         echo $controller->Display();
     } else if (CanAccessMainController($params)) {

@@ -8,7 +8,7 @@
 
 namespace famoser\phpFrame\Services;
 
-use Famoser\phpFrame\Core\Logging\Logger;
+use Famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\FileHelper;
 
 class SettingsService extends ServiceBase
@@ -19,7 +19,7 @@ class SettingsService extends ServiceBase
         $configFilePath = $this->getSourceDir() . "/FrameworkAssets/configuration.json";
         $resp = FileHelper::getInstance()->getJsonArray($configFilePath);
         if ($resp === false)
-            Logger::getInstance()->logFatal("could not find configuration file at " . $configFilePath);
+            LogHelper::getInstance()->logFatal("could not find configuration file at " . $configFilePath);
 
         $this->config = $resp;
     }
@@ -38,7 +38,7 @@ class SettingsService extends ServiceBase
         if (isset($this->config[$name]))
             return $this->config[$name];
 
-        Logger::getInstance()->logError("Unknown Setting: " . $name);
+        LogHelper::getInstance()->logError("Unknown Setting: " . $name);
         return "";
     }
 
@@ -53,10 +53,10 @@ class SettingsService extends ServiceBase
             $name = str_replace($namespace, "", $className);
             if (isset($this->config["Framework"]["Services"][$name]))
                 return $this->config["Framework"]["Services"][$name];
-            Logger::getInstance()->logError("Unknown Setting for Framework Service: " . $name);
+            LogHelper::getInstance()->logError("Unknown Setting for Framework Service: " . $name);
             return "";
         }
-        Logger::getInstance()->logError("Invalid call. Please use the getValueFor method");
+        LogHelper::getInstance()->logError("Invalid call. Please use the getValueFor method");
         return "";
     }
 }

@@ -15,8 +15,6 @@ class LogItem
     private $logLevel;
     private $message;
 
-    const LineDivisor = "\n";
-
     public function __construct($source, $logLevel, $message)
     {
         $this->source = $source;
@@ -24,36 +22,28 @@ class LogItem
         $this->message = $message;
     }
 
-    function renderAsText()
+    /**
+     * @return string
+     */
+    public function getSource()
     {
-        return $this->getLogLevelAsString() . ": " . $this->message . "\n" . $this->source;
+        return $this->source;
     }
 
-    function renderAsHtml()
+    /**
+     * @return int
+     */
+    public function getLogLevel()
     {
-        return nl2br("<b>".$this->getLogLevelAsString() . "</b>: " . $this->message . "<br/>" . $this->source);
+        return $this->logLevel;
     }
 
-    private function getLogLevelAsString()
+    /**
+     * @return string
+     */
+    public function getMessage()
     {
-        if ($this->logLevel == Logger::LOG_LEVEL_DEBUG) {
-            return "debug";
-        } else if ($this->logLevel == Logger::LOG_LEVEL_INFO) {
-            return "info";
-        } else if ($this->logLevel == Logger::LOG_LEVEL_WARNING) {
-            return "warning";
-        } else if ($this->logLevel == Logger::LOG_LEVEL_ERROR) {
-            return "error";
-        } else if ($this->logLevel == Logger::LOG_LEVEL_FATAL) {
-            return "fatal";
-        } else if ($this->logLevel == Logger::LOG_LEVEL_EXCEPTION) {
-            return "exception occured";
-        } else if ($this->logLevel == Logger::LOG_LEVEL_ASSERT_FAILED) {
-            return "assert failed";
-        } else if ($this->logLevel == Logger::LOG_LEVEL_ASSERT_VALIDATED) {
-            return "assert validated";
-        }
-        return "logtype unknown";
+        return $this->message;
     }
 
 }

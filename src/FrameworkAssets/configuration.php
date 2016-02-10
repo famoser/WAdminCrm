@@ -1,7 +1,5 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 /* Framework */
 define("FRAMEWORK_VERSION", "1");
@@ -20,20 +18,3 @@ define("CONTROLLERS", '
     {"url": "settings", "name": "settings", "icon": "flaticon-screwdriver26"}
 ]'
 );
-
-/* Locale */
-define("LOCALE_DAYS_SER", serialize(array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag")));
-define("LOCALE_DAYS_SHORT_SER", serialize(array("So", "Mo", "Di", "Mi", "Do", "Fr", "Sa")));
-define("LOCALE_MONTHS_SER", serialize(array(1 => "Januar", 2 => "Februar", 3 => "März", 4 => "April", 5 => "Mai", 6 => "Juni", 7 => "Juli", 8 => "August", 9 => "September", 10 => "Oktober", 11 => "November", 12 => "Dezember")));
-
-define("DATETIME_FORMAT_DATABASE", "Y-m-d H:i:s");
-define("DATETIME_FORMAT_INPUT", "d.m.Y H:i");
-define("DATETIME_FORMAT_DISPLAY", "d.m.Y H:i");
-
-define("DATE_FORMAT_DATABASE", "Y-m-d");
-define("DATE_FORMAT_INPUT", "Y-m-d");
-define("DATE_FORMAT_DISPLAY", "d.m.Y");
-
-define("TIME_FORMAT_DATABASE", "H:i:s");
-define("TIME_FORMAT_INPUT", "H:i");
-define("TIME_FORMAT_DISPLAY", "H:i");

@@ -9,7 +9,7 @@
 namespace famoser\phpFrame\Services;
 
 
-use Famoser\phpFrame\Core\Logging\Logger;
+use Famoser\phpFrame\Core\Logging\LogHelper;
 use Famoser\phpFrame\Models\Locale\Language;
 use Famoser\phpFrame\Models\Locale\ResourceWrapper;
 
@@ -25,7 +25,7 @@ class LocaleService extends ServiceBase
 
         //parse language resources
         if (!isset($config["DefaultLanguage"])) {
-            Logger::getInstance()->logWarning("Default language not configured, switching to first available language");
+            LogHelper::getInstance()->logWarning("Default language not configured, switching to first available language");
             $this->activeLangShort = $config["LanguageResources"][0]["Language"];
         } else
             $this->activeLangShort = $config["DefaultLanguage"];
@@ -38,7 +38,7 @@ class LocaleService extends ServiceBase
             $this->activeLang = $this->languages[$this->activeLangShort];
         else {
             $this->activeLang = array_values($this->languages)[0];
-            Logger::getInstance()->logError("Default language not found");
+            LogHelper::getInstance()->logError("Default language not found");
         }
 
         setlocale(LC_ALL, $this->activeLangShort . ".utf8");

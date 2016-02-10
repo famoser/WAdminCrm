@@ -46,7 +46,7 @@
             <?php
             foreach ($this->submenu as $menuitem) {
                 $href = $menuitem["href"];
-                if ($href != "" && !str_endsWith($href, "/"))
+                if ($href != "" && !str_ends_with($href, "/"))
                     $href .= "/";
 
                 echo '<li ' . GetClassesForMenuItem($this, array($this->params[0], $menuitem["href"]), true) . '>

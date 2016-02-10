@@ -8,7 +8,7 @@
 
 namespace famoser\phpFrame\Views;
 
-use Famoser\phpFrame\Core\Logging\Logger;
+use Famoser\phpFrame\Core\Logging\LogHelper;
 
 class GenericCrudView extends GenericView
 {
@@ -52,7 +52,7 @@ class GenericCrudView extends GenericView
         else if ($mode == GenericCrudView::CRUD_DELETE)
             return "delete";
         else
-            Logger::getInstance()->logFatal("Invalid crud action! Please use one of the constants in GenericCrudView");
+            LogHelper::getInstance()->logFatal("Invalid crud action! Please use one of the constants in GenericCrudView");
         return "";
     }
 }
