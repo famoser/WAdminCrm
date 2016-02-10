@@ -14,14 +14,17 @@ use Famoser\phpFrame\Core\Logging\Logger;
 use Famoser\phpFrame\Models\Locale\Language;
 use famoser\phpFrame\Services\LocaleService;
 use famoser\phpFrame\Services\SettingsService;
+use Famoser\phpFrame\Models\Locale\ResourceWrapper;
 
 class FormatHelper extends HelperBase
 {
     private $formats;
+    private $resources;
 
     public function __construct()
     {
         $this->formats = LocaleService::getInstance()->getFormats();
+        $this->resources = LocaleService::getInstance()->getResources();
     }
 
     public function textOrPlaceholder($input)
@@ -31,12 +34,22 @@ class FormatHelper extends HelperBase
         return $input;
     }
 
+    public function dateTime($input)
+    {
+        $res = "";
+        $time = $this->parseDateTimeObject($input);
+        if ($time !== false) {
+            return $time->format($this->formats["DateTime"]["Display"]);
+        }
+        return $res;
+    }
+
     public function dateTimeShort($input)
     {
         $res = "";
         $time = $this->parseDateTimeObject($input);
         if ($time !== false) {
-            $res .= $time->format(DATETIME_FORMAT_DISPLAY);
+            $res .= $time->format($this->formats["DateTime"]["Display"]);
         }
         return $res;
     }
@@ -46,17 +59,27 @@ class FormatHelper extends HelperBase
         $res = "";
         $time = $this->parseDateTimeObject($input);
         if ($time !== false) {
-            $date = format_DateText($input);
-            $res = $date . " um " . $time->format("H:i");
+            $date = $this->dateText($input);
+            $res = $date . ", " . $this->dateTimeShort($input);
             if ($input2 != null) {
-                $date2 = format_DateText($input2);
+                $date2 = $this->dateText($input2);
                 if ($date2 != $date) {
-                    $date2text = format_DateTimeText($input2);
+                    $date2text = $this->dateTimeText($input2);
                     if ($date2text != "")
-                        $res .= " bis " . $date2text;
+                        $res .= " - " . $date2text;
                 } else
-                    $res .= " bis ca " . $time->format("H:i");
+                    $res .= " - " . $this->dateTimeShort($input);
             }
+        }
+        return $res;
+    }
+
+    public function date($input)
+    {
+        $res = "";
+        $time = $this->parseDateTimeObject($input);
+        if ($time !== false) {
+            return $time->format($this->formats["Date"]["Display"]);
         }
         return $res;
     }
@@ -65,26 +88,23 @@ class FormatHelper extends HelperBase
     {
         $time1 = $this->parseDateTimeObject($input);
         if ($time1 !== false) {
-            $days = unserialize(LOCALE_DAYS_SER);
-            $months = unserialize(LOCALE_MONTHS_SER);
-            $res = $days[$time1->format("w")] . ", " . $time1->format("d") . " " . $months[$time1->format("n")] . " " . $time1->format("Y");
+            $res = $time1->format("l") . ", " . $time1->format("d") . " " . $time1->format("F") . " " . $time1->format("Y");
             return $res;
         }
         return "-";
     }
 
-    public function format_TimeSpanText($input1, $input2)
+    public function time($input)
     {
-        $time1 = $this->parseDateTimeObject($input1);
-        $time2 = $this->parseDateTimeObject($input2);
-
-        if ($time1 == false || $time2 == false)
-            return "";
-
-        return (abs($time1->getTimestamp() - $time2->getTimestamp()) / 60) . " minutes";
+        $res = "";
+        $time = $this->parseDateTimeObject($input);
+        if ($time !== false) {
+            return $time->format($this->formats["Time"]["Display"]);
+        }
+        return $res;
     }
 
-    public function format_TimeSpanMinutes($input1, $input2)
+    public function timeSpanMinutesShort($input1, $input2)
     {
         $time1 = $this->parseDateTimeObject($input1);
         $time2 = $this->parseDateTimeObject($input2);
@@ -95,37 +115,54 @@ class FormatHelper extends HelperBase
         return abs($time1->getTimestamp() - $time2->getTimestamp()) / 60;
     }
 
-    public function format_Money($money, $isZeroValid = true)
+    public function timeSpanMinutesText($input1, $input2)
     {
-        if ($money == 0)
-            if ($isZeroValid)
-                return "- " . CURRENCY;
-            else
-                return "-";
-        return number_format($money, 2) . " " . CURRENCY;
+        $time1 = $this->parseDateTimeObject($input1);
+        $time2 = $this->parseDateTimeObject($input2);
+
+        if ($time1 == false || $time2 == false)
+            return "";
+
+        return (abs($time1->getTimestamp() - $time2->getTimestamp()) / 60) . " " . $this->resources->getKey("Minutes");
     }
 
-    public function format_WorkingTime($timeSpan)
+    public function timeSpanHoursMinutesShort($timeSpan)
     {
         $std = $timeSpan / 60;
         $min = $timeSpan % 60;
-        return number_format($std, 0) . " Stunden, " . $min . " Minuten";
+        return number_format($std, 0) . ":" . $min;
     }
 
-
-    public function format_Percentage($value, $total)
+    public function timeSpanHoursMinutesText($timeSpan)
     {
-        $percentage = $value / $total * 100;
-        return number_format($percentage, 0);
+        $std = $timeSpan / 60;
+        $min = $timeSpan % 60;
+        return number_format($std, 0) . " " . $this->resources->getKey("Hours") . ", " . $min . " " . $this->resources->getKey("Minutes");
     }
 
-    public function parseDateTimeObject($input)
+    private function parseDateTimeObject($input)
     {
         $time = DateTime::createFromFormat($this->formats["DateTime"]["Database"], $input);
         if ($time == false)
-            $time = DateTime::createFromFormat(DATE_FORMAT_DATABASE, $input);
+            $time = DateTime::createFromFormat($this->formats["Date"]["Database"], $input);
         if ($time == false)
-            $time = DateTime::createFromFormat(TIME_FORMAT_DATABASE, $input);
+            $time = DateTime::createFromFormat($this->formats["Time"]["Database"], $input);
         return $time;
+    }
+
+    public function money($money, $isZeroValid = true)
+    {
+        if ($money == 0)
+            if ($isZeroValid)
+                return "- " . $this->resources->getKey("Currency");
+            else
+                return "-";
+        return number_format($money, 2) . " " . $this->resources->getKey("Currency");
+    }
+
+    public function percentage($value, $maxValue = 100)
+    {
+        $percentage = $value / $maxValue * 100;
+        return number_format($percentage, 0);
     }
 }

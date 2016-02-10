@@ -28,17 +28,22 @@ class Language
         $this->folder = $folder;
     }
 
+    /**
+     * @return ResourceWrapper
+     */
     public function getResources()
     {
         if (!$this->resourcesLoaded) {
+            $resourceArr = array();
             foreach ($this->config["ResourceFiles"] as $resourceFile) {
                 $configFilePath = $this->folder . DIRECTORY_SEPARATOR . $resourceFile;
                 $resp = FileHelper::getInstance()->getJsonArray($configFilePath);
                 if ($resp === false)
                     Logger::getInstance()->logFatal("could not find resource file at " . $configFilePath);
                 else
-                    $this->resources = array_merge($resp, $this->resources);
+                    $resourceArr = array_merge($resp, $resourceArr);
             }
+            $this->resources = new ResourceWrapper($resourceArr);
             $this->resourcesLoaded = true;
         }
         return $this->resources;

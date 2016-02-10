@@ -11,6 +11,7 @@ namespace famoser\phpFrame\Services;
 
 use Famoser\phpFrame\Core\Logging\Logger;
 use Famoser\phpFrame\Models\Locale\Language;
+use Famoser\phpFrame\Models\Locale\ResourceWrapper;
 
 class LocaleService extends ServiceBase
 {
@@ -56,6 +57,9 @@ class LocaleService extends ServiceBase
         return $this->getActiveLang()->getFormats();
     }
 
+    /**
+     * @return ResourceWrapper
+     */
     public function getResources()
     {
         return $this->getActiveLang()->getResources();

@@ -1,3 +1,7 @@
 {
-  "Currency": "CHF"
+  "Currency": "CHF",
+  "Days": "days",
+  "Hours": "hours",
+  "Minutes": "minutes",
+  "till": "bis"
 }

@@ -9,7 +9,7 @@
 namespace famoser\phpFrame\Services;
 
 
-class EmailService
+class EmailService extends ServiceBase
 {
 
 }
