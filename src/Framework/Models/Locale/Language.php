@@ -16,16 +16,23 @@ class Language
 {
     private $config;
     private $folder;
+    private $name;
 
     private $resources = array();
     private $resourcesLoaded = false;
     private $formats = array();
     private $formatsLoaded = false;
 
-    public function __construct($config, $folder)
+    public function __construct($name, $config, $folder)
     {
+        $this->name = $name;
         $this->config = $config;
         $this->folder = $folder;
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**

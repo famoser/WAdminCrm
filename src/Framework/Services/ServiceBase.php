@@ -9,12 +9,11 @@
 namespace famoser\phpFrame\Services;
 
 
-
 use Famoser\phpFrame\Core\Singleton\Singleton;
 
 class ServiceBase extends Singleton
 {
-    protected $config;
+    private $config;
 
     public function __construct($getConfig = false)
     {
@@ -22,5 +21,13 @@ class ServiceBase extends Singleton
             $className = get_called_class();
             $this->config = SettingsService::getInstance()->getFrameworkConfig($className);
         }
+    }
+
+    protected function getConfig($key)
+    {
+        if (isset($this->config[$key])) {
+            return $this->config[$key];
+        }
+        return null;
     }
 }

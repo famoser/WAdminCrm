@@ -31,7 +31,7 @@ class LocaleService extends ServiceBase
             $this->activeLangShort = $config["DefaultLanguage"];
 
         foreach ($config["LanguageResources"] as $languageResource) {
-            $this->languages[$languageResource["Language"]] = new Language($languageResource, SettingsService::getInstance()->getSourceDir() . "/FrameworkAssets/Locale/");
+            $this->languages[$languageResource["Language"]] = new Language($languageResource["Language"], $languageResource, SettingsService::getInstance()->getSourceDir() . "/FrameworkAssets/Locale/");
         }
 
         if (isset($this->languages[$this->activeLangShort]))
@@ -47,7 +47,7 @@ class LocaleService extends ServiceBase
     /**
      * @return Language
      */
-    private function getActiveLang()
+    public function getActiveLang()
     {
         return $this->activeLang;
     }

@@ -1,25 +1,38 @@
 <?php
+
+namespace famoser\crm\Models\Database;
+use famoser\phpFrame\Interfaces\BaseModel;
+use famoser\phpFrame\Interfaces\BaseThingModel;
+
 /**
  * Created by PhpStorm.
  * User: Florian Moser
  * Date: 13.09.2015
  * Time: 13:17
  */
-class PasswordModel
+class PasswordModel extends BaseThingModel
 {
-    public $Id;
-    public $CustomerId;
-    public $Name;
-    public $Description;
-    public $Location;
-    public $Username;
-    public $Password;
-    public $Notes;
+    private $Location;
+    private $Username;
+    private $Password;
+    private $Notes;
 
-    public $Customer;
+    private $CustomerId;
+    private $Customer;
 
-    function GetIdentification()
+    /**
+     * @param CustomerModel $customer
+     */
+    public function setCustomer(CustomerModel $customer)
     {
-        return $this->Name;
+        $this->Customer = $customer;
+    }
+
+    /**
+     * @return CustomerModel
+     */
+    public function getCustomer()
+    {
+        return $this->Customer;
     }
 }

@@ -1,4 +1,7 @@
 <?php
+namespace famoser\crm\Models\Database;
+
+use famoser\phpFrame\Interfaces\BasePersonalModel;
 
 /**
  * Created by PhpStorm.
@@ -6,62 +9,40 @@
  * Date: 5/18/2015
  * Time: 7:44 PM
  */
-class CustomerModel
+class CustomerModel extends BasePersonalModel
 {
+    private $Company;
+    private $CustomerSinceDate;
 
-    public $Id;
-    public $Company;
-    public $FirstName;
-    public $LastName;
-    public $AdressExtension;
-    public $Street;
-    public $Land;
-    public $ZipCode;
-    public $Place;
-    public $TelPrivat;
-    public $TelBusiness;
-    public $Mobile;
-    public $Email;
-    public $BirthDate;
-    public $Description;
-    public $CustomerSinceDate;
+    private $PersonId;
+    private $Person;
+
+    /**
+     * @param PersonModel $person
+     */
+    public function setPerson(PersonModel $person)
+    {
+        $this->Person = $person;
+    }
+
+    /**
+     * @return PersonModel
+     */
+    public function getPerson()
+    {
+        return $this->Person;
+    }
 
     function GetPersonalIdentification()
     {
-        if ($this->FirstName != "") {
-            return $this->FirstName;
+        if ($this->getPerson() != null) {
+            return $this->getPerson()->getPersonalIdentification() . " (" . $this->Company . ")";
         }
-        if ($this->LastName != "") {
-            return $this->LastName;
-        }
-        return "<unknown name>";
-    }
-
-    function GetFlatIdentification()
-    {
-        return $this->GetIdentification();
+        return $this->Company;
     }
 
     function GetIdentification()
     {
-        $str = $this->FirstName;
-
-        if ($this->LastName != "") {
-            if ($str != "")
-                $str .= " ";
-            $str .= $this->LastName;
-        }
-
-        if ($this->Company != "") {
-            if ($str == "")
-                $str .= $this->Company;
-            else
-                $str .= " (" . $this->Company . ")";
-        }
-
-        if ($str == "")
-            return "<unknown name>";
-        else
-            return $str;
+        return $this->getPerson()->getIdentification() . " (" . $this->Company . ")";
     }
 }

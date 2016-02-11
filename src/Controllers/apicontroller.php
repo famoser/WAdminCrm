@@ -8,7 +8,8 @@
  */
 namespace famoser\WAdminCrm\Controllers;
 
-use famoser\WAdminCrm\Framework\Controllers\ApiControllerBase;
+
+use famoser\phpFrame\Controllers\ApiControllerBase;
 
 class ApiController extends ApiControllerBase
 {
