@@ -9,12 +9,25 @@
 namespace famoser\phpFrame\Helpers;
 
 use DateTime;
+use Famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\HelperBase;
 use Famoser\phpFrame\Helpers\ReflectionHelper;
-use famoser\phpFrame\Interfaces\IModel;
+use famoser\phpFrame\Interfaces\Models\IModel;
+use famoser\phpFrame\Services\RuntimeService;
 
 class PartHelper extends HelperBase
 {
+    const PART_HEAD = 10;
+    const PART_FOOTER_CENTER = 11;
+    const PART_FOOTER_CONTENT = 11;
+    const PART_FOOTER_CRUD = 12;
+    const PART_HEADER_CENTER = 13;
+    const PART_HEADER_CONTENT = 14;
+    const PART_HEADER_CRUD = 15;
+    const PART_LOADING_PLACEHOLDER = 15;
+    const PART_MENU = 15;
+    const PART_MESSAGES = 15;
+
     /**
      * @param IModel $obj
      * @param string $prop
@@ -84,39 +97,101 @@ class PartHelper extends HelperBase
         return '<input type="hidden" name="' . $key . '" value="' . $value . '">';
     }
 
-    public function getSubmit($customText = "Speichern")
+    public function getSubmit($customText = "save")
     {
         return '<input type="submit" value="' . $customText . '" class="btn">';
     }
 
-    public function getClassesForMenuItem($view, $params = null, $isSubmenu = false)
+    public function getFormStart($action = null, $ajax = true)
     {
-        if ($params == null || count($params) == 0 || $view->params == null || count($view->params) == 0)
-            return "";
+        if ($action == null)
+            $action = RuntimeService::getInstance()->getTotalUrl();
 
-        //clean $params
-        $temp = $params;
-        $params = array();
-        foreach ($temp as $val) {
-            if ($val != "")
-                $params[] = $val;
-        }
+        $classes = "";
+        if (!$ajax)
+            $classes .= 'class="no-ajax"';
 
-        $isSamePage = true;
-        for ($i = 0; $i < count($params); $i++) {
-            if (!isset($view->params[$i]) || $view->params[$i] != $params[$i]) {
-                $isSamePage = false;
+        return '<form ' . $classes . ' action="' . $action . '" method="post">'.$this->getFormToken();
+    }
+
+    private function getFormToken()
+    {
+        $action = RuntimeService::getInstance()->getTotalParams();
+        if ($action[count($action) -1] == "create")
+            return $this->getHiddenInput("create", "true");
+
+        $allowed = array("update", "delete");
+
+        if (is_numeric($action[count($action) -1]))
+        {
+            if (in_array($action[count($action) - 2], $allowed)) {
+                return $this->getHiddenInput($action[count($action) - 2], "true");
             }
         }
+        return "";
+    }
 
-        if (!$isSamePage)
-            return "";
-        $classes = "active";
-        if (count($params) == count($view->params))
-            $classes .= " active-page";
-        else if ($isSubmenu)
-            return "";
+    /**
+     * @param bool $includeSubmit
+     * @return string
+     */
+    public function getFormEnd($includeSubmit = true)
+    {
+        $output = "</form>";
+        if ($includeSubmit)
+            $output = $this->getSubmit().$output;
+        return $output;
+    }
 
-        return ' class="' . $classes . '" ';
+    public function getClassForMainMenuItem(array $routeParams, array $totalParams)
+    {
+        for ($i = 0; $i < count($routeParams); $i++) {
+            if (!isset($totalParams) || $totalParams[$i] != $routeParams[$i])
+                return "";
+        }
+        return ' class="active active-page"';
+    }
+
+    public function getClassesForMenuSubItem(array $controllerParams, string $menuUrl)
+    {
+        $params = explode("/", $menuUrl);
+        return $this->getClassForMainMenuItem($controllerParams, $params);
+    }
+
+    public function getPart(int $const)
+    {
+        if ($const == PartHelper::PART_HEAD)
+            return $this->loadFile("/Templates/_parts/headerPart.php");
+        if ($const == PartHelper::PART_FOOTER_CONTENT)
+            return $this->loadFile("/Templates/_parts/footer_content.php");
+        if ($const == PartHelper::PART_FOOTER_CRUD)
+            return $this->loadFile("/Templates/_parts/footer_crud.php");
+        if ($const == PartHelper::PART_HEADER_CENTER)
+            return $this->loadFile("/Templates/_parts/header_center.php");
+        if ($const == PartHelper::PART_HEADER_CONTENT)
+            return $this->loadFile("/Templates/_parts/header_content.php");
+        if ($const == PartHelper::PART_HEADER_CRUD)
+            return $this->loadFile("/Templates/_parts/header_crud.php");
+        if ($const == PartHelper::PART_LOADING_PLACEHOLDER)
+            return $this->loadFile("/Templates/_parts/loading_placeholder.php");
+        if ($const == PartHelper::PART_MENU)
+            return $this->loadFile("/Templates/_parts/menu.php");
+        if ($const == PartHelper::PART_MESSAGES)
+            return $this->loadFile("/Templates/_parts/messages.php");
+
+        LogHelper::getInstance()->logError("Part not found with const " . $const);
+        return $this->getPart(PartHelper::PART_MESSAGES);
+    }
+
+    private function loadFile($relativeFilePath)
+    {
+        $filePath = RuntimeService::getInstance()->getFrameworkDirectory() . $relativeFilePath;
+
+        ob_start();
+        include $filePath;
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        return $output;
     }
 }

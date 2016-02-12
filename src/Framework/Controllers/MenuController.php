@@ -11,6 +11,7 @@ namespace famoser\phpFrame\Controllers;
 
 use famoser\phpFrame\Models\View\IconMenuItem;
 use famoser\phpFrame\Models\View\MenuItem;
+use famoser\phpFrame\Services\RouteService;
 use famoser\phpFrame\Services\SettingsService;
 use famoser\phpFrame\Views\ViewBase;
 
@@ -22,10 +23,7 @@ class MenuController extends ControllerBase
     public function __construct($request, $params, $files)
     {
         parent::__construct($request, $params, $files);
-        $routes = SettingsService::getInstance()->getValueFor("Routes");
-        foreach ($routes as $route) {
-            $this->mainMenu[] = new IconMenuItem($route["Name"], $route["Url"], $route["Icon"]);
-        }
+        $this->mainMenu = RouteService::getInstance()->getMenu("MainMenu");
     }
 
     /**

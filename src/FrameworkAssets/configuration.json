@@ -2,39 +2,35 @@
   "Application": {
     "Url": "https://crm.florianalexandermoser.ch/",
     "Name": "Customer Relationship Management",
+    "Title": "crm",
     "Description": "Ein Tool für Projektmanagement, Customer Relationship Managment und Buchhaltung. Konzept & Umsetzung von Florian Moser",
-    "Author": "Florian Moser"
+    "Author": "Florian Moser",
+    "AuthorUrl": "http://famoser.ch"
   },
   "Routes": [
     {
-      "Url": "customers",
-      "Name": "customers",
-      "Controller": "famoser\\crm\\Controllers\\CustomersController",
-      "Icon": "flaticon-profile29"
+      "Url": "/",
+      "Controller": "famoser\\crm\\Controllers\\MainController"
     },
     {
-      "Url": "projects",
-      "Name": "projects",
-      "Controller": "famoser\\crm\\Controllers\\ProjectsController",
-      "Icon": "flaticon-notes26"
+      "Url": "/customers",
+      "Controller": "famoser\\crm\\Controllers\\CustomersController"
     },
     {
-      "Url": "milestones",
-      "Name": "milestones",
-      "Controller": "famoser\\crm\\Controllers\\MilestonesController",
-      "Icon": "fmilestonesaticon-notes27"
+      "Url": "/projects",
+      "Controller": "famoser\\crm\\Controllers\\ProjectsController"
     },
     {
-      "Url": "procedures",
-      "Name": "procedures",
-      "Controller": "famoser\\crm\\Controllers\\ProceduresController",
-      "Icon": "flaticon-sheet3"
+      "Url": "/milestones",
+      "Controller": "famoser\\crm\\Controllers\\MilestonesController"
     },
     {
-      "Url": "settings",
-      "Name": "settings",
-      "Controller": "famoser\\crm\\Controllers\\SettingsController",
-      "Icon": "flaticon-screwdriver26"
+      "Url": "/procedures",
+      "Controller": "famoser\\crm\\Controllers\\ProceduresController"
+    },
+    {
+      "Url": "/settings",
+      "Controller": "famoser\\crm\\Controllers\\SettingsController"
     }
   ],
   "Framework": {
@@ -82,17 +78,36 @@
           }
         ]
       },
-      "AuthenticationService": {
-        "LoggedInStartPage": "de",
-        "LanguageResources": [
+      "RouteService": {
+        "Menus": [
           {
-            "Language": "de",
-            "Locale": "de_CH",
-            "ResourceFiles": [
-              "de_strings.json"
-            ],
-            "FormatFiles": [
-              "de_formats.json"
+            "Name": "MainMenu",
+            "Entries": [
+              {
+                "Name": "customers",
+                "Controller": "famoser\\crm\\Controllers\\CustomersController",
+                "Icon": "flaticon-profile29"
+              },
+              {
+                "Name": "projects",
+                "Controller": "famoser\\crm\\Controllers\\ProjectsController",
+                "Icon": "flaticon-notes26"
+              },
+              {
+                "Name": "milestones",
+                "Controller": "famoser\\crm\\Controllers\\MilestonesController",
+                "Icon": "fmilestonesaticon-notes27"
+              },
+              {
+                "Name": "procedures",
+                "Controller": "famoser\\crm\\Controllers\\ProceduresController",
+                "Icon": "flaticon-sheet3"
+              },
+              {
+                "Name": "settings",
+                "Controller": "famoser\\crm\\Controllers\\SettingsController",
+                "Icon": "flaticon-screwdriver26"
+              }
             ]
           }
         ]

@@ -4,14 +4,16 @@
  * User: Florian Moser
  * Date: 04.09.2015
  * Time: 10:50
- */ ?>
-<?php if (!is_ajax_request()) {
-    include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/header_content.php"; ?>
-    <div class="row content">
-    <?php
-} else { ?>
+ */
+use famoser\phpFrame\Helpers\PartHelper;
+use Famoser\phpFrame\Helpers\RequestHelper; ?>
+<?php if (RequestHelper::getInstance()->isAjaxRequest()) { ?>
     <div class="row no-gutters content clearfix">
     <?php
+} else {
+    echo PartHelper::getInstance()->getPart(PartHelper::PART_HEADER_CONTENT); ?>
+    <div class="row content">
+    <?php
 }
-include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/message_template.php";
-include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/loading_replacement.php" ?>
+echo PartHelper::getInstance()->getPart(PartHelper::PART_MESSAGES);
+echo PartHelper::getInstance()->getPart(PartHelper::PART_LOADING_PLACEHOLDER);?>

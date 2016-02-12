@@ -5,21 +5,20 @@
  * Date: 25.05.2015
  * Time: 10:08
  */
-?>
+use famoser\phpFrame\Helpers\PartHelper;
+use famoser\phpFrame\Interfaces\Models\IModel;
+use famoser\phpFrame\Services\LocaleService;
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/header_crud.php"; ?>
+$model = $this->_["model"];
+if ($model instanceof IModel) {
+    ?>
 
-    <form action="<?php echo $this->controller ?>/<?php echo $this->link ?>/<?php echo GetValue($this->_['obj'], "Id") ?>/"
-        method="post">
-        <input type="hidden" name="delete" value="true"/>
+    <?= PartHelper::getInstance()->getFormStart(); ?>
 
-        <p>Soll <b><?php echo $this->_['obj']->GetIdentification() ?></b> wirklich gelöscht werden?</p>
+    <p><?= LocaleService::getInstance()->translate("Are you sure you want to delete") ?>
+        <b><?= $model->getIdentification() ?></b></p>
 
-        <div class="clearfix">
-            <div class="col-md-12">
-                <input type="submit" value="Löschen" class="btn">
-            </div>
-        </div>
-    </form>
+    <?= PartHelper::getInstance()->getSubmit("delete") ?>
+    <?= PartHelper::getInstance()->getFormEnd(false); ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/footer_crud.php"; ?>
+<?php } ?>

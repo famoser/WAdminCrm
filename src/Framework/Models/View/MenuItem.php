@@ -19,4 +19,20 @@ class MenuItem
         $this->name = $name;
         $this->href = $href;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHref()
+    {
+        return $this->href;
+    }
 }

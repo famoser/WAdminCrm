@@ -18,4 +18,12 @@ class IconMenuItem extends MenuItem
         parent::__construct($name, $href);
         $this->icon = $icon;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
 }

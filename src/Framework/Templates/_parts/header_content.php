@@ -5,10 +5,15 @@
  * Date: 24.05.2015
  * Time: 10:15
  */
-?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/_headerPart.php"; ?>
-    <body>
-    <div class="mobile-container">
+use famoser\phpFrame\Helpers\PartHelper;
+use famoser\phpFrame\Views\ViewBase;
+
+
+if ($this instanceof ViewBase) { ?>
+
+<?php echo PartHelper::getInstance()->getPart(PartHelper::PART_HEAD); ?>
+<body>
+<div class="mobile-container">
     <div id="loadingbar"></div>
 
     <a class="arrow-top"></a>
@@ -17,7 +22,7 @@
         <div class="container">
             <div class="clearfix">
                 <div class="col-md-3">
-                    <a href="<?php echo BASEURL ?>">
+                    <a href="/">
                         <img class="brand" width="111" height="33" alt="Admin Logo" src="/images/Logo.png">
                     </a>
                     <ul class="tiles menu-toggle">
@@ -29,7 +34,7 @@
                     </ul>
                 </div>
                 <div class="col-md-6">
-                    <h2 class="application"><?php echo APPLICATION_TITLE ?></h2>
+                    <h2 class="application"><?= $this->getApplicationTitle(); ?></h2>
                 </div>
                 <div class="col-md-3">
                     <div class="support">
@@ -42,11 +47,13 @@
 
     <div id="topbar" class="clearfix">
         <div class="container">
-            <?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/menu.php"; ?>
+            <?php echo PartHelper::getInstance()->getPart(PartHelper::PART_MENU); ?>
         </div>
     </div>
 
     <div id="tab-content-slider">
         <div class="container">
             <div id="tab-content" class="clearfix">
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/_parts/message_template.php"; ?>
+                <?php echo PartHelper::getInstance()->getPart(PartHelper::PART_MESSAGES); ?>
+
+                <?php } ?>

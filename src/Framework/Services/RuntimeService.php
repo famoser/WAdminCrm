@@ -13,6 +13,9 @@ class RuntimeService extends ServiceBase
 {
     private $totalParams;
     private $routeParams;
+    private $controllerParams;
+
+    private $frameworkDirectory;
 
     /**
      * @param array $params
@@ -47,10 +50,51 @@ class RuntimeService extends ServiceBase
     }
 
     /**
-     * @return array $params
+     * @return string $params
      */
     public function getRouteUrl()
     {
-        return implode("/", $this->routeParams);
+        return implode("/", $this->getRouteParams());
+    }
+
+
+    /**
+     * @return string $params
+     */
+    public function getTotalUrl()
+    {
+        return implode("/", $this->getTotalParams());
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFrameworkDirectory()
+    {
+        return $this->frameworkDirectory;
+    }
+
+    /**
+     * @param mixed $frameworkPath
+     */
+    public function setFrameworkDirectory($frameworkDirectory)
+    {
+        $this->frameworkDirectory = $frameworkDirectory;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getControllerParams()
+    {
+        return $this->controllerParams;
+    }
+
+    /**
+     * @param mixed $controllerParams
+     */
+    public function setControllerParams($controllerParams)
+    {
+        $this->controllerParams = $controllerParams;
     }
 }

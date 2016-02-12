@@ -64,4 +64,13 @@ class LocaleService extends ServiceBase
     {
         return $this->getActiveLang()->getResources();
     }
+
+    /**
+     * @param $content
+     * @return ResourceWrapper
+     */
+    public function translate($content)
+    {
+        return $this->getActiveLang()->getResources()->getKey($content);
+    }
 }

@@ -9,6 +9,8 @@
 namespace Famoser\phpFrame\Models\Locale;
 
 
+use Famoser\phpFrame\Core\Logging\LogHelper;
+
 class ResourceWrapper
 {
     private $config;
@@ -20,8 +22,10 @@ class ResourceWrapper
 
     public function getKey($key)
     {
-        if (!isset($key))
+        if (!isset($key)) {
+            LogHelper::getInstance()->logWarning("Not translated: " . $key);
             return $key;
+        }
         return $this->config[$key];
     }
 }

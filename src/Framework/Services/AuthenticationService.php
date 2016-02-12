@@ -16,6 +16,14 @@ class AuthenticationService extends ServiceBase
         return unserialize($_SESSION["user"]);
     }
 
+    public function relinkAfterLogin()
+    {
+        $res = $this->tryGetConfig("LoggedInStartPage");
+        if ($res !== null)
+            return $res;
+        return false;
+    }
+
     public function setUser()
     {
         return serialize($_SESSION["user"]);

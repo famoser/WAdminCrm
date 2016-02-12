@@ -13,6 +13,7 @@ class PasswordHelper extends HelperBase
     const FAILURE_PASSWORD_TOO_SHORT = 11;
     const FAILURE_PASSWORD_NO_NUMBERS = 12;
     const FAILURE_PASSWORD_NO_CHARACTERS = 13;
+
     /**
      * @param $passwd
      * @return bool
@@ -64,5 +65,18 @@ class PasswordHelper extends HelperBase
     public function validatePasswort($input, $hash)
     {
         return password_verify($input, $hash);
+    }
+
+    /**
+     * @return string
+     */
+    public function createUniqueHash()
+    {
+        return bin2hex(mcrypt_create_iv(22, MCRYPT_DEV_URANDOM));
+    }
+
+    public function checkIfHashIsValid($hash)
+    {
+        return strlen($hash) == 44;
     }
 }

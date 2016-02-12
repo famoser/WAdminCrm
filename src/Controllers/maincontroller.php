@@ -1,5 +1,8 @@
 <?php
 namespace famoser\crm\Controllers;
+use famoser\phpFrame\Controllers\ControllerBase;
+use famoser\phpFrame\Helpers\PasswordHelper;
+use famoser\phpFrame\Services\IoCService;
 
 /**
  * Created by PhpStorm.
@@ -9,35 +12,13 @@ namespace famoser\crm\Controllers;
  */
 class MainController extends ControllerBase
 {
-
-    private $request = null;
-    private $params = null;
-
-    /**
-     * Konstruktor, erstellet den Controllers.
-     *
-     * @param Array $request Array aus $_GET & $_POST.
-     */
-    public function __construct($request, $requestFiles, $params)
-    {
-        $this->request = $request;
-        $this->params = $params;
-    }
-
-    /**
-     * Methode zum anzeigen des Contents.
-     *
-     * @return String Content der Applikation.
-     */
     public function Display()
     {
-        $user = GetActiveUser();
-        $view = $this->NotFound();
-        if (count($this->params[0]) < 2 && $this->params[0] == "") {
+        $authService = IoCService::getInstance()->getAuthenticationService();
+        $user = $authService->getUser();
+        if (count($this->params[0]) < 2) {
             if ($user !== false) {
-                DoLog("Sie sind eingeloggt, und wurden automatisch weitergeleitet");
-                header("Location: " . BASEURL . AFTER_LOGIN_PAGE . "/");
-                exit;
+                $this->exitWithControllerRedirect("customers");
             }
 
             if (isset($this->request["email"]) && isset($this->request["password"])) {
@@ -87,7 +68,7 @@ class MainController extends ControllerBase
                 }
             }
 
-            if (strlen($this->params[1]) < 20 || strlen($this->params[1]) > 100)
+            if (PasswordHelper::getInstance()->checkIfHashIsValid($this->params[1]))
                 $view = new MessageView("Dieser Authentifizierungslink ist ungültig.", LOG_LEVEL_USER_ERROR);
             else {
                 $res = GetSingleByCondition("admins", array("AuthHash" => $this->params[1]));
@@ -143,6 +124,6 @@ class MainController extends ControllerBase
             }
         }
 
-        return $view->loadTemplate();
+        return parent::Display();
     }
 }

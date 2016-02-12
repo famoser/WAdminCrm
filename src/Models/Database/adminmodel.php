@@ -2,6 +2,7 @@
 namespace famoser\crm\Models\Database;
 
 use famoser\crm\Models\Database\Base\BasePersonModel;
+use famoser\phpFrame\Models\Database\LoginModel;
 
 /**
  * Created by PhpStorm.
@@ -9,11 +10,9 @@ use famoser\crm\Models\Database\Base\BasePersonModel;
  * Date: 5/18/2015
  * Time: 7:44 PM
  */
-class AdminModel extends BasePersonModel
+class AdminModel extends LoginModel
 {
     private $Email;
-    private $PasswordHash;
-    private $AuthHash;
 
     private $PersonId;
     private $Person;
@@ -38,7 +37,7 @@ class AdminModel extends BasePersonModel
 
     public function getDatabaseArray()
     {
-        $props = array("Email" => $this->getEmail(), "PasswordHash" => $this->getPasswordHash(), "AuthHash" => $this->getAuthHash());
+        $props = array("Email" => $this->getEmail(), "PersonId" => $this->getPersonId());
         return array_merge($props, parent::getDatabaseArray());
     }
 
@@ -56,38 +55,6 @@ class AdminModel extends BasePersonModel
     public function setEmail($Email)
     {
         $this->Email = $Email;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPasswordHash()
-    {
-        return $this->PasswordHash;
-    }
-
-    /**
-     * @param string $PasswordHash
-     */
-    public function setPasswordHash($PasswordHash)
-    {
-        $this->PasswordHash = $PasswordHash;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAuthHash()
-    {
-        return $this->AuthHash;
-    }
-
-    /**
-     * @param string $AuthHash
-     */
-    public function setAuthHash($AuthHash)
-    {
-        $this->AuthHash = $AuthHash;
     }
 
     /**

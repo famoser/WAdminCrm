@@ -8,6 +8,8 @@
 
 namespace famoser\phpFrame\Views;
 
+use famoser\phpFrame\Helpers\PartHelper;
+
 class MessageView extends ViewBase
 {
     protected $message;
@@ -24,6 +26,9 @@ class MessageView extends ViewBase
 
     public function loadTemplate()
     {
-        return $this->loadFile($_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/message.php");
+        $content = PartHelper::getInstance()->getPart(PartHelper::PART_HEADER_CENTER);
+        $content .= PartHelper::getInstance()->getPart(PartHelper::PART_MESSAGES);
+        $content .= PartHelper::getInstance()->getPart(PartHelper::PART_FOOTER_CENTER);
+        return $content;
     }
 }

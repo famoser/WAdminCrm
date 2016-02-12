@@ -9,7 +9,9 @@
 namespace famoser\phpFrame\Views;
 
 
-class GenericView extends MenuView
+use famoser\phpFrame\Helpers\PartHelper;
+
+class GenericView extends ViewBase
 {
     private $controller = null;
     private $view = null;
@@ -28,10 +30,13 @@ class GenericView extends MenuView
 
     public function loadTemplate()
     {
+        $content = PartHelper::getInstance()->getPart(PartHelper::PART_HEADER_CONTENT);
         if ($this->fromFramework){
-            return $this->loadFile($_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/" . $this->controller . "/" . $this->folder . $this->view . ".php");
+            $content .= $this->loadFile($_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/" . $this->controller . "/" . $this->folder . $this->view . ".php");
         } else {
-            return $this->loadFile($_SERVER['DOCUMENT_ROOT'] . "/Templates/" . $this->controller . "/" . $this->folder . $this->view . ".php");
+            $content .= $this->loadFile($_SERVER['DOCUMENT_ROOT'] . "/Templates/" . $this->controller . "/" . $this->folder . $this->view . ".php");
         }
+        $content .= PartHelper::getInstance()->getPart(PartHelper::PART_FOOTER_CONTENT);
+        return $content;
     }
 }

@@ -4,56 +4,55 @@
  * User: Florian Moser
  * Date: 01.07.2015
  * Time: 18:12
- */ ?>
+ */
+use famoser\phpFrame\Helpers\PartHelper;
+use famoser\phpFrame\Services\RuntimeService;
+use famoser\phpFrame\Views\ViewBase;
 
-<?php if (CanAccessAnyMenu()) { ?>
 
-<div class="primary-menu clearfix" >
-    <div class="primary-menu-items" >
-        <ul class="tiles" >
-            <?php
-            $controllers = json_decode(CONTROLLERS);
-            foreach ($controllers as $controller) {
-                if (CanAccessGenericController($controller)) {
+if ($this instanceof ViewBase) { ?>
+    <?php if (count($this->getMainMenu()) > 0) { ?>
+        <div class="primary-menu clearfix">
+            <div class="primary-menu-items">
+                <ul class="tiles">
+                    <?php
+                    foreach ($this->getMainMenu() as $menuEntry) { ?>
+                        <li <?php echo PartHelper::getInstance()->getClassForMainMenuItem(RuntimeService::getInstance()->getRouteParams(), RuntimeService::getInstance()->getTotalParams()); ?>>
+                            <a href="<?php echo $menuEntry->getHref() ?>/">
+                            <span class="<?php echo $menuEntry->getIcon() ?>"
+                                  aria-hidden="true"></span><?php echo $menuEntry->getName() ?>
+                            </a>
+                        </li>
+                    <?php }
                     ?>
-                    <li <?php echo GetClassesForMenuItem($this, array($controller->url)); ?>>
-                        <a href="<?php echo $controller->url ?>/">
-                            <span class="<?php echo $controller->icon ?>"
-                                  aria-hidden="true"></span><?php echo $controller->name ?>
+                </ul>
+            </div>
+
+            <div class="secondary-menu-items">
+                <ul class="tiles">
+                    <li>
+                        <a class="tile floatright" href="logout">
+                            <span class="flaticon-cancel22" aria-hidden="true"></span>Logout
                         </a>
                     </li>
-                <?php }
-            } ?>
-</ul>
-</div>
+                </ul>
+            </div>
+        </div>
+    <?php } ?>
 
-<div class="secondary-menu-items">
-    <ul class="tiles">
-        <li>
-            <a class="tile floatright" href="logout">
-                <span class="flaticon-cancel22" aria-hidden="true"></span>Logout
-            </a>
-        </li>
-    </ul>
-</div>
-</div>
-<?php } ?>
+    <?php if (count($this->getSubMenu()) > 0) {
+        ?>
+        <div class="submenu-items">
+            <ul class="oneline-nav">
+                <?php
+                foreach ($this->getSubMenu() as $menuEntry) {
 
-<?php if ($this->submenu != null) {
-    ?>
-    <div class="submenu-items">
-        <ul class="oneline-nav">
-            <?php
-            foreach ($this->submenu as $menuitem) {
-                $href = $menuitem["href"];
-                if ($href != "" && !str_ends_with($href, "/"))
-                    $href .= "/";
-
-                echo '<li ' . GetClassesForMenuItem($this, array($this->params[0], $menuitem["href"]), true) . '>
-                            <a href="' . $this->controller . "/" . $href . '">' . $menuitem["content"] . '</a>
+                    echo '<li ' . PartHelper::getInstance()->getClassesForMenuSubItem(RuntimeService::getInstance()->getControllerParams(), $menuEntry->getHref()) . '>
+                            <a href="' . RuntimeService::getInstance()->getRouteUrl() . "/" . $menuEntry->getHref() . '">' . $menuEntry->getName() . '</a>
                       </li>';
-            }
-            ?>
-        </ul>
-    </div>
+                }
+                ?>
+            </ul>
+        </div>
+    <?php } ?>
 <?php } ?>

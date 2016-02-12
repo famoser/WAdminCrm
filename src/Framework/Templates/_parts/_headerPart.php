@@ -4,20 +4,25 @@
  * User: Florian Moser
  * Date: 01.07.2015
  * Time: 19:25
- */ ?>
-<!DOCTYPE html>
-<html>
+ */
+
+use famoser\phpFrame\Views\ViewBase;
+
+if ($this instanceof ViewBase) {
+    ?>
+    <!DOCTYPE html>
+    <html>
 <head>
     <meta charset="UTF-8">
-    <base href="<?php echo BASEURL; ?>">
+    <base href="<?= $this->getApplicationUrl(); ?>">
 
     <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Cache-Control" content="private">
 
-    <meta name="author" content="Florian Moser">
+    <meta name="author" content="<?= $this->getPageAuthor(); ?>">
 
     <meta name="robots" content="noindex, nofollow">
-    <meta name="description" content="<?php echo $this->page_description; ?>">
+    <meta name="description" content="<?= $this->getPageDescription(); ?>">
 
     <link href="/css/minified.min.css" rel="stylesheet" type="text/css">
     <link href="/css/addstyles.css" rel="stylesheet" type="text/css">
@@ -43,10 +48,22 @@
 
     <script type="text/javascript">
         /* Fix IE Mobile Responsive Design */
-        !function(){if("-ms-user-select"in document.documentElement.style&&navigator.userAgent.match(/IEMobile\/10\.0/)){var e=document.createElement("style");e.appendChild(document.createTextNode("@-ms-viewport{width:auto!important}")),document.getElementsByTagName("head")[0].appendChild(e)}}();
-        window.onload=function(){if(screen.width<=400){var t=document.getElementById("viewport");t.setAttribute("content","width=400")}};
+        !function () {
+            if ("-ms-user-select" in document.documentElement.style && navigator.userAgent.match(/IEMobile\/10\.0/)) {
+                var e = document.createElement("style");
+                e.appendChild(document.createTextNode("@-ms-viewport{width:auto!important}")), document.getElementsByTagName("head")[0].appendChild(e)
+            }
+        }();
+        window.onload = function () {
+            if (screen.width <= 400) {
+                var t = document.getElementById("viewport");
+                t.setAttribute("content", "width=400")
+            }
+        };
     </script>
 
 
-    <title><?php echo $this->page_title; ?></title>
+    <title><?= $this->getPageTitle(); ?></title>
 </head>
+
+<?php } ?>

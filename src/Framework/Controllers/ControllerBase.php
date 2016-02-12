@@ -48,7 +48,7 @@ abstract class ControllerBase
 
     protected function Display()
     {
-        $this->returnFailure(ControllerBase::FAILURE_NOT_FOUND);
+        return $this->returnFailure(ControllerBase::FAILURE_NOT_FOUND);
     }
 
     protected function returnFailure($code = ControllerBase::FAILURE_SERVER_ERROR, $message = "")
@@ -132,7 +132,8 @@ abstract class ControllerBase
 
     protected function returnView(ViewBase $view)
     {
-        $view->setDefaultValues($this->applicationConfig["Name"], $this->applicationConfig["Description"], $this->applicationConfig["Author"]);
+        $view->setDefaultValues($this->applicationConfig["Title"], $this->applicationConfig["Description"], $this->applicationConfig["Author"], $this->applicationConfig["AuthorUrl"]);
+        $view->setApplicationValues($this->applicationConfig["Name"], $this->applicationConfig["Url"]);
         return $view->loadTemplate();
     }
 }

@@ -10,6 +10,7 @@ namespace Famoser\phpFrame\Helpers;
 
 
 use Exception;
+use Famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Models\Database\BaseModel;
 
 class ReflectionHelper extends HelperBase
@@ -29,7 +30,10 @@ class ReflectionHelper extends HelperBase
     public function getPropertyOfObject($obj, $propName)
     {
         $functionName = "get" . $propName;
-        return $obj->$functionName();
+        if (method_exists($obj, $functionName))
+            return $obj->$functionName();
+        LogHelper::getInstance()->logError("Method " . $functionName . " does not exist");
+        return "";
     }
 
     public function getObjectAsJson($object)
@@ -89,7 +93,7 @@ class ReflectionHelper extends HelperBase
     {
         $ignoreKeys = array();
         foreach ($properties as $key => $val) {
-            if (!in_array($key,$ignoreKeys)) {
+            if (!in_array($key, $ignoreKeys)) {
                 if (strpos($key, "CheckboxPlaceholder") !== false) {
                     $realName = str_replace("CheckboxPlaceholder", "", $key);
                     if (!isset($params[$realName]))

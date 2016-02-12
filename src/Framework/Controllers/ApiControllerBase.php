@@ -18,7 +18,7 @@ class ApiControllerBase extends ControllerBase
         if ($this->params[0] == "log") {
             if (isset($request) && isset($request["message"]) && isset($request["loglevel"]))
                 DoLog($request["message"], $request["loglevel"]);
-            $view = new RawView("/Framework/Templates/_parts/message_template.php");
+            $view = new RawView("/Framework/Templates/_parts/messages.php");
             return $this->returnView($view);
         }
         return $this->returnFailure(ControllerBase::FAILURE_NOT_FOUND);

@@ -22,6 +22,10 @@ abstract class ViewBase
     private $pageTitle;
     private $pageDescription;
     private $pageAuthor;
+    private $pageAuthorUrl;
+
+    private $applicationTitle;
+    private $applicationUrl;
 
     private $subMenu;
     private $mainMenu;
@@ -38,32 +42,17 @@ abstract class ViewBase
             $this->pageDescription = $description;
     }
 
-    public function setPageTitle($title)
-    {
-        $this->pageTitle = $title;
-    }
-
-    public function setPageDescription($description)
-    {
-        $this->pageDescription = $description;
-    }
-
-    public function setPageAuthor($author)
-    {
-        $this->pageAuthor = $author;
-    }
-
     /**
      * @param IconMenuItem[] $mainMenu
      * @param MenuItem[] $subMenu
      */
     public function setMenus($mainMenu, $subMenu)
     {
-        $this->mainMenu= $mainMenu;
+        $this->mainMenu = $mainMenu;
         $this->subMenu = $subMenu;
     }
 
-    public function setDefaultValues($defaultTitle, $defaultDescription, $defaultAuthor)
+    public function setDefaultValues($defaultTitle, $defaultDescription, $defaultAuthor, $defaultAuthorUrl)
     {
         if ($this->pageTitle == "")
             $this->pageTitle = $defaultTitle;
@@ -71,6 +60,14 @@ abstract class ViewBase
             $this->pageDescription = $defaultDescription;
         if ($this->pageAuthor == "")
             $this->pageAuthor = $defaultAuthor;
+        if ($this->pageAuthorUrl == "")
+            $this->pageAuthorUrl = $defaultAuthorUrl;
+    }
+
+    public function setApplicationValues($applicationTitle, $baseUrl)
+    {
+        $this->applicationTitle = $applicationTitle;
+        $this->applicationUrl = $baseUrl;
     }
 
     /**
@@ -94,8 +91,125 @@ abstract class ViewBase
     }
 
     /**
-     * loads the template
+     * @return null
      */
+    public function getPageTitle()
+    {
+        return $this->pageTitle;
+    }
+
+    /**
+     * @param null $pageTitle
+     */
+    public function setPageTitle($pageTitle)
+    {
+        $this->pageTitle = $pageTitle;
+    }
+
+    /**
+     * @return null
+     */
+    public function getPageDescription()
+    {
+        return $this->pageDescription;
+    }
+
+    /**
+     * @param null $pageDescription
+     */
+    public function setPageDescription($pageDescription)
+    {
+        $this->pageDescription = $pageDescription;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageAuthor()
+    {
+        return $this->pageAuthor;
+    }
+
+    /**
+     * @param string $pageAuthor
+     */
+    public function setPageAuthor($pageAuthor)
+    {
+        $this->pageAuthor = $pageAuthor;
+    }
+
+    /**
+     * @return MenuItem[]
+     */
+    public function getSubMenu()
+    {
+        return $this->subMenu;
+    }
+
+    /**
+     * @return IconMenuItem[]
+     */
+    public function getMainMenu()
+    {
+        return $this->mainMenu;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApplicationUrl()
+    {
+        return $this->applicationUrl;
+    }
+
+    /**
+     * @param string $applicationUrl
+     */
+    public function setApplicationUrl($applicationUrl)
+    {
+        $this->applicationUrl = $applicationUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageAuthorUrl()
+    {
+        return $this->pageAuthorUrl;
+    }
+
+    /**
+     * @param string $pageAuthorUrl
+     */
+    public function setPageAuthorUrl($pageAuthorUrl)
+    {
+        $this->pageAuthorUrl = $pageAuthorUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApplicationTitle()
+    {
+        return $this->applicationTitle;
+    }
+
+    /**
+     * @param string $applicationTitle
+     */
+    public function setApplicationTitle($applicationTitle)
+    {
+        $this->applicationTitle = $applicationTitle;
+    }
+
     protected function loadFile($file)
     {
         ob_start();

@@ -10,6 +10,7 @@
 namespace Famoser\phpSLWrapper\Framework\Hook;
 
 use Famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Services\RuntimeService;
 use famoser\phpFrame\Services\SettingsService;
 use Famoser\phpSLWrapper\Framework;
 
@@ -26,6 +27,7 @@ function hi_framework()
     spl_autoload_register('spl_autoload_register');
 
     $val = SettingsService::getInstance()->tryGetValueFor(array("Framework", "DebugMode"));
+    RuntimeService::getInstance()->setFrameworkDirectory(__DIR__);
     if ($val === true) {
         error_reporting(E_ALL);
         ini_set('display_errors', 1);
