@@ -16,7 +16,7 @@ use famoser\phpFrame\Services\SettingsService;
 use famoser\phpFrame\Views\MessageView;
 use famoser\phpFrame\Views\ViewBase;
 
-class ControllerBase
+abstract class ControllerBase
 {
     protected $request;
     protected $params;
@@ -44,6 +44,11 @@ class ControllerBase
         $this->files = $files;
 
         $this->applicationConfig = SettingsService::getInstance()->getValueFor("Application");
+    }
+
+    protected function Display()
+    {
+        $this->returnFailure(ControllerBase::FAILURE_NOT_FOUND);
     }
 
     protected function returnFailure($code = ControllerBase::FAILURE_SERVER_ERROR, $message = "")

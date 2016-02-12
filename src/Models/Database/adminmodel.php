@@ -1,9 +1,7 @@
 <?php
 namespace famoser\crm\Models\Database;
 
-use famoser\crm\Models\Database\EmployeeModel;
-use famoser\phpFrame\Interfaces\IModel;
-use famoser\phpFrame\Models\Database\BasePersonalModel;
+use famoser\crm\Models\Database\Base\BasePersonModel;
 
 /**
  * Created by PhpStorm.
@@ -11,7 +9,7 @@ use famoser\phpFrame\Models\Database\BasePersonalModel;
  * Date: 5/18/2015
  * Time: 7:44 PM
  */
-class AdminModel extends BasePersonalModel
+class AdminModel extends BasePersonModel
 {
     private $Email;
     private $PasswordHash;
@@ -20,12 +18,92 @@ class AdminModel extends BasePersonalModel
     private $PersonId;
     private $Person;
 
-    /**
-     * @param PersonModel $person
-     */
-    public function setPerson(PersonModel $person)
+    public function getIdentification()
     {
-        $this->Person = $person;
+        if ($this->getPerson() != null) {
+            return "Admin (" . $this->getEmail() . "), verbunden mit " . $this->getPerson()->GetIdentification();
+        } else {
+            return "Admin (" . $this->getEmail() . ")";
+        }
+    }
+
+    public function getPersonalIdentification()
+    {
+        if ($this->getPerson() != null) {
+            return $this->getPerson()->GetPersonalIdentification();
+        } else {
+            return "Admin";
+        }
+    }
+
+    public function getDatabaseArray()
+    {
+        $props = array("Email" => $this->getEmail(), "PasswordHash" => $this->getPasswordHash(), "AuthHash" => $this->getAuthHash());
+        return array_merge($props, parent::getDatabaseArray());
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->Email;
+    }
+
+    /**
+     * @param string $Email
+     */
+    public function setEmail($Email)
+    {
+        $this->Email = $Email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPasswordHash()
+    {
+        return $this->PasswordHash;
+    }
+
+    /**
+     * @param string $PasswordHash
+     */
+    public function setPasswordHash($PasswordHash)
+    {
+        $this->PasswordHash = $PasswordHash;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthHash()
+    {
+        return $this->AuthHash;
+    }
+
+    /**
+     * @param string $AuthHash
+     */
+    public function setAuthHash($AuthHash)
+    {
+        $this->AuthHash = $AuthHash;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPersonId()
+    {
+        return $this->PersonId;
+    }
+
+    /**
+     * @param int $PersonId
+     */
+    public function setPersonId($PersonId)
+    {
+        $this->PersonId = $PersonId;
     }
 
     /**
@@ -36,27 +114,11 @@ class AdminModel extends BasePersonalModel
         return $this->Person;
     }
 
-    public function getIdentification()
+    /**
+     * @param PersonModel $Person
+     */
+    public function setPerson($Person)
     {
-        if ($this->Person != null) {
-            return "Admin (" . $this->Email . "), verbunden mit " . $this->getPerson()->GetIdentification();
-        } else {
-            return "Admin (" . $this->Email . ")";
-        }
-    }
-
-    public function GetPersonalIdentification()
-    {
-        if ($this->Person != null) {
-            return $this->getPerson()->GetPersonalIdentification();
-        } else {
-            return "Admin";
-        }
-    }
-
-    public function getDatabaseArray()
-    {
-        $props = array("Email" => $this->Email, "PasswordHash" => $this->PasswordHash, "AuthHash" => $this->AuthHash, "PersonId" => $this->PersonId);
-        return array_merge($props, parent::getDatabaseArray());
+        $this->Person = $Person;
     }
 }

@@ -57,7 +57,7 @@ class GenericController extends MenuController
     /**
      * @return BaseDatabaseModel
      */
-    private function getObjectInstance()
+    protected function getObjectInstance()
     {
         return $this->objectInstance;
     }
@@ -65,20 +65,21 @@ class GenericController extends MenuController
     /**
      * @param BaseDatabaseModel $instance
      */
-    private function setObjectInstance(BaseDatabaseModel $instance)
+    protected function setObjectInstance(BaseDatabaseModel $instance)
     {
         $this->objectInstance = $instance;
     }
 
     /**
+     * @param null $params if null, controller will use params
      * @param null $place1
-     * read: condition array("Green"=> true)
+     * list: condition array("Green"=> true)
      * add (form): overWriteValues array("Id"=> 2)
      * add (no form): additional View Props array("wat"=> "aww jizz")
      * update (form): overWriteValues array("Id"=> 2)
      * update (no form): additional View Props array("wat"=> "aww jizz")
      * @param null $place2
-     * read: orderBy LongName, LastName
+     * list: orderBy LongName, LastName
      * add (form): removeValues array("PersonId",""LongShots")
      * add (no form): (empty)
      * update (form): removeValues array("PersonId",""LongShots")
@@ -87,9 +88,12 @@ class GenericController extends MenuController
      * read: additional View props array("wat"=> "aww jizz")
      * @return mixed|string
      */
-    public function Display($place1 = null, $place2 = null, $place3 = null)
+    public function Display($params = null, $place1 = null, $place2 = null, $place3 = null)
     {
-        if (count($this->params) == 0 || $this->params[0] == "") {
+        if ($params = null)
+            $params = $this->params;
+
+        if (count($params) == 0 || $params[0] == "") {
             $view = new GenericView($this->controllerName);
 
             //add $place3 props
@@ -101,7 +105,7 @@ class GenericController extends MenuController
 
             $view->assign("models", GenericDatabaseService::getInstance()->getAll($this->getObjectInstance(), $place1, true, $place2));
         } else {
-            if ($this->params[0] == "add") {
+            if ($params[0] == "add") {
                 if (isset($this->request["add"]) && $this->request["add"] == "true") {
                     $req = $this->request;
 
@@ -157,12 +161,38 @@ class GenericController extends MenuController
                 }
 
                 return $this->returnView($view);
-            } else if ($this->params[0] == "update" && isset($this->params[1]) && is_numeric($this->params[1])) {
+            } else if ($params[0] == "read" && isset($params[1]) && is_numeric($params[1])) {
+                $obj = GenericDatabaseService::getInstance()->getById($this->getObjectInstance(), $params[1]);
+                if ($obj !== false) {
+                    $this->setObjectInstance($obj);
+
+                    $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericController::CRUD_READ)));
+                    $view->assign("model", $this->getObjectInstance());
+
+                    //add relations
+                    if (is_array($this->nRelationInstances)) {
+                        foreach ($this->nRelationInstances as $name => $config) {
+                            $view->assign($name, GenericDatabaseService::getInstance()->getAll($config[0], $config[1], false, $config[2]));
+                        }
+                    }
+
+                    //add place1 props
+                    if (is_array($place1)) {
+                        foreach ($place1 as $key => $val) {
+                            $view->assign($key, $val);
+                        }
+                    }
+
+                    return $this->returnView($view);
+                } else {
+                    return $this->returnFailure(ControllerBase::FAILURE_NOT_FOUND);
+                }
+            } else if ($params[0] == "update" && isset($params[1]) && is_numeric($params[1])) {
                 if (isset($this->request["update"]) && $this->request["update"] == "true") {
                     $req = $this->request;
 
                     unset($req["update"]);
-                    $req["Id"] = $this->params[1];
+                    $req["Id"] = $params[1];
 
                     //add defaults
                     if (is_array($place1)) {
@@ -192,7 +222,7 @@ class GenericController extends MenuController
                     }
                 }
 
-                $obj = GenericDatabaseService::getInstance()->getById($this->getObjectInstance(), $this->params[1]);
+                $obj = GenericDatabaseService::getInstance()->getById($this->getObjectInstance(), $params[1]);
                 if ($obj !== false) {
                     $this->setObjectInstance($obj);
 
@@ -217,47 +247,21 @@ class GenericController extends MenuController
                 } else {
                     return $this->returnFailure(ControllerBase::FAILURE_NOT_FOUND);
                 }
-            } else if ($this->params[0] == "delete" && isset($this->params[1]) && is_numeric($this->params[1])) {
+            } else if ($params[0] == "delete" && isset($params[1]) && is_numeric($params[1])) {
                 if (isset($this->request["delete"]) && $this->request["delete"] == "true") {
 
-                    $res = GenericDatabaseService::getInstance()->deleteById($this->getObjectInstance(), $this->params[1]);
+                    $res = GenericDatabaseService::getInstance()->deleteById($this->getObjectInstance(), $params[1]);
                     if ($res) {
                         return $this->returnSuccess(ControllerBase::SUCCESS_DELETED, $this->friendlyObjectName . " was deleted");
                     } else {
                         LogHelper::getInstance()->logError("unable to delete " . $this->friendlyObjectName);
                     }
                 }
-                $obj = GenericDatabaseService::getInstance()->getById($this->getObjectInstance(), $this->params[1]);
+                $obj = GenericDatabaseService::getInstance()->getById($this->getObjectInstance(), $params[1]);
                 if ($obj !== false) {
                     $this->setObjectInstance($obj);
 
                     $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericController::CRUD_DELETE)));
-                    $view->assign("model", $this->getObjectInstance());
-
-                    //add relations
-                    if (is_array($this->nRelationInstances)) {
-                        foreach ($this->nRelationInstances as $name => $config) {
-                            $view->assign($name, GenericDatabaseService::getInstance()->getAll($config[0], $config[1], false, $config[2]));
-                        }
-                    }
-
-                    //add place1 props
-                    if (is_array($place1)) {
-                        foreach ($place1 as $key => $val) {
-                            $view->assign($key, $val);
-                        }
-                    }
-
-                    return $this->returnView($view);
-                } else {
-                    return $this->returnFailure(ControllerBase::FAILURE_NOT_FOUND);
-                }
-            } else if ($this->params[0] == "read" && isset($this->params[1]) && is_numeric($this->params[1])) {
-                $obj = GenericDatabaseService::getInstance()->getById($this->getObjectInstance(), $this->params[1]);
-                if ($obj !== false) {
-                    $this->setObjectInstance($obj);
-
-                    $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericController::CRUD_READ)));
                     $view->assign("model", $this->getObjectInstance());
 
                     //add relations

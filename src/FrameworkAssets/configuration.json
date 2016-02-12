@@ -81,6 +81,21 @@
             ]
           }
         ]
+      },
+      "AuthenticationService": {
+        "LoggedInStartPage": "de",
+        "LanguageResources": [
+          {
+            "Language": "de",
+            "Locale": "de_CH",
+            "ResourceFiles": [
+              "de_strings.json"
+            ],
+            "FormatFiles": [
+              "de_formats.json"
+            ]
+          }
+        ]
       }
     }
   }

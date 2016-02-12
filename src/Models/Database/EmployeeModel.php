@@ -20,22 +20,6 @@ class EmployeeModel extends BasePersonalModel
     private $PersonId;
     private $Person;
 
-    /**
-     * @param PersonModel $person
-     */
-    public function setPerson(PersonModel $person)
-    {
-        $this->Person = $person;
-    }
-
-    /**
-     * @return PersonModel
-     */
-    public function getPerson()
-    {
-        return $this->Person;
-    }
-
     public function getIdentification()
     {
         return $this->getPerson()->getIdentification();
@@ -48,7 +32,71 @@ class EmployeeModel extends BasePersonalModel
 
     public function getDatabaseArray()
     {
-        $props = array("CanModifyPayment" => $this->CanModifyPayment, "PaymentPerHour" => $this->PaymentPerHour, "PersonId" => $this->PersonId);
+        $props = array("CanModifyPayment" => $this->getCanModifyPayment(), "PaymentPerHour" => $this->getPaymentPerHour(), "PersonId" => $this->getPersonId());
         return array_merge($props, parent::getDatabaseArray());
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentPerHour()
+    {
+        return $this->PaymentPerHour;
+    }
+
+    /**
+     * @param string $PaymentPerHour
+     */
+    public function setPaymentPerHour($PaymentPerHour)
+    {
+        $this->PaymentPerHour = $PaymentPerHour;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCanModifyPayment()
+    {
+        return $this->CanModifyPayment;
+    }
+
+    /**
+     * @param bool $CanModifyPayment
+     */
+    public function setCanModifyPayment($CanModifyPayment)
+    {
+        $this->CanModifyPayment = $CanModifyPayment;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPersonId()
+    {
+        return $this->PersonId;
+    }
+
+    /**
+     * @param int $PersonId
+     */
+    public function setPersonId($PersonId)
+    {
+        $this->PersonId = $PersonId;
+    }
+
+    /**
+     * @return PersonModel
+     */
+    public function getPerson()
+    {
+        return $this->Person;
+    }
+
+    /**
+     * @param PersonModel $Person
+     */
+    public function setPerson($Person)
+    {
+        $this->Person = $Person;
     }
 }

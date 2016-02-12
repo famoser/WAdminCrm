@@ -34,6 +34,11 @@ class FormatHelper extends HelperBase
         return $input;
     }
 
+    public function dateTimeFromString($str)
+    {
+        return date($this->formats["DateTime"]["Display"], strtotime($str));
+    }
+
     public function dateTime($input)
     {
         $res = "";
@@ -83,6 +88,11 @@ class FormatHelper extends HelperBase
         return $res;
     }
 
+    public function dateFromString($str)
+    {
+        return date($this->formats["Date"]["Display"], strtotime($str));
+    }
+
     public function date($input)
     {
         $res = "";
@@ -110,6 +120,11 @@ class FormatHelper extends HelperBase
             return $res;
         }
         return "-";
+    }
+
+    public function timeFromString($str)
+    {
+        return date($this->formats["Time"]["Display"], strtotime($str));
     }
 
     public function time($input)

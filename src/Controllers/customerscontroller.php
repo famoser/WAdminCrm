@@ -1,9 +1,15 @@
 <?php
 namespace famoser\crm\Controllers;
 
-use famoser\WAdminCrm\Framework\Controllers\ControllerBase;
-use famoser\WAdminCrm\Framework\Controllers\GenericController;
-use famoser\WAdminCrm\Framework\Views\GenericView;
+use famoser\crm\Models\Database\CustomerModel;
+use famoser\crm\Services\CustomerDatabaseService;
+use famoser\phpFrame\Controllers\ControllerBase;
+use famoser\phpFrame\Controllers\GenericController;
+use famoser\phpFrame\Helpers\FormatHelper;
+use famoser\phpFrame\Models\View\MenuItem;
+use famoser\phpFrame\Services\DatabaseService;
+use famoser\phpFrame\Services\GenericDatabaseService;
+use famoser\phpFrame\Views\GenericView;
 
 /**
  * Created by PhpStorm.
@@ -13,30 +19,14 @@ use famoser\WAdminCrm\Framework\Views\GenericView;
  */
 class CustomersController extends GenericController
 {
-    private $request = null;
-    private $params = null;
-
-    private $genericController = null;
-    private $requestFiles;
-
-    public function __construct($request, $files, $params)
+    public function __construct($request, $params, $files)
     {
-        parent::__construct($request, $files, $params);
-        $this->genericController = new GenericController($this->request, $this->params, "customers", "customer", "Company, LastName, FirstName", array("add" => "edit"), null, $this->getMenu());
-    }
+        $defaultObj = new CustomerModel();
+        $defaultObj->setCustomerSinceDate(FormatHelper::getInstance()->dateFromString("today"));
+        parent::__construct($request, $params, $files, $defaultObj, array(GenericController::CRUD_CREATE => GenericController::CRUD_UPDATE));
 
-    function getMenu()
-    {
-        $res = array();
-        $menuItem = array();
-        $menuItem["href"] = "";
-        $menuItem["content"] = "all";
-        $res[] = $menuItem;
-        $menuItem2 = array();
-        $menuItem2["href"] = "active";
-        $menuItem2["content"] = "with active projects";
-        $res[] = $menuItem2;
-        return $res;
+        $this->addMenuItem(new MenuItem("all", ""));
+        $this->addMenuItem(new MenuItem("with active projects", "active"));
     }
 
     /**
@@ -46,24 +36,13 @@ class CustomersController extends GenericController
      */
     public function Display()
     {
-        if (count($this->params) == 0) {
-            return $this->genericController->Display();
-        } else {
-            if ($this->params[0] == "add") {
-                $pm = new CustomerModel();
-                $pm->CustomerSinceDate = date(DATE_FORMAT_DATABASE, strtotime("today"));
-                return $this->genericController->Display($pm);
-            } else if ($this->params[0] == "edit" && isset($this->params[1]) && is_numeric($this->params[1])) {
-                return $this->genericController->Display();
-            } else if ($this->params[0] == "delete" && isset($this->params[1]) && is_numeric($this->params[1])) {
-                return $this->genericController->Display();
-            } else if ($this->params[0] == "active") {
-                $view = new GenericView("customers", $this->getMenu());
-                $view->assign("customers", GetActiveCustomers());
-                $this->setView($view);
+        if (count($this->params) > 0) {
+            if ($this->params[0] == "active") {
+                $view = new GenericView("CustomersController");
+                $view->assign("customers", CustomerDatabaseService::getInstance()->getActive());
+                return $this->returnView($view);
             }
         }
-
-        return $this->evaluateView();
+        return parent::Display();
     }
 }

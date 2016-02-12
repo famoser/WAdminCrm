@@ -1,53 +1,50 @@
 <?php
 namespace famoser\crm\Controllers;
 
+use famoser\crm\Models\Database\MilestoneModel;
+use famoser\crm\Models\Database\ProjectModel;
+use famoser\phpFrame\Controllers\ControllerBase;
+use famoser\phpFrame\Controllers\GenericController;
+use famoser\phpFrame\Helpers\FormatHelper;
+use famoser\phpFrame\Models\Database\BaseDatabaseModel;
+use famoser\phpFrame\Models\View\MenuItem;
+use famoser\phpFrame\Services\DatabaseService;
+use famoser\phpFrame\Services\GenericDatabaseService;
+use famoser\phpFrame\Views\GenericView;
+
 /**
  * Created by PhpStorm.
  * User: Florian Moser
  * Date: 13.09.2015
  * Time: 16:03
  */
-class MilestonesController extends ControllerBase
+class MilestonesController extends GenericController
 {
-    private $request = null;
-    private $params = null;
-
-    private $genericController = null;
-
+    /*
     /**
      * Konstruktor, erstellet den Controllers.
      *
      * @param Array $request Array aus $_GET & $_POST.
-     */
+     *
     public function __construct($request, $requestFiles, $params)
     {
         $this->request = $request;
         $this->params = $params;
         $this->genericController = new GenericController($this->request, $this->params, "milestones", "milestone", "StartDate", array("add" => "edit"), null, $this->getMenu(), $this->getNRelations());
-    }
+    }*/
 
-    function getMenu()
+    public function __construct($request, $params, $files, BaseDatabaseModel $objectInstance, array $crudReplaces, array $nRelationInstances)
     {
-        $res = array();
-        $menuItem = array();
-        $menuItem["href"] = "";
-        $menuItem["content"] = "active";
-        $res[] = $menuItem;
-        $menuItem2 = array();
-        $menuItem2["href"] = "all";
-        $menuItem2["content"] = "all";
-        $res[] = $menuItem2;
-        return $res;
-    }
+        $defaultModel = new MilestoneModel();
+        $defaultModel->setStartDate(FormatHelper::getInstance()->dateFromString("today"));
+        parent::__construct($request,
+            $params,
+            $files,
+            $defaultModel,
+            array(GenericController::CRUD_CREATE => GenericController::CRUD_UPDATE));
 
-    function getNRelations()
-    {
-        $res = array();
-        $menuItem = array();
-        $menuItem["table"] = "projects";
-        $menuItem["orderby"] = "Name";
-        $res[] = $menuItem;
-        return $res;
+        $this->addMenuItem(new MenuItem("active", ""));
+        $this->addMenuItem(new MenuItem("archived", "archived"));
     }
 
     /**
@@ -57,57 +54,36 @@ class MilestonesController extends ControllerBase
      */
     public function Display()
     {
-        $view = $this->NotFound();
         if (count($this->params) == 0) {
-            $view = new GenericView("milestones", $this->getMenu());
-            $projects = GetAllByCondition("projects", array("IsCompletedBool" => false), true, "StartDate");
-            foreach ($projects as $project) {
-                $project->Milestones = GetAllByCondition("milestones", array("ProjectId" => $project->Id), false, "StartDate");
-            }
-            $view->assign("projects", $projects);
-        } else if (count($this->params) > 0 && $this->params[0] == "all") {
-            $view = new GenericView("milestones", $this->getMenu());
-            $projects = GetAllByCondition("projects", array(), true, "StartDate");
-            foreach ($projects as $project) {
-                $project->Milestones = GetAllByCondition("milestones", array("ProjectId" => $project->Id), false, "StartDate");
-            }
-            $view->assign("projects", $projects);
-        } else if (count($this->params) > 1 && $this->params[0] == "byproject" && is_numeric($this->params[1])) {
-            $proj = GetById("projects", $this->params[1]);
-            if ($proj != null) {
-                $view = new GenericView("milestones", $this->getMenu(), "milestones of " . $proj->GetIdentification());
-                $project = GetSingleByCondition("projects", array("Id" => $this->params[1]), true);
-                $project->Milestones = GetAllByCondition("milestones", array("ProjectId" => $project->Id), false, "StartDate");
-                $view->assign("projects", array($project));
-            } else {
-                $view = new GenericView("milestones", $this->getMenu());
-                DoLog("project not found", LOG_LEVEL_USER_ERROR);
-                $view->assign("projects", array());
-            }
+            return parent::Display(array(), array("IsArchived" => false), "StartDate DESC");
         } else {
-            if ($this->params[0] == "add") {
-                $pm = new MilestoneModel();
-                $pm->StartDate = date(DATE_FORMAT_DATABASE, strtotime("today"));
-                if (isset($this->params[1]) && is_numeric($this->params[1])) {
-                    $proj = GetById("projects", $this->params[1]);
-                    if ($proj != null) {
-                        $pm->ProjectId = $proj->Id;
-                        $pm->DeadlineDate = $proj->DeadlineDate;
-                        $pm->PaymentPerHour = $proj->PaymentPerHour;
-                        $pm->PercentageComplete = 0;
+            if ($this->params[0] == "archived") {
+                return parent::Display(array(), array("IsArchived" => true), "StartDate DESC");
+            } else if (count($this->params) > 1 && is_numeric($this->params[1])) {
+                if ($this->params[0] == "byproject") {
+                    $project = GenericDatabaseService::getInstance()->getById(new ProjectModel(), $this->params[1]);
+                    if ($project != null) {
+                        return parent::Display(array(), array("ProjectId" => $project->getId()), "StartDate DESC");
+                    } else {
+                        return $this->returnFailure(ControllerBase::FAILURE_NOT_FOUND);
+                    }
+                } else {
+                    if ($this->params[0] == "add") {
+                        $model = $this->getObjectInstance();
+                        if ($model instanceof MilestoneModel) {
+                            $project = GenericDatabaseService::getInstance()->getById(new ProjectModel(), $this->params[1]);
+                            if ($project instanceof ProjectModel) {
+                                $model->setProjectId($this->params[1]);
+                                $model->setProject($project);
+                                $model->setDeadlineDate($project->getDeadlineDate());
+                            }
+                        }
+                        return parent::Display();
                     }
                 }
-                return $this->genericController->Display($pm);
-            } else if ($this->params[0] == "edit" && isset($this->params[1]) && is_numeric($this->params[1])) {
-                return $this->genericController->Display();
-            } else if ($this->params[0] == "delete" && isset($this->params[1]) && is_numeric($this->params[1])) {
-                return $this->genericController->Display();
-            } else if ($this->params[0] == "active") {
-                $view = new GenericView("milestones", $this->getMenu());
-                $view->assign("milestones", GetAllByCondition("milestones", array("IsCompletedBool" => false), true, "StartDate DESC"));
             }
         }
 
-        return $view->loadTemplate();
+        return parent::Display();
     }
 }

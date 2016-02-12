@@ -1,5 +1,6 @@
 <?php
 namespace famoser\crm\Models\Database;
+use famoser\crm\Models\Database\Base\BasePersonModel;
 use famoser\phpFrame\Models\Database\BasePersonalModel;
 
 
@@ -9,46 +10,77 @@ use famoser\phpFrame\Models\Database\BasePersonalModel;
  * Date: 5/18/2015
  * Time: 7:44 PM
  */
-class CustomerModel extends BasePersonalModel
+class CustomerModel extends BasePersonModel
 {
     private $Company;
     private $CustomerSinceDate;
 
-    private $PersonId;
-    private $Person;
+    private $Projects;
 
-    /**
-     * @param PersonModel $person
-     */
-    public function setPerson(PersonModel $person)
-    {
-        $this->Person = $person;
-    }
-
-    /**
-     * @return PersonModel
-     */
-    public function getPerson()
-    {
-        return $this->Person;
-    }
-
-    public function GetPersonalIdentification()
+    public function getPersonalIdentification()
     {
         if ($this->getPerson() != null) {
-            return $this->getPerson()->getPersonalIdentification() . " (" . $this->Company . ")";
+            return $this->getPerson()->getPersonalIdentification() . " (" . $this->getCompany() . ")";
         }
-        return $this->Company;
+        return $this->getCompany();
     }
 
-    public function GetIdentification()
+    public function getIdentification()
     {
-        return $this->getPerson()->getIdentification() . " (" . $this->Company . ")";
+        return $this->getPerson()->getIdentification() . " (" . $this->getCompany() . ")";
     }
 
     public function getDatabaseArray()
     {
-        $props = array("Company" => $this->Company, "CustomerSinceDate" => $this->CustomerSinceDate, "PersonId" => $this->PersonId);
+        $props = array("Company" => $this->getCustomerSinceDate(), "CustomerSinceDate" => $this->getCustomerSinceDate());
         return array_merge($props, parent::getDatabaseArray());
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompany()
+    {
+        return $this->Company;
+    }
+
+    /**
+     * @param mixed $Company
+     */
+    public function setCompany($Company)
+    {
+        $this->Company = $Company;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerSinceDate()
+    {
+        return $this->CustomerSinceDate;
+    }
+
+    /**
+     * @param string $CustomerSinceDate
+     */
+    public function setCustomerSinceDate($CustomerSinceDate)
+    {
+        $this->CustomerSinceDate = $CustomerSinceDate;
+    }
+
+    /**
+     * @return ProjectModel[]
+     */
+    public function getProjects()
+    {
+        return $this->Projects;
+    }
+
+    /**
+     * @param ProjectModel[] $Projects
+     */
+    public function setProjects($Projects)
+    {
+        $this->Projects = $Projects;
     }
 }

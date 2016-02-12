@@ -1,8 +1,8 @@
 <?php
 
-use famoser\crm\Models\Database\CustomerModel;
-use famoser\crm\Models\Database\MilestoneModel;
-use famoser\phpFrame\Models\Database\BaseThingModel;
+namespace famoser\crm\Models\Database;
+use famoser\crm\Models\Database\Base\TimeTaskModel;
+
 
 /**
  * Created by PhpStorm.
@@ -10,23 +10,59 @@ use famoser\phpFrame\Models\Database\BaseThingModel;
  * Date: 13.09.2015
  * Time: 13:16
  */
-class ProjectModel extends BaseThingModel
+class ProjectModel extends TimeTaskModel
 {
-    public $IsCompleted;
-    public $StartDate;
-    public $EndDate;
-
     private $CustomerId;
     private $Customer;
 
-    private $Milestones = array();
+    private $Milestones;
+
+    public function totalCost()
+    {
+        $total_cost = 0;
+        foreach ($this->getMilestones() as $milestone) {
+            $total_cost += $milestone->TotalCost();
+        }
+        return $total_cost;
+    }
+
+    public function totalWorkingTime()
+    {
+        $total_time = 0;
+        foreach ($this->getMilestones() as $milestone) {
+            $total_time += $milestone->TotalWorkingTime();
+        }
+        return $total_time;
+    }
+
+    public function getIdentification()
+    {
+        if ($this->Customer != null)
+            return $this->getName() . " (" . $this->getCustomer()->getIdentification() . ")";
+        return $this->getName();
+    }
+
+    public function getDatabaseArray()
+    {
+        $props = array("CustomerId" => $this->getCustomerId());
+        return array_merge($props, parent::getDatabaseArray());
+    }
+
 
     /**
-     * @param CustomerModel $customer
+     * @return int
      */
-    public function setCustomer($customer)
+    public function getCustomerId()
     {
-        $this->Customer = $customer;
+        return $this->CustomerId;
+    }
+
+    /**
+     * @param int $CustomerId
+     */
+    public function setCustomerId($CustomerId)
+    {
+        $this->CustomerId = $CustomerId;
     }
 
     /**
@@ -38,11 +74,11 @@ class ProjectModel extends BaseThingModel
     }
 
     /**
-     * @param MilestoneModel[] $milestones
+     * @param CustomerModel $Customer
      */
-    public function setMilestones(array $milestones)
+    public function setCustomer($Customer)
     {
-        $this->Milestones = $milestones;
+        $this->Customer = $Customer;
     }
 
     /**
@@ -53,37 +89,11 @@ class ProjectModel extends BaseThingModel
         return $this->Milestones;
     }
 
-    public function TotalCost()
+    /**
+     * @param MilestoneModel[] $Milestones
+     */
+    public function setMilestones(array $Milestones)
     {
-        $total_cost = 0;
-        foreach ($this->getMilestones() as $milestone) {
-            $total_cost += $milestone->TotalCost();
-        }
-        return $total_cost;
-    }
-
-    public function TotalWorkingTime()
-    {
-        $total_time = 0;
-        foreach ($this->getMilestones() as $milestone) {
-            $total_time += $milestone->TotalWorkingTime();
-        }
-        return $total_time;
-    }
-
-    public function GetIdentification()
-    {
-        if ($this->Customer != null)
-            return $this->getName() . " (" . $this->getCustomer()->getIdentification() . ")";
-        return $this->getName();
-    }
-
-    public function getDatabaseArray()
-    {
-        $props = array("IsCompleted" => $this->IsCompleted,
-            "StartDate" => $this->StartDate,
-            "EndDate" => $this->EndDate
-        );
-        return array_merge($props, parent::getDatabaseArray());
+        $this->Milestones = $Milestones;
     }
 }

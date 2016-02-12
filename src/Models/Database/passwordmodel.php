@@ -19,12 +19,98 @@ class PasswordModel extends BaseThingModel
     private $CustomerId;
     private $Customer;
 
-    /**
-     * @param CustomerModel $customer
-     */
-    public function setCustomer(CustomerModel $customer)
+    private $ProjectId;
+    private $Project;
+
+    public function getDatabaseArray()
     {
-        $this->Customer = $customer;
+        $props = array("Location" => $this->getLocation(),
+            "Username" => $this->getUsername(),
+            "Password" => $this->getPassword(),
+            "Notes" => $this->getNotes(),
+            "CustomerId" => $this->getCustomerId()
+        );
+        return array_merge($props, parent::getDatabaseArray());
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocation()
+    {
+        return $this->Location;
+    }
+
+    /**
+     * @param string $Location
+     */
+    public function setLocation($Location)
+    {
+        $this->Location = $Location;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->Username;
+    }
+
+    /**
+     * @param string $Username
+     */
+    public function setUsername($Username)
+    {
+        $this->Username = $Username;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->Password;
+    }
+
+    /**
+     * @param string $Password
+     */
+    public function setPassword($Password)
+    {
+        $this->Password = $Password;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotes()
+    {
+        return $this->Notes;
+    }
+
+    /**
+     * @param string $Notes
+     */
+    public function setNotes($Notes)
+    {
+        $this->Notes = $Notes;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCustomerId()
+    {
+        return $this->CustomerId;
+    }
+
+    /**
+     * @param int $CustomerId
+     */
+    public function setCustomerId($CustomerId)
+    {
+        $this->CustomerId = $CustomerId;
     }
 
     /**
@@ -35,14 +121,43 @@ class PasswordModel extends BaseThingModel
         return $this->Customer;
     }
 
-    public function getDatabaseArray()
+    /**
+     * @param CustomerModel $Customer
+     */
+    public function setCustomer($Customer)
     {
-        $props = array("Location" => $this->Location,
-            "Username" => $this->Username,
-            "Password" => $this->Password,
-            "Notes" => $this->Notes,
-            "CustomerId" => $this->CustomerId
-        );
-        return array_merge($props, parent::getDatabaseArray());
+        $this->Customer = $Customer;
+    }
+
+    /**
+     * @return int
+     */
+    public function getProjectId()
+    {
+        return $this->ProjectId;
+    }
+
+    /**
+     * @param int $ProjectId
+     */
+    public function setProjectId($ProjectId)
+    {
+        $this->ProjectId = $ProjectId;
+    }
+
+    /**
+     * @return ProjectModel
+     */
+    public function getProject()
+    {
+        return $this->Project;
+    }
+
+    /**
+     * @param ProjectModel $Project
+     */
+    public function setProject($Project)
+    {
+        $this->Project = $Project;
     }
 }

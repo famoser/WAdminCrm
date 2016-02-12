@@ -16,16 +16,39 @@ class BaseThingModel extends BaseDatabaseModel
 
     public function getIdentification()
     {
-        return $this->Name;
+        return $this->getName();
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->Name;
     }
 
+    /**
+     * @param string $Name
+     */
+    public function setName($Name)
+    {
+        $this->Name = $Name;
+    }
+
+    /**
+     * @return string
+     */
     public function getDescription()
     {
         return $this->Description;
     }
+
+    /**
+     * @param string $Description
+     */
+    public function setDescription($Description)
+    {
+        $this->Description = $Description;
+    }
+
 }

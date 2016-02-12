@@ -9,30 +9,63 @@
 namespace famoser\crm\Models\Database;
 
 
-use famoser\phpFrame\Models\Database\BaseThingModel;
-use ProjectModel;
 
-class MilestoneModel extends BaseThingModel
+use famoser\crm\Models\Database\Base\TimeTaskModel;
+
+class MilestoneModel extends TimeTaskModel
 {
-    private $StartDate;
-    private $DeadlineDate;
-    private $EndDate;
-    private $CostCeiling;
-    private $PercentageComplete;
-    private $PaymentPerHour;
-
     private $ProjectId;
     private $Project;
 
     private $Procedures = array();
 
+    public function totalCost()
+    {
+        $total_cost = 0;
+        foreach ($this->getProcedures() as $procedure) {
+            $total_cost += $procedure->totalCost();
+        }
+        return $total_cost;
+    }
+
+    public function totalWorkingTime()
+    {
+        $total_time = 0;
+        foreach ($this->getProcedures() as $procedure) {
+            $total_time += $procedure->totalWorkingTime();
+        }
+        return $total_time;
+    }
+
+    public function getIdentification()
+    {
+        if ($this->getProject() != null)
+            return $this->getName() . " (" . $this->getProject()->getName() . ")";
+        return $this->getName();
+    }
+
+    public function getDatabaseArray()
+    {
+        $props = array(
+            "ProjectId" => $this->getProjectId()
+        );
+        return array_merge($props, parent::getDatabaseArray());
+    }
 
     /**
-     * @param ProjectModel $project
+     * @return int
      */
-    public function setProject(ProjectModel $project)
+    public function getProjectId()
     {
-        $this->Project = $project;
+        return $this->ProjectId;
+    }
+
+    /**
+     * @param int $ProjectId
+     */
+    public function setProjectId($ProjectId)
+    {
+        $this->ProjectId = $ProjectId;
     }
 
     /**
@@ -44,11 +77,11 @@ class MilestoneModel extends BaseThingModel
     }
 
     /**
-     * @param ProcedureModel[] $procedures
+     * @param ProjectModel $Project
      */
-    public function setProcedures(array $procedures)
+    public function setProject($Project)
     {
-        $this->Procedures = $procedures;
+        $this->Project = $Project;
     }
 
     /**
@@ -59,41 +92,11 @@ class MilestoneModel extends BaseThingModel
         return $this->Procedures;
     }
 
-    public function TotalCost()
+    /**
+     * @param ProcedureModel[] $Procedures
+     */
+    public function setProcedures(array $Procedures)
     {
-        $total_cost = 0;
-        foreach ($this->getProcedures() as $procedure) {
-            $total_cost += $procedure->TotalCost();
-        }
-        return $total_cost;
-    }
-
-    public function TotalWorkingTime()
-    {
-        $total_time = 0;
-        foreach ($this->getProcedures() as $procedure) {
-            $total_time += $procedure->TotalWorkingTime();
-        }
-        return $total_time;
-    }
-
-    public function GetIdentification()
-    {
-        if ($this->Project != null)
-            return $this->getName() . " (" . $this->getProject()->getName() . ")";
-        return $this->Name;
-    }
-
-    public function getDatabaseArray()
-    {
-        $props = array("StartDate" => $this->StartDate,
-            "DeadlineDate" => $this->DeadlineDate,
-            "EndDate" => $this->EndDate,
-            "CostCeiling" => $this->CostCeiling,
-            "PercentageComplete" => $this->PercentageComplete,
-            "PaymentPerHour" => $this->PaymentPerHour,
-            "ProjectId" => $this->ProjectId
-        );
-        return array_merge($props, parent::getDatabaseArray());
+        $this->Procedures = $Procedures;
     }
 }

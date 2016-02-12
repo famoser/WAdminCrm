@@ -1,6 +1,13 @@
 <?php
 namespace famoser\crm\Controllers;
 
+use famoser\phpFrame\Controllers\ControllerBase;
+use Famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Helpers\FileHelper;
+use famoser\phpFrame\Services\DatabaseService;
+use famoser\phpFrame\Services\LocaleService;
+use famoser\phpFrame\Views\GenericView;
+
 /**
  * Created by PhpStorm.
  * User: Florian Moser
@@ -8,25 +15,8 @@ namespace famoser\crm\Controllers;
  * Time: 11:55
  *
  */
-
 class ImportController extends ControllerBase
 {
-    private $request = null;
-    private $params = null;
-    private $requestFiles = null;
-
-    /**
-     * Konstruktor, erstellet den Controllers.
-     *
-     * @param Array $request Array aus $_GET & $_POST.
-     */
-    public function __construct($request, $requestFiles, $params)
-    {
-        $this->request = $request;
-        $this->params = $params;
-        $this->requestFiles = $requestFiles;
-    }
-
     /**
      * Methode zum Anzeigen des Contents.
      *
@@ -35,50 +25,25 @@ class ImportController extends ControllerBase
     public function Display()
     {
         $view = new GenericView("import");
-        if (count($this->params) == 0 || $this->params[0] == "") {
-            //no params: default
-        } else if ($this->params[0] == "upload") {
-            if ($this->request["step"] == "1") {
-                $filetype = FileTypeUploadedFile('importfile');
-                if ($filetype == "sql") {
-                    $filepath = $_SERVER['DOCUMENT_ROOT'] . "/import/" . uniqid() . ".sql";
-                    $resp = ValidateUploadedFile('importfile', $filepath);
-                    if ($resp !== true) {
-                        DoLog("Upload failed", LOG_LEVEL_USER_ERROR);
-                    } else {
-                        if (ImportDatabase(false, $filepath)) {
-                            $view->assign("filepath", $filepath);
-                            $view->assign("type", "database");
-                            $view->assign("step", 2);
-                        }
-                    }
-                } else if ($filetype == "xls" || $filetype == "xlsx") {
-                    $filepath = $_SERVER['DOCUMENT_ROOT'] . "/import/" . uniqid() . ".xlsx";
-                    $resp = ValidateUploadedFile('importfile', $filepath);
-                    if ($resp !== true) {
-                        DoLog("Upload failed", LOG_LEVEL_USER_ERROR);
-                    } else {
-                        if (ImportPersons(false, $filepath)) {
-                            $view->assign("filepath", $filepath);
-                            $view->assign("type", "persons");
-                            $view->assign("step", 2);
-                        }
-                    }
+
+        if (count($this->params) > 0) {
+            if ($this->params[0] == "upload") {
+                $fileType = FileHelper::getInstance()->getFileTypeUploadedFile('importfile');
+                $filePath = $_SERVER['DOCUMENT_ROOT'] . "/import/" . uniqid() . "." . $fileType;
+                $resp = FileHelper::getInstance()->saveUploadedFile('importfile', $filePath);
+                if ($resp !== true) {
+                    LogHelper::getInstance()->logError(FileHelper::getInstance()->evaluateFailure($resp));
                 } else {
-                    DoLog("Unbekanntes Dateiformat: ".$filetype, LOG_LEVEL_USER_ERROR);
+                    $resp = DatabaseService::getInstance()->importDatabase($filePath);
+                    if ($resp == true) {
+                        LogHelper::getInstance()->logUserInfo(LocaleService::getInstance()->getResources()->getKey("SUCCESS_GENERAL"));
+                    } else {
+                        LogHelper::getInstance()->logError(DatabaseService::getInstance()->evaluateError($resp));
+                    }
                 }
-            } else if ($this->request["step"] == "2") {
-                if ($this->request["type"] == "database"){
-                    ImportDatabase(true, $this->request["filepath"]);
-                } else if ($this->request["type"] == "persons") {
-                    ImportPersons(true, $this->request["filepath"]);
-                } else {
-                    DoLog("Import konnte nicht ausgeführt werden", LOG_LEVEL_SYSTEM_ERROR);
-                }
-            } else {
-                DoLog("Import konnte nicht ausgeführt werden", LOG_LEVEL_SYSTEM_ERROR);
             }
         }
-        return $view->loadTemplate();
+
+        return $this->returnView($view);
     }
 }

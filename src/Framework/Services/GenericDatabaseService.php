@@ -43,9 +43,25 @@ class GenericDatabaseService extends DatabaseService
         if ($orderBy != null)
             $orderBy = " ORDER BY " . $orderBy;
 
-        $db = $this->GetDatabaseConnection();
+        $db = $this->getDatabaseConnection();
         $stmt = $db->prepare('SELECT * FROM ' . $table . " " . $this->constructConditionSQL($condition) . $orderBy . " " . $additionalSql);
         $stmt->execute($condition);
+
+        return $this->fetchAllToClass($stmt, $model, $addRelationships);
+    }
+
+    /**
+     * @param BaseDatabaseModel $model
+     * @param string $sql
+     * @param array|null $preparedArray
+     * @param bool $addRelationships
+     * @return \famoser\phpFrame\Models\Database\BaseDatabaseModel[]
+     */
+    protected function getAllWithQuery(BaseDatabaseModel $model, string $sql, array $preparedArray = null, $addRelationships = true)
+    {
+        $db = $this->getDatabaseConnection();
+        $stmt = $db->prepare($sql);
+        $stmt->execute($preparedArray);
 
         return $this->fetchAllToClass($stmt, $model, $addRelationships);
     }
@@ -64,9 +80,25 @@ class GenericDatabaseService extends DatabaseService
         if ($orderBy != "")
             $orderBy = " ORDER BY " . $orderBy;
 
-        $db = $this->GetDatabaseConnection();
+        $db = $this->getDatabaseConnection();
         $stmt = $db->prepare('SELECT * FROM ' . $table . $this->constructConditionSQL($condition) . $orderBy . " LIMIT 1");
         $stmt->execute($condition);
+
+        return $this->fetchSingleToClass($stmt, $model, $addRelationships);
+    }
+
+    /**
+     * @param BaseDatabaseModel $model
+     * @param string $sql
+     * @param array|null $preparedArray
+     * @param bool $addRelationships
+     * @return BaseDatabaseModel
+     */
+    protected function getSingleWithQuery(BaseDatabaseModel $model, string $sql, $preparedArray = null, $addRelationships = true)
+    {
+        $db = $this->getDatabaseConnection();
+        $stmt = $db->prepare($sql . " LIMIT 1");
+        $stmt->execute($preparedArray);
 
         return $this->fetchSingleToClass($stmt, $model, $addRelationships);
     }
@@ -113,7 +145,7 @@ class GenericDatabaseService extends DatabaseService
         else
             $orderBy = " ORDER BY " . $property;
 
-        $db = $this->GetDatabaseConnection();
+        $db = $this->getDatabaseConnection();
         $stmt = $db->prepare('SELECT ' . $property . ' FROM ' . $table . $this->constructConditionSQL($condition) . $orderBy);
         $stmt->execute($condition);
 
@@ -187,7 +219,7 @@ class GenericDatabaseService extends DatabaseService
 
     private function createInternal($table, $arr)
     {
-        $db = $this->GetDatabaseConnection();
+        $db = $this->getDatabaseConnection();
         $excludedArray = array();
         $params = $this->cleanUpGenericArray($arr);
         $stmt = $db->prepare('INSERT INTO ' . $table . ' ' . $this->constructMiddleSQL("insert", $params, $excludedArray));
@@ -198,7 +230,7 @@ class GenericDatabaseService extends DatabaseService
 
     private function updateInternal($table, $arr)
     {
-        $db = $this->GetDatabaseConnection();
+        $db = $this->getDatabaseConnection();
         $params = $this->cleanUpGenericArray($arr);
         $excludedArray = array();
         $excludedArray[] = "Id";
@@ -208,7 +240,7 @@ class GenericDatabaseService extends DatabaseService
 
     private function deleteInternal($table, $id)
     {
-        $db = $this->GetDatabaseConnection();
+        $db = $this->getDatabaseConnection();
         $stmt = $db->prepare('DELETE FROM ' . $table . ' WHERE Id = :Id');
         $stmt->bindParam(":Id", $id);
         return $stmt->execute();

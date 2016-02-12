@@ -11,23 +11,21 @@ namespace famoser\phpFrame\Services;
 
 class IoCService extends ServiceBase
 {
-    private $instances = array();
+    private $authenticationService;
 
     /**
-     * @param $interface
-     * @param $implementation
+     * @return AuthenticationService
      */
-    public function register($interface, $implementation)
+    public function getAuthenticationService()
     {
-        $this->instances[$interface] = $implementation;
+        return $this->authenticationService;
     }
 
     /**
-     * @param $interface
-     * @return $interface
+     * @param AuthenticationService $authenticationService
      */
-    public function resolve($interface)
+    public function setAuthenticationService($authenticationService)
     {
-        return $this->instances[$interface];
+        $this->authenticationService = $authenticationService;
     }
 }

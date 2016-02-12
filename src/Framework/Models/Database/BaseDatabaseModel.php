@@ -27,6 +27,6 @@ abstract class BaseDatabaseModel extends BaseModel implements IDatabaseModel
 
     public function getDatabaseArray()
     {
-        return array($this->Id);
+        return array($this->getId());
     }
 }

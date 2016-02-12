@@ -9,9 +9,15 @@
 namespace famoser\phpFrame\Helpers;
 
 
+use Famoser\phpFrame\Core\Logging\LogHelper;
 use Famoser\phpFrame\Core\Singleton\Singleton;
+use Famoser\phpFrame\Interfaces\Helpers\IHelper;
 
-class HelperBase extends Singleton
+class HelperBase extends Singleton implements IHelper
 {
-
+    public function evaluateFailure($const)
+    {
+        LogHelper::getInstance()->logError("evaluateFailure not implemented for " . get_called_class());
+        return "";
+    }
 }
