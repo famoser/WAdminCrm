@@ -6,15 +6,11 @@
  * Time: 12:21
  */
 
-namespace famoser\phpFrame\Interfaces;
+namespace famoser\phpFrame\Models\Database;
 
+
+use famoser\phpFrame\Interfaces\Models\IModel;
 
 abstract class BaseModel implements IModel
 {
-    protected $Id;
-
-    public function getId()
-    {
-        return $this->Id;
-    }
 }

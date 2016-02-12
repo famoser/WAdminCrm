@@ -11,17 +11,46 @@ namespace famoser\phpFrame\Services;
 
 class RuntimeService extends ServiceBase
 {
-    private $params;
-    public function setParams(array $params)
+    private $totalParams;
+    private $routeParams;
+
+    /**
+     * @param array $params
+     */
+    public function setTotalParams(array $params)
     {
-        $this->params = $params;
+        $this->totalParams = $params;
     }
 
     /**
      * @return array $params
      */
-    public function getParams()
+    public function getTotalParams()
     {
-        return $this->params;
+        return $this->totalParams;
+    }
+
+    /**
+     * @param array $params
+     */
+    public function setRouteParams(array $params)
+    {
+        $this->routeParams = $params;
+    }
+
+    /**
+     * @return array $params
+     */
+    public function getRouteParams()
+    {
+        return $this->routeParams;
+    }
+
+    /**
+     * @return array $params
+     */
+    public function getRouteUrl()
+    {
+        return implode("/", $this->routeParams);
     }
 }

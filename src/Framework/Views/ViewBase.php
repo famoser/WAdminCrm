@@ -8,34 +8,77 @@
  */
 namespace famoser\phpFrame\Views;
 
-class ViewBase
+use Famoser\phpFrame\Helpers\OutputHelper;
+use famoser\phpFrame\Models\View\IconMenuItem;
+use famoser\phpFrame\Models\View\MenuItem;
+
+abstract class ViewBase
 {
     /**
      * Enthält die Variablen, die in das Template eingebettet
      * werden sollen.
      */
-    protected $_ = array();
-    private $page_title = DEFAULTTITLE;
-    private $page_description = DEFAULTDESCRIPTION;
+    private $collection = array();
+    private $pageTitle;
+    private $pageDescription;
+    private $pageAuthor;
+
+    private $subMenu;
+    private $mainMenu;
+
+    private $params;
 
     public function __construct($title = null, $description = null)
     {
         $this->params = unserialize(ACTIVE_PARAMS);
 
         if ($title != null)
-            $this->page_title = $title;
+            $this->pageTitle = $title;
         if ($description != null)
-            $this->page_description = $description;
+            $this->pageDescription = $description;
     }
 
     public function setPageTitle($title)
     {
-        $this->page_title = $title;
+        $this->pageTitle = $title;
     }
 
     public function setPageDescription($description)
     {
-        $this->page_description = $description;
+        $this->pageDescription = $description;
+    }
+
+    public function setPageAuthor($author)
+    {
+        $this->pageAuthor = $author;
+    }
+
+    /**
+     * @param IconMenuItem[] $mainMenu
+     * @param MenuItem[] $subMenu
+     */
+    public function setMenus($mainMenu, $subMenu)
+    {
+        $this->mainMenu= $mainMenu;
+        $this->subMenu = $subMenu;
+    }
+
+    public function setDefaultValues($defaultTitle, $defaultDescription, $defaultAuthor)
+    {
+        if ($this->pageTitle == "")
+            $this->pageTitle = $defaultTitle;
+        if ($this->pageDescription == "")
+            $this->pageDescription = $defaultDescription;
+        if ($this->pageAuthor == "")
+            $this->pageAuthor = $defaultAuthor;
+    }
+
+    /**
+     * @param string[] $params
+     */
+    public function setParams(array $params)
+    {
+        $this->params = $params;
     }
 
 
@@ -47,7 +90,7 @@ class ViewBase
      */
     public function assign($key, $value)
     {
-        $this->_[$key] = $value;
+        $this->collection[$key] = $value;
     }
 
     /**
@@ -59,9 +102,11 @@ class ViewBase
 
         include $file;
         $output = ob_get_contents();
-        $output = sanitize_output($output);
+        $output = OutputHelper::getInstance()->sanitizeOutput($output);
         ob_end_clean();
 
         return $output;
     }
+
+    abstract public function loadTemplate();
 }

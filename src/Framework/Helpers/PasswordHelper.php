@@ -33,4 +33,13 @@ class PasswordHelper extends HelperBase
 
         return true;
     }
+
+    public function convertToPasswordHash($password)
+    {
+        $options = [
+            'cost' => 12,
+        ];
+        $hash = password_hash($password, PASSWORD_BCRYPT, $options);
+        return $hash;
+    }
 }

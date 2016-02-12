@@ -45,4 +45,11 @@ class FileHelper extends HelperBase
         }
         return false;
     }
+
+    public function include_all_files_in_dir($path, $fileEnding)
+    {
+        foreach (glob($path . "/*." . $fileEnding) as $filename) {
+            require_once $filename;
+        }
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 namespace famoser\crm\Models\Database;
+use famoser\phpFrame\Models\Database\BasePersonalModel;
 
-use famoser\phpFrame\Interfaces\BasePersonalModel;
 
 /**
  * Created by PhpStorm.
@@ -33,7 +33,7 @@ class CustomerModel extends BasePersonalModel
         return $this->Person;
     }
 
-    function GetPersonalIdentification()
+    public function GetPersonalIdentification()
     {
         if ($this->getPerson() != null) {
             return $this->getPerson()->getPersonalIdentification() . " (" . $this->Company . ")";
@@ -41,8 +41,14 @@ class CustomerModel extends BasePersonalModel
         return $this->Company;
     }
 
-    function GetIdentification()
+    public function GetIdentification()
     {
         return $this->getPerson()->getIdentification() . " (" . $this->Company . ")";
+    }
+
+    public function getDatabaseArray()
+    {
+        $props = array("Company" => $this->Company, "CustomerSinceDate" => $this->CustomerSinceDate, "PersonId" => $this->PersonId);
+        return array_merge($props, parent::getDatabaseArray());
     }
 }

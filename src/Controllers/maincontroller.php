@@ -1,4 +1,5 @@
 <?php
+namespace famoser\crm\Controllers;
 
 /**
  * Created by PhpStorm.

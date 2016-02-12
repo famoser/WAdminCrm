@@ -6,7 +6,7 @@
  * Date: 09.09.2015
  * Time: 23:43
  */
-namespace famoser\WAdminCrm\Controllers;
+namespace famoser\crm\Controllers;
 
 
 use famoser\phpFrame\Controllers\ApiControllerBase;

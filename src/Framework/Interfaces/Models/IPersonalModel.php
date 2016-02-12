@@ -6,7 +6,7 @@
  * Time: 12:20
  */
 
-namespace famoser\phpFrame\Interfaces;
+namespace famoser\phpFrame\Interfaces\Models;
 
 
 interface IPersonalModel

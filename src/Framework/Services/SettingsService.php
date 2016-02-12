@@ -21,7 +21,7 @@ class SettingsService extends ServiceBase
         if ($resp === false)
             LogHelper::getInstance()->logFatal("could not find configuration file at " . $configFilePath);
 
-        $this->config = $resp;
+        $this->setConfig($resp);
     }
 
     public function getSourceDir()
@@ -30,16 +30,23 @@ class SettingsService extends ServiceBase
     }
 
     /**
-     * @param $name string key from configuration file, or enum from SettingService::ENUM
+     * Throws error if key not found
+     * @param array|string $key string key from configuration file, or enum from SettingService::ENUM
      * @return array|string returns array for key, and string for SettingService::ENUM
      */
-    public function getValueFor($name)
+    public function getValueFor($key)
     {
-        if (isset($this->config[$name]))
-            return $this->config[$name];
+        return $this->getConfig($key);
+    }
 
-        LogHelper::getInstance()->logError("Unknown Setting: " . $name);
-        return "";
+    /**
+     * Silently fails if key not found
+     * @param array|string $key key from configuration file, or enum from SettingService::ENUM
+     * @return array|string returns array for key, and string for SettingService::ENUM
+     */
+    public function tryGetValueFor($key)
+    {
+        return $this->tryGetConfig($key);
     }
 
     /**
@@ -51,10 +58,7 @@ class SettingsService extends ServiceBase
         $namespace = "Famoser\\phpFrame\\";
         if (strpos($className, $namespace) === 0) {
             $name = str_replace($namespace, "", $className);
-            if (isset($this->config["Framework"]["Services"][$name]))
-                return $this->config["Framework"]["Services"][$name];
-            LogHelper::getInstance()->logError("Unknown Setting for Framework Service: " . $name);
-            return "";
+            return $this->getConfig(array("Framework","Services",$name));
         }
         LogHelper::getInstance()->logError("Invalid call. Please use the getValueFor method");
         return "";

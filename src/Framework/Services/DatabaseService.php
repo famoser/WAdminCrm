@@ -33,7 +33,7 @@ class DatabaseService extends ServiceBase
     {
         if ($name == null) {
             if ($this->defaultPdo == null) {
-                foreach ($this->config["Connections"] as $connection) {
+                foreach ($this->getConfig("Connections") as $connection) {
                     if ($connection["Default"] == true) {
                         $newConnection = $this->getConnection($connection);
                         $this->PDOs[$connection["Name"]] = $newConnection;
@@ -41,9 +41,9 @@ class DatabaseService extends ServiceBase
                         return $newConnection;
                     }
                 }
-                if (count($this->config["Connections"]) > 0) {
-                    $newConnection = $this->getConnection($this->config["Connections"][0]);
-                    $this->PDOs[$this->config["Connections"][0]["Name"]] = $newConnection;
+                if (count($this->getConfig("Connections")) > 0) {
+                    $newConnection = $this->getConnection($this->getConfig(array("Connections", 0)));
+                    $this->PDOs[$this->getConfig(array("Connections",0,"Name"))] = $newConnection;
                     $this->defaultPdo = $newConnection;
                     return $newConnection;
                 }
@@ -51,7 +51,7 @@ class DatabaseService extends ServiceBase
                 return $this->defaultPdo;
         }
         if (!isset($this->PDOs[$name])) {
-            foreach ($this->config["Connections"] as $connection) {
+            foreach ($this->getConfig("Connections") as $connection) {
                 if ($connection["Name"] == $name) {
                     $newConnection = $this->getConnection($connection);
                     $this->PDOs[$connection["Name"]] = $newConnection;

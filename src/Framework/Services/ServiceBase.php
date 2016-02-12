@@ -9,6 +9,7 @@
 namespace famoser\phpFrame\Services;
 
 
+use Famoser\phpFrame\Core\Logging\LogHelper;
 use Famoser\phpFrame\Core\Singleton\Singleton;
 
 class ServiceBase extends Singleton
@@ -23,11 +24,50 @@ class ServiceBase extends Singleton
         }
     }
 
+    /**
+     * @param string|array $key
+     * @return array|null|string
+     */
     protected function getConfig($key)
     {
-        if (isset($this->config[$key])) {
-            return $this->config[$key];
+        return $this->getConfigIntern($key, true);
+    }
+
+    /**
+     * @param string|array $key
+     * @return array|null|string
+     */
+    protected function tryGetConfig($key)
+    {
+        return $this->getConfigIntern($key, false);
+    }
+
+    private function getConfigIntern($key, bool $throwError)
+    {
+        if (is_array($key)) {
+            $activeConfig = $this->config;
+            foreach ($key as $item) {
+                if (isset($activeConfig[$item]))
+                    $activeConfig = $activeConfig[$item];
+                else {
+                    if ($throwError)
+                        LogHelper::getInstance()->logError("Unknown key " . $item . " inside " . json_encode($key));
+                    return null;
+                }
+            }
+            return $activeConfig;
+        } else {
+            if (isset($this->config[$key])) {
+                return $this->config[$key];
+            }
+            if ($throwError)
+                LogHelper::getInstance()->logError("Unknown Setting: " . $key);
+            return null;
         }
-        return null;
+    }
+
+    protected function setConfig($config)
+    {
+        $this->config = $config;
     }
 }

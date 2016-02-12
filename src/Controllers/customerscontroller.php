@@ -1,4 +1,6 @@
 <?php
+namespace famoser\crm\Controllers;
+
 use famoser\WAdminCrm\Framework\Controllers\ControllerBase;
 use famoser\WAdminCrm\Framework\Controllers\GenericController;
 use famoser\WAdminCrm\Framework\Views\GenericView;
@@ -9,7 +11,7 @@ use famoser\WAdminCrm\Framework\Views\GenericView;
  * Date: 23.05.2015
  * Time: 13:52
  */
-class CustomersController extends ControllerBase
+class CustomersController extends GenericController
 {
     private $request = null;
     private $params = null;

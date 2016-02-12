@@ -5,8 +5,43 @@
     "Description": "Ein Tool für Projektmanagement, Customer Relationship Managment und Buchhaltung. Konzept & Umsetzung von Florian Moser",
     "Author": "Florian Moser"
   },
+  "Routes": [
+    {
+      "Url": "customers",
+      "Name": "customers",
+      "Controller": "famoser\\crm\\Controllers\\CustomersController",
+      "Icon": "flaticon-profile29"
+    },
+    {
+      "Url": "projects",
+      "Name": "projects",
+      "Controller": "famoser\\crm\\Controllers\\ProjectsController",
+      "Icon": "flaticon-notes26"
+    },
+    {
+      "Url": "milestones",
+      "Name": "milestones",
+      "Controller": "famoser\\crm\\Controllers\\MilestonesController",
+      "Icon": "fmilestonesaticon-notes27"
+    },
+    {
+      "Url": "procedures",
+      "Name": "procedures",
+      "Controller": "famoser\\crm\\Controllers\\ProceduresController",
+      "Icon": "flaticon-sheet3"
+    },
+    {
+      "Url": "settings",
+      "Name": "settings",
+      "Controller": "famoser\\crm\\Controllers\\SettingsController",
+      "Icon": "flaticon-screwdriver26"
+    }
+  ],
   "Framework": {
     "DebugMode": true,
+    "AutoLoader": {
+      "famoser\\crm\\": "/src"
+    },
     "Services": {
       "EmailService": {
         "SenderEmail": "server@florianalexandermoser.ch",

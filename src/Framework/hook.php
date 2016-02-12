@@ -6,121 +6,75 @@
  * Time: 23:29
  */
 
+
 namespace Famoser\phpSLWrapper\Framework\Hook;
 
+use Famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Services\SettingsService;
 use Famoser\phpSLWrapper\Framework;
-use Famoser\phpSLWrapper\Framework\Core\Logging\Logger;
-use function Famoser\phpSLWrapper\Framework\Helpers\ValidationHelper\path_by_namespace;
-use Famoser\phpSLWrapper\Framework\Services\SettingsService;
-
 
 function hi_framework()
 {
-    define("SPL_BASE_DIR", dirname(__DIR__));
-    define("HELPER_BASE_DIR", __DIR__ . DIRECTORY_SEPARATOR);
-    include_all_files_in_dir(HELPER_BASE_DIR, "php");
-
+    include_once __DIR__ . DIRECTORY_SEPARATOR . "phplibrary.php";
     //start setting service
     //configure:
     /*
-     *  error_reporting(E_ALL);
-     *  ini_set('display_errors', 1);
      *  RuntimeService-> original add params
      */
 
     //register autoload
-    spl_autoload_extensions('.php');
     spl_autoload_register('spl_autoload_register');
+
+    $val = SettingsService::getInstance()->tryGetValueFor(array("Framework", "DebugMode"));
+    if ($val === true) {
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+    } else {
+        error_reporting(0);
+        ini_set('display_errors', 0);
+    }
 }
 
 spl_autoload_register(function ($class) {
-
-    $path = path_by_namespace($class);
-
-    // project-specific namespace prefix
-    $prefix = 'Famoser\\phpSLWrapper\\';
-    $basedir = null;
-    $relative_class = null;
-
-
-    // does the class use the namespace prefix?
-    $len = strlen($prefix);
-    if (strncmp($prefix, $class, $len) === 0) {
-        $relative_class = substr($class, $len);
-        $basedir = SPL_BASE_DIR;
-    }
-
-    /*
-    /prefix for Helpers (not Models)
-    $prefix = 'Famoser\\phpSLWrapper\\Framework\\Helpers\\';
-    $len = strlen($prefix);
-    if (strncmp($prefix, $class, $len) === 0) {
-        $relative_class = substr($class, $len);
-        $relative_class = substr($relative_class, 0, strpos($class,"\\"));
-        $basedir = SPL_BASE_DIR;
-    }
-    */
-
-
-    if ($basedir != null) {
-        // get the relative class name
-        $file = $basedir . "/" . str_replace('\\', '/', $relative_class) . '.php';
-
-        // if the file exists, require it
-        if (file_exists($file)) {
-            require $file;
-        } else {
-            Logger::getInstance()->logFatal("class not found! class: " . $class . " | path: " . $file);
+    $frameworkNamespaces = array(
+        "famoser\\phpFrame\\" => dirname(__DIR__)
+    );
+    foreach ($frameworkNamespaces as $namespace => $folder) {
+        if (strpos($class, $namespace) === 0) {
+            $newPath = str_replace($namespace, "", $class);
+            $newPath = str_replace("\\", "/", $newPath);
+            $filePath = $folder . "/" . $newPath . ".php";
+            if (!file_exists($filePath)) {
+                LogHelper::getInstance()->logFatal("file for class name " . $class . " does not exist at " . $filePath);
+                bye_framework(false);
+            }
+            include_once $filePath;
+            return;
         }
-    } else {
-        Logger::getInstance()->logFatal("invalid namespace prefix! class: " . $class);
+    }
+
+    $nameSpaces = SettingsService::getInstance()->tryGetValueFor(array("Framework","AutoLoader"));
+    if (is_array($nameSpaces)) {
+        foreach ($nameSpaces as $namespace => $folder) {
+            if (strpos($class, $namespace) === 0) {
+                $newPath = str_replace($namespace, "", $class);
+                $newPath = str_replace("\\", "/", $newPath);
+                $filePath = $_SERVER["DOCUMENT_ROOT"] . "/" . $newPath . ".php";
+                if (!file_exists($filePath)) {
+                    LogHelper::getInstance()->logFatal("file for class name " . $class . " does not exist at " . $filePath);
+                    bye_framework(false);
+                }
+                include_once $filePath;
+                return;
+            }
+        }
     }
 });
 
-function path_by_namespace($class)
+function bye_framework($successfull = true)
 {
-    // project-specific namespace prefix
-    $prefix = 'Famoser\\phpSLWrapper\\';
-    $basedir = null;
-    $relative_class = null;
-
-    // does the class use the namespace prefix?
-    $len = strlen($prefix);
-    if (strncmp($prefix, $class, $len) === 0) {
-        $relative_class = substr($class, $len);
-        $basedir = SPL_BASE_DIR;
+    if (!$successfull) {
+        echo "Application faillure";
+        echo LogHelper::getInstance()->getLogsAsHtml();
     }
-
-    /*
-    /prefix for Helpers (not Models)
-    $prefix = 'Famoser\\phpSLWrapper\\Framework\\Helpers\\';
-    $len = strlen($prefix);
-    if (strncmp($prefix, $class, $len) === 0) {
-        $relative_class = substr($class, $len);
-        $relative_class = substr($relative_class, 0, strpos($class,"\\"));
-        $basedir = SPL_BASE_DIR;
-    }
-    */
-
-
-    if ($basedir != null) {
-        // get the relative class name
-        return $basedir . "/" . str_replace('\\', '/', $relative_class) . '.php';
-
-    } else {
-        Logger::getInstance()->logFatal("invalid namespace prefix! class: " . $class);
-    }
-    return "";
-}
-
-function include_all_files_in_dir($path, $fileEnding)
-{
-    foreach (glob($path . "/*." . $fileEnding) as $filename) {
-        require_once $filename;
-    }
-}
-
-function bye_framework()
-{
-
 }

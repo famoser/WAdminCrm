@@ -1,38 +1,62 @@
 <?php
+namespace famoser\crm\Models\Database;
+
+use famoser\crm\Models\Database\EmployeeModel;
+use famoser\phpFrame\Interfaces\IModel;
+use famoser\phpFrame\Models\Database\BasePersonalModel;
+
 /**
  * Created by PhpStorm.
  * User: FlorianAlexander
  * Date: 5/18/2015
  * Time: 7:44 PM
  */
-class AdminModel {
+class AdminModel extends BasePersonalModel
+{
+    private $Email;
+    private $PasswordHash;
+    private $AuthHash;
 
-    public $Id;
-    public $PersonId;
-    public $Email;
-    public $PasswordHash;
-    public $AuthHash;
-    public $FirstName;
-    public $LastName;
-    public $PaymentPerHour;
+    private $PersonId;
+    private $Person;
 
-    public $Person;
+    /**
+     * @param PersonModel $person
+     */
+    public function setPerson(PersonModel $person)
+    {
+        $this->Person = $person;
+    }
 
-    function GetIdentification()
+    /**
+     * @return PersonModel
+     */
+    public function getPerson()
+    {
+        return $this->Person;
+    }
+
+    public function getIdentification()
     {
         if ($this->Person != null) {
-            return "Admin (".$this->Email."), verbunden mit " . $this->Person->GetIdentification();
+            return "Admin (" . $this->Email . "), verbunden mit " . $this->getPerson()->GetIdentification();
         } else {
-            return "Admin (".$this->Email.")";
+            return "Admin (" . $this->Email . ")";
         }
     }
 
-    function GetPersonalIdentification()
+    public function GetPersonalIdentification()
     {
         if ($this->Person != null) {
-            return $this->Person->GetPersonalIdentification();
+            return $this->getPerson()->GetPersonalIdentification();
         } else {
             return "Admin";
         }
+    }
+
+    public function getDatabaseArray()
+    {
+        $props = array("Email" => $this->Email, "PasswordHash" => $this->PasswordHash, "AuthHash" => $this->AuthHash, "PersonId" => $this->PersonId);
+        return array_merge($props, parent::getDatabaseArray());
     }
 }

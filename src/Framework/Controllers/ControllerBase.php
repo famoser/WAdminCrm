@@ -9,8 +9,12 @@
 namespace famoser\phpFrame\Controllers;
 
 
-use famoser\phpFrame\Framework\Views\MessageView;
-use famoser\phpFrame\Framework\Views\ViewBase;
+use Famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Services\LocaleService;
+use famoser\phpFrame\Services\RuntimeService;
+use famoser\phpFrame\Services\SettingsService;
+use famoser\phpFrame\Views\MessageView;
+use famoser\phpFrame\Views\ViewBase;
 
 class ControllerBase
 {
@@ -18,52 +22,112 @@ class ControllerBase
     protected $params;
     protected $files;
 
+    private $applicationConfig;
+
     const FAILURE_ACCESS_DENIED = 10;
     const FAILURE_NOT_FOUND = 11;
+    const FAILURE_SERVER_ERROR = 12;
+
+    const SUCCESS_CREATED = 20;
+    const SUCCESS_UPDATED = 21;
+    const SUCCESS_DELETED = 22;
+    const SUCCESS_GENERAL = 23;
 
     const REDIRECTION_TEMPORARY = 20;
     const REDIRECTION_PERMANENTLY = 21;
-    const REDIRECTION_FOUND = 22;
+    const REDIRECTION_ONE_TIME = 22;
 
     public function __construct($request, $params, $files)
     {
         $this->request = $request;
         $this->params = $params;
         $this->files = $files;
+
+        $this->applicationConfig = SettingsService::getInstance()->getValueFor("Application");
     }
 
-    public function returnFailure($code)
+    protected function returnFailure($code = ControllerBase::FAILURE_SERVER_ERROR, $message = "")
     {
-        if ($code >= 10 && $code < 20) {
-            if ($code == ControllerBase::FAILURE_ACCESS_DENIED) {
-                header("HTTP/1.1 401 Unauthorized");
-                return new MessageView("Sie haben kein Zugriff auf diese Seite", LOG_LEVEL_USER_ERROR);
-            }
-            else if ($code == ControllerBase::FAILURE_NOT_FOUND) {
-                header("HTTP/1.0 404 Not Found");
-                return new MessageView("Seite nicht gefunden", LOG_LEVEL_USER_ERROR);
-            }
+        if ($message == "") {
+            if ($code == ControllerBase::FAILURE_ACCESS_DENIED)
+                $message = LocaleService::getInstance()->getResources()->getKey("FAILURE_ACCESS_DENIED");
+            else if ($code == ControllerBase::FAILURE_NOT_FOUND)
+                $message = LocaleService::getInstance()->getResources()->getKey("FAILURE_NOT_FOUND");
+            else if ($code == ControllerBase::FAILURE_SERVER_ERROR)
+                $message = LocaleService::getInstance()->getResources()->getKey("FAILURE_SERVER_ERROR");
+        }
+
+        if ($code == ControllerBase::FAILURE_ACCESS_DENIED) {
+            header("HTTP/1.1 401 Unauthorized");
+            return new MessageView($message, LOG_LEVEL_USER_ERROR);
+        } else if ($code == ControllerBase::FAILURE_NOT_FOUND) {
+            header("HTTP/1.0 404 Not Found");
+            return new MessageView($message, LOG_LEVEL_USER_ERROR);
+        } else if ($code == ControllerBase::FAILURE_SERVER_ERROR) {
+            header("HTTP/1.0 500 Internal Server Error");
+            return new MessageView($message, LOG_LEVEL_SYSTEM_ERROR);
+        } else {
+            LogHelper::getInstance()->logError("Unknown returnFailure const!");
+            return $this->returnFailure($code, $message);
         }
     }
 
-    public function returnRedirection($code)
+    protected function returnSuccess($code = ControllerBase::SUCCESS_GENERAL, $message = "")
     {
+        if ($message == "") {
+            if ($code == ControllerBase::SUCCESS_CREATED)
+                $message = LocaleService::getInstance()->getResources()->getKey("SUCCESS_CREATED");
+            else if ($code == ControllerBase::SUCCESS_UPDATED)
+                $message = LocaleService::getInstance()->getResources()->getKey("SUCCESS_UPDATED");
+            else if ($code == ControllerBase::SUCCESS_DELETED)
+                $message = LocaleService::getInstance()->getResources()->getKey("SUCCESS_DELETED");
+            else if ($code == ControllerBase::SUCCESS_GENERAL)
+                $message = LocaleService::getInstance()->getResources()->getKey("SUCCESS_GENERAL");
+        }
 
+        if ($code == ControllerBase::SUCCESS_CREATED) {
+            return new MessageView($message, LOG_LEVEL_USER_ERROR);
+        } else if ($code == ControllerBase::SUCCESS_UPDATED) {
+            return new MessageView($message, LOG_LEVEL_USER_ERROR);
+        } else if ($code == ControllerBase::SUCCESS_DELETED) {
+            return new MessageView($message, LOG_LEVEL_USER_ERROR);
+        } else if ($code == ControllerBase::SUCCESS_GENERAL) {
+            return new MessageView($message, LOG_LEVEL_USER_ERROR);
+        } else {
+            LogHelper::getInstance()->logError("Unknown returnSuccess const!");
+            return $this->returnFailure($code, $message);
+        }
     }
 
-    public function returnServerError($code)
+    protected function exitWithRedirect($url, $code = ControllerBase::REDIRECTION_ONE_TIME)
     {
+        if ($code == ControllerBase::REDIRECTION_ONE_TIME)
+            header("HTTP/1.0 302 Found");
+        else if ($code == ControllerBase::REDIRECTION_TEMPORARY)
+            header("HTTP/1.0 303 Temporary Redirect");
+        else if ($code == ControllerBase::REDIRECTION_PERMANENTLY)
+            header("HTTP/1.0 301 Moved Permanently");
+        else {
+            LogHelper::getInstance()->logError("Unknown returnRedirect const!");
+            $this->exitWithRedirect($url);
+            return;
+        }
 
+        header('Location: ' . $url);
+        exit;
     }
 
-    public function returnView(ViewBase $view)
+    protected function exitWithControllerRedirect($relativeUrl)
     {
-
+        $preUrl = $this->applicationConfig["Url"] . RuntimeService::getInstance()->getRouteUrl();
+        header("HTTP/1.0 302 Found");
+        header('Location: ' . $preUrl . "/" . $relativeUrl);
+        exit;
     }
 
-    public function getMenu()
+    protected function returnView(ViewBase $view)
     {
-        $res = array();
-        return $res;
+        $view->setDefaultValues($this->applicationConfig["Name"], $this->applicationConfig["Description"], $this->applicationConfig["Author"]);
+        return $view->loadTemplate();
     }
 }

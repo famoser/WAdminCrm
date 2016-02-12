@@ -1,8 +1,7 @@
 <?php
 
 namespace famoser\crm\Models\Database;
-use famoser\phpFrame\Interfaces\BaseModel;
-use famoser\phpFrame\Interfaces\BaseThingModel;
+use famoser\phpFrame\Models\Database\BaseThingModel;
 
 /**
  * Created by PhpStorm.
@@ -34,5 +33,16 @@ class PasswordModel extends BaseThingModel
     public function getCustomer()
     {
         return $this->Customer;
+    }
+
+    public function getDatabaseArray()
+    {
+        $props = array("Location" => $this->Location,
+            "Username" => $this->Username,
+            "Password" => $this->Password,
+            "Notes" => $this->Notes,
+            "CustomerId" => $this->CustomerId
+        );
+        return array_merge($props, parent::getDatabaseArray());
     }
 }

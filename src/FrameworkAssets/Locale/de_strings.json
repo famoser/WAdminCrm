@@ -3,5 +3,14 @@
   "Days": "days",
   "Hours": "hours",
   "Minutes": "minutes",
-  "till": "bis"
+
+  "FAILURE_SERVER_ERROR": "Sever error occurred",
+  "FAILURE_NOT_FOUND": "Not found",
+  "FAILURE_ACCESS_DENIED": "you do not have sufficient permission to perform this task",
+
+  "SUCCESS_CREATED": "object was created successfully",
+  "SUCCESS_UPDATED": "object updated successfully",
+  "SUCCESS_DELETED": "object deleted successfully",
+  "SUCCESS_GENERAL": "successful"
+
 }

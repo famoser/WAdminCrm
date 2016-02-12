@@ -10,6 +10,7 @@ namespace Famoser\phpFrame\Helpers;
 
 
 use Exception;
+use famoser\phpFrame\Models\Database\BaseModel;
 
 class ReflectionHelper extends HelperBase
 {
@@ -65,5 +66,43 @@ class ReflectionHelper extends HelperBase
         }
 
         return $callStack;
+    }
+
+    public function removeNamespace($model)
+    {
+        $class = get_class($model);
+        return substr($class, strrpos($class, "\\"));
+    }
+
+    public function getNamespace($model)
+    {
+        $class = get_class($model);
+        return substr($class, 0, strrpos($class, "\\"));
+    }
+
+    public function getClassName($model)
+    {
+        return get_class($model);
+    }
+
+    public function writeFromPostArrayToObjectProperties(array $properties, $model)
+    {
+        $ignoreKeys = array();
+        foreach ($properties as $key => $val) {
+            if (!in_array($key,$ignoreKeys)) {
+                if (strpos($key, "CheckboxPlaceholder") !== false) {
+                    $realName = str_replace("CheckboxPlaceholder", "", $key);
+                    if (!isset($params[$realName]))
+                        $params[$realName] = false;
+                    else if ($params[$realName] == "true")
+                        $params[$realName] = true;
+                    $ignoreKeys[] = $realName;
+                } else {
+                    $methodName = "set" . $key;
+                    if (method_exists($model, $methodName))
+                        $model->$methodName($key);
+                }
+            }
+        }
     }
 }

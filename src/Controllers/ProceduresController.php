@@ -1,4 +1,6 @@
 <?php
+namespace famoser\crm\Controllers;
+use famoser\phpFrame\Controllers\GenericController;
 
 /**
  * Created by PhpStorm.
@@ -6,7 +8,7 @@
  * Date: 13.09.2015
  * Time: 16:03
  */
-class ProceduresController extends ControllerBase
+class ProceduresController extends GenericController
 {
     private $request = null;
     private $params = null;

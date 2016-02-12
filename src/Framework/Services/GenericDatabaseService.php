@@ -8,63 +8,105 @@
 
 namespace famoser\phpFrame\Services;
 
+use famoser\phpFrame\Helpers\FormatHelper;
+use famoser\phpFrame\Helpers\PasswordHelper;
+use Famoser\phpFrame\Helpers\ReflectionHelper;
+use famoser\phpFrame\Models\Database\BaseDatabaseModel;
+use famoser\phpFrame\Models\Database\BaseModel;
 use PDO;
 
 class GenericDatabaseService extends DatabaseService
 {
-    function GetById($table, $id, $addRelationships = true)
+    /**
+     * @param BaseDatabaseModel $model
+     * @param $id
+     * @param bool $addRelationships
+     * @return BaseDatabaseModel
+     */
+    public function getById(BaseDatabaseModel $model, $id, $addRelationships = true)
     {
-        return $this->GetSingleByCondition($table, array("Id" => $id), $addRelationships);
+        return $this->getSingle($model, array("Id" => $id), $addRelationships);
     }
 
-    function GetAllOrderedBy($table, $orderBy, $addRelationships = true, $additionalSql = null)
+    /**
+     * @param BaseDatabaseModel $model
+     * @param null $condition
+     * @param bool $addRelationships
+     * @param null $orderBy
+     * @param null $additionalSql
+     * @return \famoser\phpFrame\Models\Database\BaseDatabaseModel[]
+     */
+    public function getAll(BaseDatabaseModel $model, $condition = null, $addRelationships = true, $orderBy = null, $additionalSql = null)
     {
-        return $this->GetAllByCondition($table, null, $addRelationships, $orderBy, $additionalSql);
-    }
+        $table = ReflectionHelper::getInstance()->removeNamespace($model);
 
-    function GetAllByCondition($table, $condition, $addRelationships = true, $orderBy = null, $additionalSql = null)
-    {
         if ($orderBy != null)
             $orderBy = " ORDER BY " . $orderBy;
 
-        $model = $this->GetModelByTable($table);
-
         $db = $this->GetDatabaseConnection();
-        $stmt = $db->prepare('SELECT * FROM ' . $table . $this->ConstructConditionSQL($condition) . $orderBy . " " . $additionalSql);
+        $stmt = $db->prepare('SELECT * FROM ' . $table . " " . $this->constructConditionSQL($condition) . $orderBy . " " . $additionalSql);
         $stmt->execute($condition);
 
-        $result = $stmt->fetchAll(PDO::FETCH_CLASS, $model);
-        if ($addRelationships) {
-            foreach ($result as $res) {
-                $this->AddRelationsToSingle($res);
+        return $this->fetchAllToClass($stmt, $model, $addRelationships);
+    }
+
+    /**
+     * @param BaseDatabaseModel $model
+     * @param null $condition
+     * @param bool $addRelationships
+     * @param string $orderBy
+     * @return BaseDatabaseModel
+     */
+    public function getSingle(BaseDatabaseModel $model, $condition = null, $addRelationships = true, $orderBy = "")
+    {
+        $table = ReflectionHelper::getInstance()->removeNamespace($model);
+
+        if ($orderBy != "")
+            $orderBy = " ORDER BY " . $orderBy;
+
+        $db = $this->GetDatabaseConnection();
+        $stmt = $db->prepare('SELECT * FROM ' . $table . $this->constructConditionSQL($condition) . $orderBy . " LIMIT 1");
+        $stmt->execute($condition);
+
+        return $this->fetchSingleToClass($stmt, $model, $addRelationships);
+    }
+
+    /**
+     * @param \PDOStatement $stmt
+     * @param BaseDatabaseModel $model
+     * @param bool $addRelationships
+     * @return BaseDatabaseModel[]
+     */
+    private function fetchAllToClass(\PDOStatement $stmt, BaseDatabaseModel $model, $addRelationships = false)
+    {
+        $result = $stmt->fetchAll(PDO::FETCH_CLASS, ReflectionHelper::getInstance()->getClassName($model));
+        if ($addRelationships)
+            foreach ($result as $item) {
+                $this->addRelationsToSingle($item);
             }
-        }
         return $result;
     }
 
-    function GetSingleByCondition($table, $condition, $addRelationships = true, $orderBy = null)
+    /**
+     * @param \PDOStatement $stmt
+     * @param BaseDatabaseModel $model
+     * @param bool $addRelationships
+     * @return BaseDatabaseModel
+     */
+    private function fetchSingleToClass(\PDOStatement $stmt, BaseDatabaseModel $model, $addRelationships = false)
     {
-        if ($orderBy != null)
-            $orderBy = " ORDER BY " . $orderBy;
-
-        $model = $this->GetModelByTable($table);
-
-        $db = $this->GetDatabaseConnection();
-        $stmt = $db->prepare('SELECT * FROM ' . $table . $this->ConstructConditionSQL($condition) . $orderBy . " LIMIT 1");
-        $stmt->execute($condition);
-
-        $result = $stmt->fetchAll(PDO::FETCH_CLASS, $model);
+        $result = $this->fetchAllToClass($stmt, $model, false);
         if (isset($result[0])) {
             if ($addRelationships)
-                $this->AddRelationsToSingle($result[0]);
+                $this->addRelationsToSingle($result[0]);
             return $result[0];
         } else
             return false;
     }
 
-    function GetPropertyByCondition($table, $condition, $property, $orderBy = null)
+    public function getPropertyByCondition(BaseDatabaseModel $model, $property, $condition = null, $orderBy = null)
     {
-        $model = $this->GetModelByTable($table);
+        $table = ReflectionHelper::getInstance()->removeNamespace($model);
 
         if ($orderBy != null)
             $orderBy = " ORDER BY " . $orderBy;
@@ -72,93 +114,99 @@ class GenericDatabaseService extends DatabaseService
             $orderBy = " ORDER BY " . $property;
 
         $db = $this->GetDatabaseConnection();
-        $stmt = $db->prepare('SELECT ' . $property . ' FROM ' . $table . $this->ConstructConditionSQL($condition) . $orderBy);
+        $stmt = $db->prepare('SELECT ' . $property . ' FROM ' . $table . $this->constructConditionSQL($condition) . $orderBy);
         $stmt->execute($condition);
 
-        $result = $stmt->fetchAll(PDO::FETCH_CLASS, $model);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC, $model);
         $resArray = array();
         foreach ($result as $res) {
-            $resArray[] = $res->$property;
+            $resArray[] = $res[$property];
         }
 
         return $resArray;
     }
 
-    function AddRelationsToSingle(&$obj)
+    public function create(BaseDatabaseModel $model)
     {
-        $vars = get_object_vars($obj);
-        foreach ($vars as $key => $val) {
-            if ($val != null && strpos($key, "Id") !== false) {
+        $arr = $model->getDatabaseArray();
+        $table = ReflectionHelper::getInstance()->removeNamespace($model);
+
+        $arr = $this->prepareGenericArray($arr);
+        if (isset($arr["Id"])) {
+            unset($arr["Id"]);
+        }
+        $resp = $this->createInternal($table, $arr);
+        if ($resp !== false) {
+            $model->setId($resp);
+            return true;
+        }
+        return false;
+    }
+
+    public function update(BaseDatabaseModel $model)
+    {
+        $arr = $model->getDatabaseArray();
+        $table = ReflectionHelper::getInstance()->removeNamespace($model);
+
+        $arr = $this->prepareGenericArray($arr);
+        if (!isset($arr["Id"]) || $arr["Id"] == 0) {
+            return false;
+        } else {
+            return $this->updateInternal($table, $arr);
+        }
+    }
+
+    public function delete(BaseDatabaseModel $model)
+    {
+        return $this->deleteById($model, $model->getId());
+    }
+
+    public function deleteById(BaseDatabaseModel $model, $id)
+    {
+        $table = ReflectionHelper::getInstance()->removeNamespace($model);
+        return $this->deleteInternal($table, $id);
+    }
+
+    private function addRelationsToSingle(BaseDatabaseModel $model)
+    {
+        foreach ($model->getDatabaseArray() as $key => $val) {
+            if (strpos($key, "Id") !== false) {
                 if ($val > 0) {
                     $objectName = str_replace("Id", "", $key);
-                    if (array_key_exists($objectName, $vars)) {
-                        $tableName = strtolower($objectName);
-                        $relationObj = $this->GetById($tableName . "s", $val, false);
-                        if ($relationObj !== false)
-                            $obj->$objectName = $relationObj;
+                    $fullObjectName = ReflectionHelper::getInstance()->getNamespace($model) . "\\" . $objectName;
+                    $obj = new $fullObjectName();
+                    $relationObj = $this->GetById($obj, $val, false);
+                    if ($relationObj !== false) {
+                        $secMethod = "set" . $objectName;
+                        $obj->$secMethod($relationObj);
                     }
                 }
             }
         }
-
     }
 
-    function GetHighestId($table)
+    private function createInternal($table, $arr)
     {
         $db = $this->GetDatabaseConnection();
-        $stmt = $db->prepare("SELECT Id FROM " . $table . " ORDER By Id DESC LIMIT 1");
-        $stmt->execute();
-        $newId = $stmt->fetchAll();
-        if (isset($newId[0]) && isset($newId[0][0]))
-            return $newId[0][0];
-        else
-            return 0;
-    }
-
-    function AddOrUpdate($table, $arr)
-    {
-        $arr = $this->PrepareGenericArray($arr);
-        if (!isset($arr["Id"]) || $arr["Id"] == 0) {
-            $arr["Id"] = $this->GetHighestId($table) + 1;
-
-            if ($this->Insert($table, $arr)) {
-                return $arr["Id"];
-            }
-        } else {
-            $obj = $this->GetById($table, $arr["Id"], false);
-
-            if ($obj == null) {
-                if ($this->Insert($table, $arr)) {
-                    return $arr["Id"];
-                }
-            } else {
-                return $this->Update($table, $arr);
-            }
-        }
-
+        $excludedArray = array();
+        $params = $this->cleanUpGenericArray($arr);
+        $stmt = $db->prepare('INSERT INTO ' . $table . ' ' . $this->constructMiddleSQL("insert", $params, $excludedArray));
+        if ($stmt->execute($params))
+            return $db->lastInsertId();
         return false;
     }
 
-    function Insert($table, $arr)
+    private function updateInternal($table, $arr)
     {
         $db = $this->GetDatabaseConnection();
-        $excludedArray = array();
-        $params = $this->CleanUpGenericArray($arr);
-        $stmt = $db->prepare('INSERT INTO ' . $table . ' ' . $this->ConstructMiddleSQL("insert", $params, $excludedArray));
-        return $stmt->execute($params);
-    }
-
-    function Update($table, $arr)
-    {
-        $db = $this->GetDatabaseConnection();
-        $params = $this->CleanUpGenericArray($arr);
+        $params = $this->cleanUpGenericArray($arr);
         $excludedArray = array();
         $excludedArray[] = "Id";
-        $stmt = $db->prepare('UPDATE ' . $table . ' SET ' . $this->ConstructMiddleSQL("update", $params, $excludedArray) . ' WHERE Id = :Id');
+        $stmt = $db->prepare('UPDATE ' . $table . ' SET ' . $this->constructMiddleSQL("update", $params, $excludedArray) . ' WHERE Id = :Id');
         return $stmt->execute($params);
     }
 
-    function DeleteById($table, $id)
+    private function deleteInternal($table, $id)
     {
         $db = $this->GetDatabaseConnection();
         $stmt = $db->prepare('DELETE FROM ' . $table . ' WHERE Id = :Id');
@@ -166,12 +214,7 @@ class GenericDatabaseService extends DatabaseService
         return $stmt->execute();
     }
 
-    function GetModelByTable($table)
-    {
-        return strtoupper(substr($table, 0, 1)) . substr($table, 1, strlen($table) - 2) . "Model";
-    }
-
-    function ConstructConditionSQL($params)
+    private function constructConditionSQL($params)
     {
         if ($params == null || !is_array($params) || count($params) == 0)
             return "";
@@ -184,7 +227,7 @@ class GenericDatabaseService extends DatabaseService
         return $sql;
     }
 
-    function ConstructMiddleSQL($mode, $params, $excluded)
+    private function constructMiddleSQL($mode, $params, $excluded)
     {
         $sql = "";
         if ($mode == "update") {
@@ -212,7 +255,7 @@ class GenericDatabaseService extends DatabaseService
         return $sql;
     }
 
-    function PrepareGenericArray($params)
+    private function prepareGenericArray($params)
     {
         if (is_object($params)) {
             $properties = get_object_vars($params);
@@ -225,28 +268,20 @@ class GenericDatabaseService extends DatabaseService
         return $params;
     }
 
-    function CleanUpGenericArray($params, $removeNull = false)
+    private function cleanUpGenericArray($params, $removeNull = false)
     {
-        $params = $this->PrepareGenericArray($params);
+        $params = $this->prepareGenericArray($params);
         $deleteKeys = array();
 
         foreach ($params as $key => $val) {
-            if (strpos($key, "Checkbox") !== false) {
-                $realName = str_replace("CheckboxPlaceholder", "", $key);
-                if (!isset($params[$realName]))
-                    $params[$realName] = false;
-                $deleteKeys[] = $key;
-            } else if (strpos($key, "DateTime") !== false)
-                $params[$key] = $this->ConvertToDateTime($val);
+            if (strpos($key, "DateTime") !== false)
+                $params[$key] = FormatHelper::getInstance()->dateTimeDatabase($val);
 
             else if (strpos($key, "Date") !== false)
-                $params[$key] = $this->ConvertToDate($val);
-
-            else if (strpos($key, "Bool") !== false)
-                $params[$key] = 1;
+                $params[$key] = FormatHelper::getInstance()->dateDatabase($val);
 
             else if (strpos($key, "PasswordHash") !== false)
-                $params[$key] = $this->ConvertToPasswordHash($val);
+                $params[$key] = PasswordHelper::getInstance()->convertToPasswordHash($val);
 
             if ($removeNull && $params[$key] == null)
                 $deleteKeys[] = $key;
@@ -256,28 +291,5 @@ class GenericDatabaseService extends DatabaseService
         }
 
         return $params;
-    }
-
-    function ConvertToDateTime($input)
-    {
-        if ($input == null || $input == "")
-            return null;
-        return date(DATETIME_FORMAT_DATABASE, strtotime($input));
-    }
-
-    function ConvertToDate($input)
-    {
-        if ($input == null || $input == "")
-            return null;
-        return date(DATE_FORMAT_DATABASE, strtotime($input));
-    }
-
-    function ConvertToPasswordHash($password)
-    {
-        $options = [
-            'cost' => 12,
-        ];
-        $hash = password_hash($password, PASSWORD_BCRYPT, $options);
-        return $hash;
     }
 }

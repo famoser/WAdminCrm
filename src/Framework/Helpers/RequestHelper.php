@@ -11,14 +11,14 @@ namespace Famoser\phpFrame\Helpers;
 
 class RequestHelper extends HelperBase
 {
-    function isAjaxRequest()
+    public function isAjaxRequest()
     {
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
             return true;
         return false;
     }
 
-    function formatParams($uri)
+    public function formatParams($uri)
     {
         $arr = explode("/",$uri);
 

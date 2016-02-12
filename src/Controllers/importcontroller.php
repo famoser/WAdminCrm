@@ -1,4 +1,6 @@
 <?php
+namespace famoser\crm\Controllers;
+
 /**
  * Created by PhpStorm.
  * User: Florian Moser

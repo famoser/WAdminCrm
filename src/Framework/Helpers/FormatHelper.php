@@ -44,6 +44,15 @@ class FormatHelper extends HelperBase
         return $res;
     }
 
+    public function dateTimeDatabase($input)
+    {
+        $time = $this->parseDateTimeObject($input);
+        if ($time !== false) {
+            return $time->format($this->formats["DateTime"]["Database"]);
+        }
+        return null;
+    }
+
     public function dateTimeShort($input)
     {
         $res = "";
@@ -84,6 +93,15 @@ class FormatHelper extends HelperBase
         return $res;
     }
 
+    public function dateDatabase($input)
+    {
+        $time = $this->parseDateTimeObject($input);
+        if ($time !== false) {
+            return $time->format($this->formats["Date"]["Database"]);
+        }
+        return null;
+    }
+
     public function dateText($input)
     {
         $time1 = $this->parseDateTimeObject($input);
@@ -102,6 +120,15 @@ class FormatHelper extends HelperBase
             return $time->format($this->formats["Time"]["Display"]);
         }
         return $res;
+    }
+
+    public function timeDatabase($input)
+    {
+        $time = $this->parseDateTimeObject($input);
+        if ($time !== false) {
+            return $time->format($this->formats["Time"]["Database"]);
+        }
+        return null;
     }
 
     public function timeSpanMinutesShort($input1, $input2)

@@ -6,42 +6,84 @@
  * Time: 13:10
  */
 
-class ProcedureModel
+namespace famoser\crm\Models\Database;
+
+
+use famoser\phpFrame\Helpers\FormatHelper;
+use famoser\phpFrame\Models\Database\BaseThingModel;
+
+class ProcedureModel extends BaseThingModel
 {
+    private $PaymentPerHour;
+    private $StartDateTime;
+    private $EndDateTime;
 
-    public $Id;
-    public $MilestoneId;
-    public $AdminId;
-    public $Name;
-    public $Description;
-    public $PaymentPerHour;
-    public $StartDateTime;
-    public $EndDateTime;
+    private $MilestoneId;
+    private $Milestone;
 
-    public $Milestone;
-    public $Admin;
+    private $AdminId;
+    private $Admin;
 
-    function TotalCost()
+
+    /**
+     * @param AdminModel $admin
+     */
+    public function setAdmin(AdminModel $admin)
     {
-        $totalcost = $this->PaymentPerHour * format_TimeSpanMinutes($this->StartDateTime, $this->EndDateTime) / 60;
-        return $totalcost;
+        $this->Admin = $admin;
     }
 
-    function TotalWorkingTime()
+    /**
+     * @return AdminModel
+     */
+    public function getAdmin()
     {
-        $total_time = format_TimeSpanMinutes($this->StartDateTime, $this->EndDateTime);
+        return $this->Admin;
+    }
+
+    /**
+     * @param MilestoneModel $milestone
+     */
+    public function setMilestone(MilestoneModel $milestone)
+    {
+        $this->Milestone = $milestone;
+    }
+
+    /**
+     * @return MilestoneModel
+     */
+    public function getMilestone()
+    {
+        return $this->Milestone;
+    }
+
+    public function TotalCost()
+    {
+        $total_cost = $this->PaymentPerHour * FormatHelper::getInstance()->timeSpanMinutesShort($this->StartDateTime, $this->EndDateTime) / 60;
+        return $total_cost;
+    }
+
+    public function TotalWorkingTime()
+    {
+        $total_time = FormatHelper::getInstance()->timeSpanMinutesShort($this->StartDateTime, $this->EndDateTime);
         return $total_time;
     }
 
-    function GetFlatIdentification()
+    public function GetIdentification()
     {
+        if ($this->Milestone != null)
+            return $this->getName() . " (" . $this->getMilestone()->getName() . ")";
         return $this->Name;
     }
 
-    function GetIdentification()
+    public function getDatabaseArray()
     {
-        if ($this->Milestone != null)
-            return $this->GetFlatIdentification() ." (".$this->Milestone->GetFlatIdentification() . ")";
-        return $this->Name;
+        $props = array("PaymentPerHour" => $this->PaymentPerHour,
+            "StartDateTime" => $this->StartDateTime,
+            "EndDateTime" => $this->EndDateTime,
+            "MilestoneId" => $this->MilestoneId,
+            "AdminId" => $this->AdminId
+        );
+        return array_merge($props, parent::getDatabaseArray());
     }
 }

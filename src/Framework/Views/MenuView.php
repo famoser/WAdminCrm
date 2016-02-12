@@ -11,7 +11,7 @@ namespace famoser\phpFrame\Views;
 
 use famoser\phpFrame\Models\View\MenuItem;
 
-class MenuView extends ViewBase
+abstract class MenuView extends ViewBase
 {
     private $subMenu;
 
