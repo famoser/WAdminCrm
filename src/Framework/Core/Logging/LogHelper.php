@@ -6,13 +6,13 @@
  * Time: 22:37
  */
 
-namespace Famoser\phpFrame\Core\Logging;
+namespace famoser\phpFrame\Core\Logging;
 
 
 use Exception;
-use Famoser\phpFrame\Core\Logging\Interfaces\ILogger;
-use Famoser\phpFrame\Core\Singleton\Singleton;
-use Famoser\phpFrame\Helpers\ReflectionHelper;
+use famoser\phpFrame\Core\Logging\Interfaces\ILogger;
+use famoser\phpFrame\Core\Singleton\Singleton;
+use famoser\phpFrame\Helpers\ReflectionHelper;
 
 class LogHelper extends Singleton
 {
@@ -130,10 +130,10 @@ class LogHelper extends Singleton
     /**
      * log an Assert (the result of a functionality validation test)
      * @param $message
-     * @param bool $outcome result of validation
+     * @param boolean $outcome result of validation
      * @param null $object optional: reference an object which is important to understand the log entry
      */
-    public function logAssert($message, bool $outcome, $object = null)
+    public function logAssert($message, boolean $outcome, $object = null)
     {
         if ($outcome === true)
             $this->logAssertValidated($message, $object);

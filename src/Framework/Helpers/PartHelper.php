@@ -9,9 +9,9 @@
 namespace famoser\phpFrame\Helpers;
 
 use DateTime;
-use Famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\HelperBase;
-use Famoser\phpFrame\Helpers\ReflectionHelper;
+use famoser\phpFrame\Helpers\ReflectionHelper;
 use famoser\phpFrame\Interfaces\Models\IModel;
 use famoser\phpFrame\Services\RuntimeService;
 
@@ -111,28 +111,30 @@ class PartHelper extends HelperBase
         if (!$ajax)
             $classes .= 'class="no-ajax"';
 
-        return '<form ' . $classes . ' action="' . $action . '" method="post">'.$this->getFormToken();
+        return '<form ' . $classes . ' action="' . $action . '" method="post">'.$this->getFormToken($action);
     }
 
-    private function getFormToken()
+    private function getFormToken($action)
     {
-        $action = RuntimeService::getInstance()->getTotalParams();
-        if ($action[count($action) -1] == "create")
+        $params = explode("/", $action);
+        if ($params[count($params) -1] == "create")
             return $this->getHiddenInput("create", "true");
 
         $allowed = array("update", "delete");
 
-        if (is_numeric($action[count($action) -1]))
+        if (is_numeric($params[count($params) -1]) || PasswordHelper::getInstance()->checkIfHashIsValid($params[count($params) -1]))
         {
-            if (in_array($action[count($action) - 2], $allowed)) {
-                return $this->getHiddenInput($action[count($action) - 2], "true");
+            if (in_array($params[count($params) - 2], $allowed)) {
+                return $this->getHiddenInput($params[count($params) - 2], "true");
             }
+        } else {
+            return $this->getHiddenInput($params[count($params) - 1], "true");
         }
         return "";
     }
 
     /**
-     * @param bool $includeSubmit
+     * @param boolean $includeSubmit
      * @return string
      */
     public function getFormEnd($includeSubmit = true)

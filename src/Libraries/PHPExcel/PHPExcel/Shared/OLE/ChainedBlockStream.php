@@ -70,7 +70,7 @@ class PHPExcel_Shared_OLE_ChainedBlockStream
 	 * @param	string	$mode			only "r" is supported
 	 * @param	int		$options		mask of STREAM_REPORT_ERRORS and STREAM_USE_PATH
 	 * @param	string  &$openedPath	absolute path of the opened stream (out parameter)
-	 * @return	bool    true on success
+	 * @return	boolean    true on success
 	 */
 	public function stream_open($path, $mode, $options, &$openedPath)
 	{
@@ -157,7 +157,7 @@ class PHPExcel_Shared_OLE_ChainedBlockStream
 	/**
 	 * Implements support for feof().
 	 *
-	 * @return  bool  TRUE if the file pointer is at EOF; otherwise FALSE
+	 * @return  boolean  TRUE if the file pointer is at EOF; otherwise FALSE
 	 */
 	public function stream_eof()
 	{
@@ -217,14 +217,14 @@ class PHPExcel_Shared_OLE_ChainedBlockStream
 	}
 
 	// Methods used by stream_wrapper_register() that are not implemented:
-	// bool stream_flush ( void )
+	// boolean stream_flush ( void )
 	// int stream_write ( string data )
-	// bool rename ( string path_from, string path_to )
-	// bool mkdir ( string path, int mode, int options )
-	// bool rmdir ( string path, int options )
-	// bool dir_opendir ( string path, int options )
+	// boolean rename ( string path_from, string path_to )
+	// boolean mkdir ( string path, int mode, int options )
+	// boolean rmdir ( string path, int options )
+	// boolean dir_opendir ( string path, int options )
 	// array url_stat ( string path, int flags )
 	// string dir_readdir ( void )
-	// bool dir_rewinddir ( void )
-	// bool dir_closedir ( void )
+	// boolean dir_rewinddir ( void )
+	// boolean dir_closedir ( void )
 }

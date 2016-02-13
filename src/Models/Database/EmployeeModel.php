@@ -61,7 +61,7 @@ class EmployeeModel extends BasePersonalModel
     }
 
     /**
-     * @param bool $CanModifyPayment
+     * @param boolean $CanModifyPayment
      */
     public function setCanModifyPayment($CanModifyPayment)
     {

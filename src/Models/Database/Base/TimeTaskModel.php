@@ -131,7 +131,7 @@ class TimeTaskModel extends BaseThingModel
     }
 
     /**
-     * @param bool $IsArchived
+     * @param boolean $IsArchived
      */
     public function setIsArchived($IsArchived)
     {
@@ -195,7 +195,7 @@ class TimeTaskModel extends BaseThingModel
     }
 
     /**
-     * @param bool $IsCompleted
+     * @param boolean $IsCompleted
      */
     public function setIsCompleted($IsCompleted)
     {

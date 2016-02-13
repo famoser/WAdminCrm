@@ -15,6 +15,8 @@ class CustomerModel extends BasePersonModel
     private $Company;
     private $CustomerSinceDate;
 
+    private $Url;
+
     private $Projects;
 
     public function getPersonalIdentification()
@@ -82,5 +84,21 @@ class CustomerModel extends BasePersonModel
     public function setProjects($Projects)
     {
         $this->Projects = $Projects;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUrl()
+    {
+        return $this->Url;
+    }
+
+    /**
+     * @param mixed $Url
+     */
+    public function setUrl($Url)
+    {
+        $this->Url = $Url;
     }
 }

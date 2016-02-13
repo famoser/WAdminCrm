@@ -152,7 +152,7 @@ class PHPExcel_Worksheet_RowDimension
 	/**
 	 * Set ZeroHeight
 	 *
-	 * @param bool $pValue
+	 * @param boolean $pValue
 	 * @return PHPExcel_Worksheet_RowDimension
 	 */
 	public function setzeroHeight($pValue = false) {
@@ -172,7 +172,7 @@ class PHPExcel_Worksheet_RowDimension
     /**
      * Set Visible
      *
-     * @param bool $pValue
+     * @param boolean $pValue
      * @return PHPExcel_Worksheet_RowDimension
      */
     public function setVisible($pValue = true) {
@@ -219,7 +219,7 @@ class PHPExcel_Worksheet_RowDimension
     /**
      * Set Collapsed
      *
-     * @param bool $pValue
+     * @param boolean $pValue
      * @return PHPExcel_Worksheet_RowDimension
      */
     public function setCollapsed($pValue = true) {

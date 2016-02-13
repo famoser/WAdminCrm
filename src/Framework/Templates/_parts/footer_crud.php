@@ -6,7 +6,7 @@
  * Time: 10:51
  */
 use famoser\phpFrame\Helpers\PartHelper;
-use Famoser\phpFrame\Helpers\RequestHelper; ?>
+use famoser\phpFrame\Helpers\RequestHelper; ?>
     </div>
 <?php if (!RequestHelper::getInstance()->isAjaxRequest())
     echo PartHelper::getInstance()->getPart(PartHelper::PART_FOOTER_CONTENT);

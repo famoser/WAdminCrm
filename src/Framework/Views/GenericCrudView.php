@@ -8,7 +8,7 @@
 
 namespace famoser\phpFrame\Views;
 
-use Famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\PartHelper;
 
 class GenericCrudView extends ViewBase
@@ -21,7 +21,7 @@ class GenericCrudView extends ViewBase
      * GenericCrudView constructor.
      * @param string $controller
      * @param string $mode
-     * @param bool $fromFramework
+     * @param boolean $fromFramework
      */
     public function __construct(string $controller, string $mode, $fromFramework = false)
     {

@@ -9,23 +9,49 @@
 namespace famoser\phpFrame\Services;
 
 
-class AuthenticationService extends ServiceBase
+use famoser\phpFrame\Models\Database\LoginModel;
+
+abstract class AuthenticationService extends ServiceBase
 {
+    /**
+     * @return LoginModel|bool
+     */
     public function getUser()
     {
-        return unserialize($_SESSION["user"]);
-    }
-
-    public function relinkAfterLogin()
-    {
-        $res = $this->tryGetConfig("LoggedInStartPage");
-        if ($res !== null)
-            return $res;
+        if (isset($_SESSION["user"]))
+            return unserialize($_SESSION["user"]);
         return false;
     }
 
-    public function setUser()
+    /**
+     * @param $username
+     * @param $password
+     * @return LoginModel
+     */
+    abstract public function authenticate($username, $password);
+
+    /**
+     * @param $hash
+     * @return LoginModel
+     */
+    abstract public function authenticateWithHash($hash);
+
+    /**
+     * @param LoginModel $model
+     * @return bool
+     */
+    abstract public function updateModel(LoginModel $model);
+
+    abstract public function resetPassword($username);
+
+    /**
+     * @param LoginModel $user
+     */
+    public function setUser(LoginModel $user)
     {
-        return serialize($_SESSION["user"]);
+        if ($user == null)
+            unset($_SESSION["user"]);
+        else
+            $_SESSION["user"] = serialize($user);
     }
 }

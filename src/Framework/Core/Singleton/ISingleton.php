@@ -6,7 +6,7 @@
  * Time: 22:34
  */
 
-namespace Famoser\phpFrame\Core\Singleton;
+namespace famoser\phpFrame\Core\Singleton;
 
 
 interface ISingleton

@@ -22,7 +22,7 @@ if ($model instanceof LoginModel) { ?>
     <?= PartHelper::getInstance()->getHiddenInput("AuthHash", $model->getAuthHash()); ?>
 
     <?= PartHelper::getInstance()->getInput($model, "Password", "password", "password"); ?><br/>
-    <?= PartHelper::getInstance()->getInput($model, "Password2", "confirm password", "password"); ?><br/>
+    <?= PartHelper::getInstance()->getInput($model, "ConfirmPassword", "confirm password", "password"); ?><br/>
 
     <?= PartHelper::getInstance()->getFormEnd(); ?>
 

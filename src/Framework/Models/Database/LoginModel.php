@@ -15,6 +15,9 @@ abstract class LoginModel extends BasePersonalModel
     private $PasswordHash;
     private $AuthHash;
 
+    private $Password;
+    private $ConfirmPassword;
+
     /**
      * @return array
      */
@@ -70,5 +73,37 @@ abstract class LoginModel extends BasePersonalModel
     public function setAuthHash($AuthHash)
     {
         $this->AuthHash = $AuthHash;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPassword()
+    {
+        return $this->Password;
+    }
+
+    /**
+     * @param mixed $Password
+     */
+    public function setPassword($Password)
+    {
+        $this->Password = $Password;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getConfirmPassword()
+    {
+        return $this->ConfirmPassword;
+    }
+
+    /**
+     * @param mixed $ConfirmPassword
+     */
+    public function setConfirmPassword($ConfirmPassword)
+    {
+        $this->ConfirmPassword = $ConfirmPassword;
     }
 }

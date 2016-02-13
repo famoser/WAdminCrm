@@ -6,11 +6,11 @@
  * Time: 10:51
  */
 
-namespace Famoser\phpFrame\Helpers;
+namespace famoser\phpFrame\Helpers;
 
 
 use Exception;
-use Famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Models\Database\BaseModel;
 
 class ReflectionHelper extends HelperBase
@@ -29,10 +29,12 @@ class ReflectionHelper extends HelperBase
 
     public function getPropertyOfObject($obj, $propName)
     {
-        $functionName = "get" . $propName;
-        if (method_exists($obj, $functionName))
-            return $obj->$functionName();
-        LogHelper::getInstance()->logError("Method " . $functionName . " does not exist");
+        if (is_object($obj)) {
+            $functionName = "get" . $propName;
+            if (method_exists($obj, $functionName))
+                return $obj->$functionName();
+            LogHelper::getInstance()->logError("Method " . $functionName . " does not exist");
+        }
         return "";
     }
 

@@ -8,7 +8,7 @@
  */
 namespace famoser\phpFrame\Views;
 
-use Famoser\phpFrame\Helpers\OutputHelper;
+use famoser\phpFrame\Helpers\OutputHelper;
 use famoser\phpFrame\Models\View\IconMenuItem;
 use famoser\phpFrame\Models\View\MenuItem;
 

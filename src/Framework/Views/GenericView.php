@@ -18,6 +18,8 @@ class GenericView extends ViewBase
     private $folder = null;
     private $fromFramework = null;
 
+    private $useCenter = false;
+
     public function __construct($controller, $view = "index", $folder = null, $fromFramework = false)
     {
         parent::__construct();
@@ -28,15 +30,29 @@ class GenericView extends ViewBase
             $this->folder = $folder . "/";
     }
 
+    protected function useCenter(boolean $val)
+    {
+        $this->useCenter = $val;
+    }
+
     public function loadTemplate()
     {
-        $content = PartHelper::getInstance()->getPart(PartHelper::PART_HEADER_CONTENT);
-        if ($this->fromFramework){
+        $const = PartHelper::PART_HEADER_CONTENT;
+        if ($this->useCenter)
+            $const = PartHelper::PART_HEADER_CENTER;
+
+        $content = PartHelper::getInstance()->getPart($const);
+        if ($this->fromFramework) {
             $content .= $this->loadFile($_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/" . $this->controller . "/" . $this->folder . $this->view . ".php");
         } else {
             $content .= $this->loadFile($_SERVER['DOCUMENT_ROOT'] . "/Templates/" . $this->controller . "/" . $this->folder . $this->view . ".php");
         }
-        $content .= PartHelper::getInstance()->getPart(PartHelper::PART_FOOTER_CONTENT);
+
+        $const = PartHelper::PART_FOOTER_CONTENT;
+        if ($this->useCenter)
+            $const = PartHelper::PART_FOOTER_CENTER;
+
+        $content .= PartHelper::getInstance()->getPart($const);
         return $content;
     }
 }

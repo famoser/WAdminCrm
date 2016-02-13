@@ -6,7 +6,7 @@
  * Time: 18:16
  */
 
-function remove_first_entry_in_array($arr)
+function remove_first_entry_in_array(array $arr)
 {
     unset($arr[0]);
     return array_values($arr);
@@ -20,4 +20,14 @@ function str_starts_with($haystack, $needle) {
 function str_ends_with($haystack, $needle) {
     // search forward starting from end minus needle length characters
     return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
+}
+
+function remove_empty_entries(array $arr)
+{
+    $res = array();
+    foreach ($arr as $key => $value) {
+        if ($value != "")
+            $res[$key] = $value;
+    }
+    return $res;
 }

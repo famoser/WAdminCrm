@@ -6,55 +6,41 @@
  * Time: 10:00
  */
 
+use famoser\phpFrame\Controllers\ControllerBase;
+use famoser\phpFrame\Core\Logging\LogHelper;
+use Famoser\phpFrame\Helpers\RequestHelper;
+use Famoser\phpFrame\Models\Services\ControllerModel;
+use famoser\phpFrame\Services\RouteService;
+use famoser\phpFrame\Services\RuntimeService;
+use function famoser\phpSLWrapper\Framework\Hook\bye_framework;
+use function Famoser\phpSLWrapper\Framework\Hook\hi_framework;
+
 session_start();
 
-include_once $_SERVER['DOCUMENT_ROOT'] . "/common/configuration.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . "/src/Framework/hook.php";
 
-foreach (glob($_SERVER['DOCUMENT_ROOT'] . "/Framework/*", GLOB_ONLYDIR) as $folder) {
-    if ($folder != $_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates")
-        foreach (glob($folder . "/*.php") as $filename) {
-            include_once $filename;
-        }
-}
-
-$includedFolders = unserialize(INCLUDED_FOLDERS);
-$excludedFiles = unserialize(EXCLUDED_FILES);
-
-foreach ($includedFolders as $folder) {
-    foreach (glob($_SERVER['DOCUMENT_ROOT'] . "/" . $folder . "/*.php") as $filename) {
-        if (in_array($filename, $excludedFiles) === false) {
-            include_once $filename;
-        }
-    }
-}
+try {
+    hi_framework();
 
 // $_GET und $_POST zusammenfasen
-$request = array_merge($_GET, $_POST);
-$requestFiles = $_FILES;
+    $request = array_merge($_GET, $_POST);
+    $files = $_FILES;
 
-// params prepare
-$params = formatParams($_SERVER['REQUEST_URI']);
-define("ACTIVE_PARAMS", serialize($params));
+    $controllerModel = RouteService::getInstance()->getController($_SERVER['REQUEST_URI']);
+    RuntimeService::getInstance()->setParams($_SERVER['REQUEST_URI'], $controllerModel);
 
-if (CanAccessGenericControllerParams($params)) {
-    $controllerName = strtoupper(substr($params[0], 0, 1)) . substr($params[0], 1) . "Controllers";
-    $params = remove_first_entry_in_array($params);
-
-    // Controllers erstellen
-    $controller = new $controllerName($request, $requestFiles, $params);
-    // Inhalt der Webanwendung ausgeben.
-    echo $controller->Display();
-} else {
-    if ($params[0] == "api" && CanAccessApiController($params)) {
-        $params = remove_first_entry_in_array($params);
-        $controller = new ApiController($request, $requestFiles, $params);
+    if ($controllerModel instanceof ControllerModel) {
+        $controllerName = $controllerModel->getController();
+        $controller = new $controllerName($request, RuntimeService::getInstance()->getControllerParams(), $files);
         echo $controller->Display();
-    } else if (CanAccessMainController($params)) {
-        $controller = new MainController($request, $requestFiles, $params);
-        // Inhalt der Webanwendung ausgeben.
-        echo $controller->Display();
+        bye_framework();
     } else {
-        AllAccessDenied($params);
+        header("404 Not found");
+        echo "failure";
+        bye_framework();
     }
+} catch (Exception $ex) {
+    LogHelper::getInstance()->logException($ex);
+    bye_framework(false);
 }
 ?>

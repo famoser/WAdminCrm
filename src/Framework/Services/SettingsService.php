@@ -8,14 +8,14 @@
 
 namespace famoser\phpFrame\Services;
 
-use Famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\FileHelper;
 
 class SettingsService extends ServiceBase
 {
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct(false);
         $configFilePath = $this->getSourceDir() . "/FrameworkAssets/configuration.json";
         $resp = FileHelper::getInstance()->getJsonArray($configFilePath);
         if ($resp === false)
@@ -53,12 +53,12 @@ class SettingsService extends ServiceBase
      * @param string $className
      * @return array|string
      */
-    public function getFrameworkConfig(string $className)
+    public function getFrameworkConfig($className)
     {
-        $namespace = "Famoser\\phpFrame\\";
+        $namespace = "famoser\\phpFrame\\";
         if (strpos($className, $namespace) === 0) {
             $name = str_replace($namespace, "", $className);
-            return $this->getConfig(array("Framework","Services",$name));
+            return $this->getConfig(array("Framework", "Services", $name));
         }
         LogHelper::getInstance()->logError("Invalid call. Please use the getValueFor method");
         return "";

@@ -7,23 +7,17 @@
  */
 
 
-namespace Famoser\phpSLWrapper\Framework\Hook;
+namespace famoser\phpSLWrapper\Framework\Hook;
 
-use Famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Services\RuntimeService;
 use famoser\phpFrame\Services\SettingsService;
-use Famoser\phpSLWrapper\Framework;
+use famoser\phpSLWrapper\Framework;
 
 function hi_framework()
 {
     include_once __DIR__ . DIRECTORY_SEPARATOR . "phplibrary.php";
-    //start setting service
-    //configure:
-    /*
-     *  RuntimeService-> original add params
-     */
 
-    //register autoload
     spl_autoload_register('spl_autoload_register');
 
     $val = SettingsService::getInstance()->tryGetValueFor(array("Framework", "DebugMode"));
@@ -39,7 +33,7 @@ function hi_framework()
 
 spl_autoload_register(function ($class) {
     $frameworkNamespaces = array(
-        "famoser\\phpFrame\\" => dirname(__DIR__)
+        "famoser\\phpFrame\\" => __DIR__
     );
     foreach ($frameworkNamespaces as $namespace => $folder) {
         if (strpos($class, $namespace) === 0) {
@@ -52,6 +46,8 @@ spl_autoload_register(function ($class) {
             }
             include_once $filePath;
             return;
+        } else {
+            var_dump($class);
         }
     }
 

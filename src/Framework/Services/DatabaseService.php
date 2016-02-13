@@ -9,7 +9,7 @@
 namespace famoser\phpFrame\Services;
 
 
-use Famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Core\Logging\LogHelper;
 use PDO;
 
 class DatabaseService extends ServiceBase

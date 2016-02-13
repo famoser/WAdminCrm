@@ -1087,7 +1087,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
      *
      * @param string $pCoordinate Coordinate of the cell
      * @param mixed $pValue Value of the cell
-     * @param bool $returnCell   Return the worksheet (false, default) or the cell (true)
+     * @param boolean $returnCell   Return the worksheet (false, default) or the cell (true)
      * @return PHPExcel_Worksheet|PHPExcel_Cell    Depending on the last parameter being specified
      */
     public function setCellValue($pCoordinate = 'A1', $pValue = null, $returnCell = false)
@@ -1102,7 +1102,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
      * @param string $pColumn Numeric column coordinate of the cell (A = 0)
      * @param string $pRow Numeric row coordinate of the cell
      * @param mixed $pValue Value of the cell
-     * @param bool $returnCell Return the worksheet (false, default) or the cell (true)
+     * @param boolean $returnCell Return the worksheet (false, default) or the cell (true)
      * @return PHPExcel_Worksheet|PHPExcel_Cell    Depending on the last parameter being specified
      */
     public function setCellValueByColumnAndRow($pColumn = 0, $pRow = 1, $pValue = null, $returnCell = false)
@@ -1117,7 +1117,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
      * @param string $pCoordinate Coordinate of the cell
      * @param mixed  $pValue Value of the cell
      * @param string $pDataType Explicit data type
-     * @param bool $returnCell Return the worksheet (false, default) or the cell (true)
+     * @param boolean $returnCell Return the worksheet (false, default) or the cell (true)
      * @return PHPExcel_Worksheet|PHPExcel_Cell    Depending on the last parameter being specified
      */
     public function setCellValueExplicit($pCoordinate = 'A1', $pValue = null, $pDataType = PHPExcel_Cell_DataType::TYPE_STRING, $returnCell = false)
@@ -1134,7 +1134,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
      * @param string $pRow Numeric row coordinate of the cell
      * @param mixed $pValue Value of the cell
      * @param string $pDataType Explicit data type
-     * @param bool $returnCell Return the worksheet (false, default) or the cell (true)
+     * @param boolean $returnCell Return the worksheet (false, default) or the cell (true)
      * @return PHPExcel_Worksheet|PHPExcel_Cell    Depending on the last parameter being specified
      */
     public function setCellValueExplicitByColumnAndRow($pColumn = 0, $pRow = 1, $pValue = null, $pDataType = PHPExcel_Cell_DataType::TYPE_STRING, $returnCell = false)
@@ -2612,7 +2612,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
      * Example: extractSheetTitle("'testSheet 1'!A1", true) ==> array('testSheet 1', 'A1');
      *
      * @param string $pRange    Range to extract title from
-     * @param bool $returnRange    Return range? (see example)
+     * @param boolean $returnRange    Return range? (see example)
      * @return mixed
      */
 	public static function extractSheetTitle($pRange, $returnRange = false) {

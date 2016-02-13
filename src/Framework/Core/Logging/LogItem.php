@@ -6,7 +6,7 @@
  * Time: 22:33
  */
 
-namespace Famoser\phpFrame\Core\Logging;
+namespace famoser\phpFrame\Core\Logging;
 
 
 class LogItem

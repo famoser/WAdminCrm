@@ -6,10 +6,10 @@
  * Time: 11:22
  */
 
-namespace Famoser\phpFrame\Core\Logging;
+namespace famoser\phpFrame\Core\Logging;
 
 
-use Famoser\phpFrame\Core\Logging\Interfaces\ILogger;
+use famoser\phpFrame\Core\Logging\Interfaces\ILogger;
 
 class Logger implements ILogger
 {

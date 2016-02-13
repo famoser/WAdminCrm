@@ -10,7 +10,7 @@ namespace famoser\phpFrame\Services;
 
 
 use famoser\phpFrame\Controllers\ControllerBase;
-use Famoser\phpFrame\Models\Services\ControllerModel;
+use famoser\phpFrame\Models\Services\ControllerModel;
 use famoser\phpFrame\Models\View\IconMenuItem;
 
 class RouteService extends ServiceBase
@@ -43,7 +43,7 @@ class RouteService extends ServiceBase
 
     /**
      * @param string $url
-     * @return ControllerBase
+     * @return ControllerModel|false
      */
     public function getController(string $url)
     {

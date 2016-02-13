@@ -13,8 +13,8 @@ use famoser\phpFrame\Services\RouteService;
 $model = $this->_["model"];
 if ($model instanceof LoginModel) { ?>
 
-    <?= PartHelper::getInstance()->getFormStart(); ?>
-    
+    <?= PartHelper::getInstance()->getFormStart("login"); ?>
+
     <?= PartHelper::getInstance()->getInput($model, "Username", "Email", "email"); ?><br/>
     <?= PartHelper::getInstance()->getInput($model, "Password", "Password", "password"); ?><br/>
 

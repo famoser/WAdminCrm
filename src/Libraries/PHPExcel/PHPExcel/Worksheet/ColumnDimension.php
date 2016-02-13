@@ -152,7 +152,7 @@ class PHPExcel_Worksheet_ColumnDimension
     /**
      * Set Auto Size
      *
-     * @param bool $pValue
+     * @param boolean $pValue
      * @return PHPExcel_Worksheet_ColumnDimension
      */
     public function setAutoSize($pValue = false) {
@@ -172,7 +172,7 @@ class PHPExcel_Worksheet_ColumnDimension
     /**
      * Set Visible
      *
-     * @param bool $pValue
+     * @param boolean $pValue
      * @return PHPExcel_Worksheet_ColumnDimension
      */
     public function setVisible($pValue = true) {
@@ -219,7 +219,7 @@ class PHPExcel_Worksheet_ColumnDimension
     /**
      * Set Collapsed
      *
-     * @param bool $pValue
+     * @param boolean $pValue
      * @return PHPExcel_Worksheet_ColumnDimension
      */
     public function setCollapsed($pValue = true) {

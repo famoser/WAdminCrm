@@ -111,7 +111,7 @@ class PaymentModel extends BaseThingModel
     }
 
     /**
-     * @param bool $IsPaid
+     * @param boolean $IsPaid
      */
     public function setIsPaid($IsPaid)
     {

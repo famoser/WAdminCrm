@@ -9,9 +9,9 @@
 namespace famoser\phpFrame\Helpers;
 
 
-use Famoser\phpFrame\Core\Logging\LogHelper;
-use Famoser\phpFrame\Core\Singleton\Singleton;
-use Famoser\phpFrame\Interfaces\Helpers\IHelper;
+use famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Core\Singleton\Singleton;
+use famoser\phpFrame\Interfaces\Helpers\IHelper;
 
 class HelperBase extends Singleton implements IHelper
 {

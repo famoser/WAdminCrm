@@ -9,9 +9,9 @@
 namespace famoser\phpFrame\Services;
 
 
-use Famoser\phpFrame\Core\Logging\LogHelper;
-use Famoser\phpFrame\Models\Locale\Language;
-use Famoser\phpFrame\Models\Locale\ResourceWrapper;
+use famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Models\Locale\Language;
+use famoser\phpFrame\Models\Locale\ResourceWrapper;
 
 class LocaleService extends ServiceBase
 {

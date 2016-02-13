@@ -9,14 +9,14 @@
 namespace famoser\phpFrame\Services;
 
 
-use Famoser\phpFrame\Core\Logging\LogHelper;
-use Famoser\phpFrame\Core\Singleton\Singleton;
+use famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Core\Singleton\Singleton;
 
 class ServiceBase extends Singleton
 {
     private $config;
 
-    public function __construct($getConfig = false)
+    public function __construct($getConfig = true)
     {
         if ($getConfig) {
             $className = get_called_class();
@@ -42,7 +42,7 @@ class ServiceBase extends Singleton
         return $this->getConfigIntern($key, false);
     }
 
-    private function getConfigIntern($key, bool $throwError)
+    private function getConfigIntern($key, $throwError)
     {
         if (is_array($key)) {
             $activeConfig = $this->config;

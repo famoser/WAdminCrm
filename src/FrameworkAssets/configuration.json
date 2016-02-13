@@ -13,6 +13,10 @@
       "Controller": "famoser\\crm\\Controllers\\MainController"
     },
     {
+      "Url": "/api",
+      "Controller": "famoser\\crm\\Controllers\\ApiController"
+    },
+    {
       "Url": "/customers",
       "Controller": "famoser\\crm\\Controllers\\CustomersController"
     },

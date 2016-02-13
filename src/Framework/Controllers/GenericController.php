@@ -9,8 +9,8 @@
 namespace famoser\phpFrame\Controllers;
 
 
-use Famoser\phpFrame\Core\Logging\LogHelper;
-use Famoser\phpFrame\Helpers\ReflectionHelper;
+use famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Helpers\ReflectionHelper;
 use famoser\phpFrame\Models\Database\BaseDatabaseModel;
 use famoser\phpFrame\Models\Database\BaseModel;
 use famoser\phpFrame\Models\View\MenuItem;

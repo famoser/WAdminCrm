@@ -9,7 +9,7 @@
 namespace famoser\phpFrame\Controllers;
 
 
-use Famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Services\LocaleService;
 use famoser\phpFrame\Services\RuntimeService;
 use famoser\phpFrame\Services\SettingsService;
@@ -46,7 +46,7 @@ abstract class ControllerBase
         $this->applicationConfig = SettingsService::getInstance()->getValueFor("Application");
     }
 
-    protected function Display()
+    public function Display()
     {
         return $this->returnFailure(ControllerBase::FAILURE_NOT_FOUND);
     }

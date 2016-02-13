@@ -1736,7 +1736,7 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
 	 * @var string $hashedsalt_data Hashed salt data
 	 * @var string &$valContext     Set to the MD5 context of the value
 	 * 
-	 * @return bool Success
+	 * @return boolean Success
 	 */
 	private function _verifyPassword($password, $docid, $salt_data, $hashedsalt_data, &$valContext)
 	{
@@ -3344,7 +3344,7 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
 		// offset: 0; size: 2;
 
 		// bit 0, mask 0x01; 1 = sheet is protected
-		$bool = (0x01 & self::_GetInt2d($recordData, 0)) >> 0;
+		$boolean = (0x01 & self::_GetInt2d($recordData, 0)) >> 0;
 		$this->_phpSheet->getProtection()->setSheet((bool)$bool);
 	}
 
@@ -3367,7 +3367,7 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
 		// offset: 0; size: 2;
 
 		// bit: 0, mask 0x01; 1 = scenarios are protected
-		$bool = (0x01 & self::_GetInt2d($recordData, 0)) >> 0;
+		$boolean = (0x01 & self::_GetInt2d($recordData, 0)) >> 0;
 
 		$this->_phpSheet->getProtection()->setScenarios((bool)$bool);
 	}
@@ -3391,7 +3391,7 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
 		// offset: 0; size: 2;
 
 		// bit: 0, mask 0x01; 1 = objects are protected
-		$bool = (0x01 & self::_GetInt2d($recordData, 0)) >> 0;
+		$boolean = (0x01 & self::_GetInt2d($recordData, 0)) >> 0;
 
 		$this->_phpSheet->getProtection()->setObjects((bool)$bool);
 	}
@@ -4903,63 +4903,63 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
 		$options = self::_GetInt2d($recordData, 19);
 
 		// bit: 0; mask 0x0001; 1 = user may edit objects, 0 = users must not edit objects
-		$bool = (0x0001 & $options) >> 0;
+		$boolean = (0x0001 & $options) >> 0;
 		$this->_phpSheet->getProtection()->setObjects(!$bool);
 
 		// bit: 1; mask 0x0002; edit scenarios
-		$bool = (0x0002 & $options) >> 1;
+		$boolean = (0x0002 & $options) >> 1;
 		$this->_phpSheet->getProtection()->setScenarios(!$bool);
 
 		// bit: 2; mask 0x0004; format cells
-		$bool = (0x0004 & $options) >> 2;
+		$boolean = (0x0004 & $options) >> 2;
 		$this->_phpSheet->getProtection()->setFormatCells(!$bool);
 
 		// bit: 3; mask 0x0008; format columns
-		$bool = (0x0008 & $options) >> 3;
+		$boolean = (0x0008 & $options) >> 3;
 		$this->_phpSheet->getProtection()->setFormatColumns(!$bool);
 
 		// bit: 4; mask 0x0010; format rows
-		$bool = (0x0010 & $options) >> 4;
+		$boolean = (0x0010 & $options) >> 4;
 		$this->_phpSheet->getProtection()->setFormatRows(!$bool);
 
 		// bit: 5; mask 0x0020; insert columns
-		$bool = (0x0020 & $options) >> 5;
+		$boolean = (0x0020 & $options) >> 5;
 		$this->_phpSheet->getProtection()->setInsertColumns(!$bool);
 
 		// bit: 6; mask 0x0040; insert rows
-		$bool = (0x0040 & $options) >> 6;
+		$boolean = (0x0040 & $options) >> 6;
 		$this->_phpSheet->getProtection()->setInsertRows(!$bool);
 
 		// bit: 7; mask 0x0080; insert hyperlinks
-		$bool = (0x0080 & $options) >> 7;
+		$boolean = (0x0080 & $options) >> 7;
 		$this->_phpSheet->getProtection()->setInsertHyperlinks(!$bool);
 
 		// bit: 8; mask 0x0100; delete columns
-		$bool = (0x0100 & $options) >> 8;
+		$boolean = (0x0100 & $options) >> 8;
 		$this->_phpSheet->getProtection()->setDeleteColumns(!$bool);
 
 		// bit: 9; mask 0x0200; delete rows
-		$bool = (0x0200 & $options) >> 9;
+		$boolean = (0x0200 & $options) >> 9;
 		$this->_phpSheet->getProtection()->setDeleteRows(!$bool);
 
 		// bit: 10; mask 0x0400; select locked cells
-		$bool = (0x0400 & $options) >> 10;
+		$boolean = (0x0400 & $options) >> 10;
 		$this->_phpSheet->getProtection()->setSelectLockedCells(!$bool);
 
 		// bit: 11; mask 0x0800; sort cell range
-		$bool = (0x0800 & $options) >> 11;
+		$boolean = (0x0800 & $options) >> 11;
 		$this->_phpSheet->getProtection()->setSort(!$bool);
 
 		// bit: 12; mask 0x1000; auto filter
-		$bool = (0x1000 & $options) >> 12;
+		$boolean = (0x1000 & $options) >> 12;
 		$this->_phpSheet->getProtection()->setAutoFilter(!$bool);
 
 		// bit: 13; mask 0x2000; pivot tables
-		$bool = (0x2000 & $options) >> 13;
+		$boolean = (0x2000 & $options) >> 13;
 		$this->_phpSheet->getProtection()->setPivotTables(!$bool);
 
 		// bit: 14; mask 0x4000; select unlocked cells
-		$bool = (0x4000 & $options) >> 14;
+		$boolean = (0x4000 & $options) >> 14;
 		$this->_phpSheet->getProtection()->setSelectUnlockedCells(!$bool);
 
 		// offset: 21; size: 2; not used
@@ -6717,7 +6717,7 @@ class PHPExcel_Reader_Excel5 extends PHPExcel_Reader_Abstract implements PHPExce
 	 * Get UTF-8 string from (compressed or uncompressed) UTF-16 string
 	 *
 	 * @param string $string
-	 * @param bool $compressed
+	 * @param boolean $compressed
 	 * @return string
 	 */
 	private static function _encodeUTF16($string, $compressed = '')

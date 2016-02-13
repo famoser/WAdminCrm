@@ -6,10 +6,10 @@
  * Time: 00:36
  */
 
-namespace Famoser\phpFrame\Models\Locale;
+namespace famoser\phpFrame\Models\Locale;
 
 
-use Famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Core\Logging\LogHelper;
 
 class ResourceWrapper
 {

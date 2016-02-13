@@ -10,7 +10,7 @@ namespace famoser\phpFrame\Services;
 
 use famoser\phpFrame\Helpers\FormatHelper;
 use famoser\phpFrame\Helpers\PasswordHelper;
-use Famoser\phpFrame\Helpers\ReflectionHelper;
+use famoser\phpFrame\Helpers\ReflectionHelper;
 use famoser\phpFrame\Models\Database\BaseDatabaseModel;
 use famoser\phpFrame\Models\Database\BaseModel;
 use PDO;
@@ -20,7 +20,7 @@ class GenericDatabaseService extends DatabaseService
     /**
      * @param BaseDatabaseModel $model
      * @param $id
-     * @param bool $addRelationships
+     * @param boolean $addRelationships
      * @return BaseDatabaseModel
      */
     public function getById(BaseDatabaseModel $model, $id, $addRelationships = true)
@@ -31,7 +31,7 @@ class GenericDatabaseService extends DatabaseService
     /**
      * @param BaseDatabaseModel $model
      * @param null $condition
-     * @param bool $addRelationships
+     * @param boolean $addRelationships
      * @param null $orderBy
      * @param null $additionalSql
      * @return \famoser\phpFrame\Models\Database\BaseDatabaseModel[]
@@ -54,7 +54,7 @@ class GenericDatabaseService extends DatabaseService
      * @param BaseDatabaseModel $model
      * @param string $sql
      * @param array|null $preparedArray
-     * @param bool $addRelationships
+     * @param boolean $addRelationships
      * @return \famoser\phpFrame\Models\Database\BaseDatabaseModel[]
      */
     protected function getAllWithQuery(BaseDatabaseModel $model, string $sql, array $preparedArray = null, $addRelationships = true)
@@ -69,7 +69,7 @@ class GenericDatabaseService extends DatabaseService
     /**
      * @param BaseDatabaseModel $model
      * @param null $condition
-     * @param bool $addRelationships
+     * @param boolean $addRelationships
      * @param string $orderBy
      * @return BaseDatabaseModel
      */
@@ -91,7 +91,7 @@ class GenericDatabaseService extends DatabaseService
      * @param BaseDatabaseModel $model
      * @param string $sql
      * @param array|null $preparedArray
-     * @param bool $addRelationships
+     * @param boolean $addRelationships
      * @return BaseDatabaseModel
      */
     protected function getSingleWithQuery(BaseDatabaseModel $model, string $sql, $preparedArray = null, $addRelationships = true)
@@ -106,7 +106,7 @@ class GenericDatabaseService extends DatabaseService
     /**
      * @param \PDOStatement $stmt
      * @param BaseDatabaseModel $model
-     * @param bool $addRelationships
+     * @param boolean $addRelationships
      * @return BaseDatabaseModel[]
      */
     private function fetchAllToClass(\PDOStatement $stmt, BaseDatabaseModel $model, $addRelationships = false)
@@ -122,7 +122,7 @@ class GenericDatabaseService extends DatabaseService
     /**
      * @param \PDOStatement $stmt
      * @param BaseDatabaseModel $model
-     * @param bool $addRelationships
+     * @param boolean $addRelationships
      * @return BaseDatabaseModel
      */
     private function fetchSingleToClass(\PDOStatement $stmt, BaseDatabaseModel $model, $addRelationships = false)

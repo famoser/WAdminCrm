@@ -76,7 +76,7 @@ class PHPExcel_NamedRange
      * @param string $pName
      * @param PHPExcel_Worksheet $pWorksheet
      * @param string $pRange
-     * @param bool $pLocalOnly
+     * @param boolean $pLocalOnly
      * @param PHPExcel_Worksheet|null $pScope	Scope. Only applies when $pLocalOnly = true. Null for global scope.
      * @throws PHPExcel_Exception
      */
@@ -189,7 +189,7 @@ class PHPExcel_NamedRange
     /**
      * Set localOnly
      *
-     * @param bool $value
+     * @param boolean $value
      * @return PHPExcel_NamedRange
      */
     public function setLocalOnly($value = false) {

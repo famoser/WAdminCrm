@@ -6,7 +6,7 @@
  * Time: 19:35
  */
 
-namespace Famoser\phpFrame\Models\Services;
+namespace famoser\phpFrame\Models\Services;
 
 
 class ControllerModel

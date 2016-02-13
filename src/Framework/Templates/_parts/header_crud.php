@@ -6,7 +6,7 @@
  * Time: 10:50
  */
 use famoser\phpFrame\Helpers\PartHelper;
-use Famoser\phpFrame\Helpers\RequestHelper; ?>
+use famoser\phpFrame\Helpers\RequestHelper; ?>
 <?php if (RequestHelper::getInstance()->isAjaxRequest()) { ?>
     <div class="row no-gutters content clearfix">
     <?php

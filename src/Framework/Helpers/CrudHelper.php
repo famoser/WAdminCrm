@@ -6,7 +6,7 @@
  * Time: 23:28
  */
 
-namespace Famoser\phpFrame\Helpers;
+namespace famoser\phpFrame\Helpers;
 
 
 class CrudHelper extends HelperBase

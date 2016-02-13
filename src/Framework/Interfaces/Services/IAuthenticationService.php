@@ -6,7 +6,7 @@
  * Time: 14:34
  */
 
-namespace Famoser\phpFrame\Interfaces\Services;
+namespace famoser\phpFrame\Interfaces\Services;
 
 
 interface IAuthenticationService

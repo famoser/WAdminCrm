@@ -29,7 +29,7 @@
 						'gethostbynamel getimagesize getlastmod getmxrr getmygid getmyinode getmypid getmyuid getopt '+
 						'getprotobyname getprotobynumber getrandmax getrusage getservbyname getservbyport gettext '+
 						'gettimeofday gettype glob gmdate gmmktime ini_alter ini_get ini_get_all ini_restore ini_set '+
-						'interface_exists intval ip2long is_a is_array is_bool is_callable is_dir is_double '+
+						'interface_exists intval ip2long is_a is_array is_boolean is_callable is_dir is_double '+
 						'is_executable is_file is_finite is_float is_infinite is_int is_integer is_link is_long '+
 						'is_nan is_null is_numeric is_object is_readable is_real is_resource is_scalar is_soap_fault '+
 						'is_string is_subclass_of is_uploaded_file is_writable is_writeable mkdir mktime nl2br '+

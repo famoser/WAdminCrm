@@ -6,7 +6,7 @@
  * Time: 11:17
  */
 
-namespace Famoser\phpFrame\Helpers;
+namespace famoser\phpFrame\Helpers;
 
 
 class OutputHelper extends HelperBase

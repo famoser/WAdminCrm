@@ -6,7 +6,7 @@
  * Time: 22:36
  */
 
-namespace Famoser\phpFrame\Core\Singleton;
+namespace famoser\phpFrame\Core\Singleton;
 
 class Singleton implements ISingleton
 {

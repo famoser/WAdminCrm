@@ -9,6 +9,8 @@
 namespace famoser\phpFrame\Services;
 
 
+use famoser\phpFrame\Models\Services\ControllerModel;
+
 class RuntimeService extends ServiceBase
 {
     private $totalParams;
@@ -18,12 +20,25 @@ class RuntimeService extends ServiceBase
     private $frameworkDirectory;
 
     /**
-     * @param array $params
+     * @param string $uri
+     * @param ControllerModel $controller
      */
-    public function setTotalParams(array $params)
+    public function setParams(string $uri, ControllerModel $controller)
     {
-        $this->totalParams = $params;
+        $this->routeParams = remove_empty_entries(explode("/", $controller->getUrl()));
+
+        $controllerParams = remove_empty_entries(explode("/", substr($uri, strlen($controller->getUrl()))));
+
+        if (count($controllerParams) > 0) {
+            $paramnumber = count($controllerParams) - 1;
+            $lastparam = $controllerParams[$paramnumber];
+            if (($index = strpos($lastparam, "?_=")) !== false)
+                $controllerParams[$paramnumber] = substr($lastparam, 0, $index);
+        }
+        $this->controllerParams = $controllerParams;
+        $this->totalParams = array_merge($this->routeParams, $this->controllerParams);
     }
+
 
     /**
      * @return array $params
@@ -33,13 +48,6 @@ class RuntimeService extends ServiceBase
         return $this->totalParams;
     }
 
-    /**
-     * @param array $params
-     */
-    public function setRouteParams(array $params)
-    {
-        $this->routeParams = $params;
-    }
 
     /**
      * @return array $params
@@ -88,13 +96,5 @@ class RuntimeService extends ServiceBase
     public function getControllerParams()
     {
         return $this->controllerParams;
-    }
-
-    /**
-     * @param mixed $controllerParams
-     */
-    public function setControllerParams($controllerParams)
-    {
-        $this->controllerParams = $controllerParams;
     }
 }

@@ -10,11 +10,11 @@ namespace famoser\phpFrame\Helpers;
 
 
 use DateTime;
-use Famoser\phpFrame\Core\Logging\LogHelper;
-use Famoser\phpFrame\Models\Locale\Language;
+use famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Models\Locale\Language;
 use famoser\phpFrame\Services\LocaleService;
 use famoser\phpFrame\Services\SettingsService;
-use Famoser\phpFrame\Models\Locale\ResourceWrapper;
+use famoser\phpFrame\Models\Locale\ResourceWrapper;
 
 class FormatHelper extends HelperBase
 {

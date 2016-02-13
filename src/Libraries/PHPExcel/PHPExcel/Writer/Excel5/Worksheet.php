@@ -615,10 +615,10 @@ class PHPExcel_Writer_Excel5_Worksheet extends PHPExcel_Writer_Excel5_BIFFwriter
 	 * This method sets the properties for outlining and grouping. The defaults
 	 * correspond to Excel's defaults.
 	 *
-	 * @param bool $visible
-	 * @param bool $symbols_below
-	 * @param bool $symbols_right
-	 * @param bool $auto_style
+	 * @param boolean $visible
+	 * @param boolean $symbols_below
+	 * @param boolean $symbols_right
+	 * @param boolean $auto_style
 	 */
 	function setOutline($visible = true, $symbols_below = true, $symbols_right = true, $auto_style = false)
 	{

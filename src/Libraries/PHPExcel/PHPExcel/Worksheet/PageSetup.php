@@ -533,7 +533,7 @@ class PHPExcel_Worksheet_PageSetup
 	/**
 	 * Set center page horizontally
 	 *
-	 * @param bool $value
+	 * @param boolean $value
 	 * @return PHPExcel_Worksheet_PageSetup
 	 */
 	public function setHorizontalCentered($value = false) {
@@ -553,7 +553,7 @@ class PHPExcel_Worksheet_PageSetup
 	/**
 	 * Set center page vertically
 	 *
-	 * @param bool $value
+	 * @param boolean $value
 	 * @return PHPExcel_Worksheet_PageSetup
 	 */
 	public function setVerticalCentered($value = false) {

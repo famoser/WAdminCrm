@@ -6,7 +6,7 @@
  * Time: 14:39
  */
 
-namespace Famoser\phpFrame\Interfaces\Helpers;
+namespace famoser\phpFrame\Interfaces\Helpers;
 
 
 interface IHelper

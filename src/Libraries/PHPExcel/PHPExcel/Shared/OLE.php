@@ -358,7 +358,7 @@ class PHPExcel_Shared_OLE
 	*
 	* @access public
 	* @param integer $index The index for the PPS
-	* @return bool true if it's a File PPS, false otherwise
+	* @return boolean true if it's a File PPS, false otherwise
 	*/
 	public function isFile($index)
 	{
@@ -374,7 +374,7 @@ class PHPExcel_Shared_OLE
 	*
 	* @access public
 	* @param integer $index The index for the PPS.
-	* @return bool true if it's a Root PPS, false otherwise
+	* @return boolean true if it's a Root PPS, false otherwise
 	*/
 	public function isRoot($index)
 	{
