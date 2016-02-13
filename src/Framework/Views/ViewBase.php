@@ -239,10 +239,10 @@ abstract class ViewBase
     public function includeFile($file)
     {
         if (file_exists($file))
-            return include $file;
+            include $file;
         else
             LogHelper::getInstance()->logError("file does not exist: " . $file);
-        return "";
+
     }
 
     abstract public function loadTemplate();

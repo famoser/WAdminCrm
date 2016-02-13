@@ -1,8 +1,8 @@
 {
   "Currency": "CHF",
-  "Days": "days",
-  "Hours": "hours",
-  "Minutes": "minutes",
+  "Days": "Tage",
+  "Hours": "Stunden",
+  "Minutes": "Minuten",
 
   "forgot password": "passwort vergessen"
 }

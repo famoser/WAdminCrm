@@ -54,54 +54,42 @@ abstract class ControllerBase
     protected function returnFailure($code = ControllerBase::FAILURE_SERVER_ERROR, $message = "")
     {
         if ($message == "") {
-            if ($code == ControllerBase::FAILURE_ACCESS_DENIED)
-                $message = LocaleService::getInstance()->getResources()->getKey("FAILURE_ACCESS_DENIED");
-            else if ($code == ControllerBase::FAILURE_NOT_FOUND)
-                $message = LocaleService::getInstance()->getResources()->getKey("FAILURE_NOT_FOUND");
-            else if ($code == ControllerBase::FAILURE_SERVER_ERROR)
-                $message = LocaleService::getInstance()->getResources()->getKey("FAILURE_SERVER_ERROR");
+            if ($code == ControllerBase::FAILURE_ACCESS_DENIED) {
+                header("HTTP/1.1 401 Unauthorized");
+                LogHelper::getInstance()->logUserError(LocaleService::getInstance()->getResources()->getKey("FAILURE_ACCESS_DENIED"));
+            } else if ($code == ControllerBase::FAILURE_NOT_FOUND) {
+                header("HTTP/1.0 404 Not Found");
+                LogHelper::getInstance()->logUserError(LocaleService::getInstance()->getResources()->getKey("FAILURE_NOT_FOUND"));
+            } else if ($code == ControllerBase::FAILURE_SERVER_ERROR) {
+                header("HTTP/1.0 500 Internal Server Error");
+                LogHelper::getInstance()->logError(LocaleService::getInstance()->getResources()->getKey("FAILURE_SERVER_ERROR"));
+            } else {
+                header("HTTP/1.0 500 Internal Server Error");
+                LogHelper::getInstance()->logError("Unknown returnFailure const!");
+            }
         }
 
-        if ($code == ControllerBase::FAILURE_ACCESS_DENIED) {
-            header("HTTP/1.1 401 Unauthorized");
-            return new MessageView($message, LOG_LEVEL_USER_ERROR);
-        } else if ($code == ControllerBase::FAILURE_NOT_FOUND) {
-            header("HTTP/1.0 404 Not Found");
-            return new MessageView($message, LOG_LEVEL_USER_ERROR);
-        } else if ($code == ControllerBase::FAILURE_SERVER_ERROR) {
-            header("HTTP/1.0 500 Internal Server Error");
-            return new MessageView($message, LOG_LEVEL_SYSTEM_ERROR);
-        } else {
-            LogHelper::getInstance()->logError("Unknown returnFailure const!");
-            return $this->returnFailure($code, $message);
-        }
+        $view = new MessageView();
+        return $this->returnView($view);
     }
 
     protected function returnSuccess($code = ControllerBase::SUCCESS_GENERAL, $message = "")
     {
         if ($message == "") {
             if ($code == ControllerBase::SUCCESS_CREATED)
-                $message = LocaleService::getInstance()->getResources()->getKey("SUCCESS_CREATED");
+                LogHelper::getInstance()->logUserInfo(LocaleService::getInstance()->getResources()->getKey("SUCCESS_CREATED"));
             else if ($code == ControllerBase::SUCCESS_UPDATED)
-                $message = LocaleService::getInstance()->getResources()->getKey("SUCCESS_UPDATED");
+                LogHelper::getInstance()->logUserInfo(LocaleService::getInstance()->getResources()->getKey("SUCCESS_UPDATED"));
             else if ($code == ControllerBase::SUCCESS_DELETED)
-                $message = LocaleService::getInstance()->getResources()->getKey("SUCCESS_DELETED");
+                LogHelper::getInstance()->logUserInfo(LocaleService::getInstance()->getResources()->getKey("SUCCESS_DELETED"));
             else if ($code == ControllerBase::SUCCESS_GENERAL)
-                $message = LocaleService::getInstance()->getResources()->getKey("SUCCESS_GENERAL");
+                LogHelper::getInstance()->logUserInfo(LocaleService::getInstance()->getResources()->getKey("SUCCESS_GENERAL"));
+            else
+                LogHelper::getInstance()->logError("Unknown returnSuccess const!");
         }
 
-        if ($code == ControllerBase::SUCCESS_CREATED) {
-            return new MessageView($message, LOG_LEVEL_USER_ERROR);
-        } else if ($code == ControllerBase::SUCCESS_UPDATED) {
-            return new MessageView($message, LOG_LEVEL_USER_ERROR);
-        } else if ($code == ControllerBase::SUCCESS_DELETED) {
-            return new MessageView($message, LOG_LEVEL_USER_ERROR);
-        } else if ($code == ControllerBase::SUCCESS_GENERAL) {
-            return new MessageView($message, LOG_LEVEL_USER_ERROR);
-        } else {
-            LogHelper::getInstance()->logError("Unknown returnSuccess const!");
-            return $this->returnFailure($code, $message);
-        }
+        $view = new MessageView();
+        return $this->returnView($view);
     }
 
     protected function exitWithRedirect($url, $code = ControllerBase::REDIRECTION_ONE_TIME)

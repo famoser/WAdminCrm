@@ -9,19 +9,31 @@
 namespace famoser\phpFrame\Controllers;
 
 
+use famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Helpers\PartHelper;
+use famoser\phpFrame\Services\RuntimeService;
+use famoser\phpFrame\Views\MessageView;
 use famoser\phpFrame\Views\RawView;
 
 class ApiControllerBase extends ControllerBase
 {
     public function Display()
     {
-        if ($this->params[0] == "log") {
-            if (isset($request) && isset($request["message"]) && isset($request["loglevel"]))
-                DoLog($request["message"], $request["loglevel"]);
-            $view = new RawView("/Framework/Templates/_parts/messages.php");
-            return $this->returnView($view);
+        if (count($this->params) > 0){
+            if ($this->params[0] == "log") {
+                if (isset($this->request["message"]) && isset($this->request["loglevel"])) {
+                    if ($this->request["loglevel"] == 0) {
+                        LogHelper::getInstance()->logUserInfo($this->request["message"]);
+                    } else if ($this->request["loglevel"] == 1) {
+                        LogHelper::getInstance()->logUserError($this->request["message"]);
+                    } else {
+                        LogHelper::getInstance()->logError($this->request["message"]);
+                    }
+                }
+                return $this->returnView(new RawView(PartHelper::PART_MESSAGES));
+            }
         }
-        return $this->returnFailure(ControllerBase::FAILURE_NOT_FOUND);
+        return parent::Display();
     }
 
 }

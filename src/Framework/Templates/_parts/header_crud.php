@@ -21,7 +21,7 @@ if ($this instanceof ViewBase) { ?>
     <div class="row content">
         <?php
         }
-        echo $this->includeFile(PartHelper::getInstance()->getPart(PartHelper::PART_MESSAGES));
-        echo $this->includeFile(PartHelper::getInstance()->getPart(PartHelper::PART_LOADING_PLACEHOLDER)); ?>
+        $this->includeFile(PartHelper::getInstance()->getPart(PartHelper::PART_MESSAGES));
+        $this->includeFile(PartHelper::getInstance()->getPart(PartHelper::PART_LOADING_PLACEHOLDER)); ?>
         <?php } ?>
 

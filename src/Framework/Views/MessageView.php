@@ -12,16 +12,17 @@ use famoser\phpFrame\Helpers\PartHelper;
 
 class MessageView extends ViewBase
 {
-    protected $message;
-    protected $logLevel;
     protected $showLink;
 
-    public function __construct($message, $logLevel = LOG_LEVEL_INFO, $showLink = true)
+    public function __construct($showLink = true)
     {
-        $this->message = $message;
-        $this->logLevel = $logLevel;
         $this->showLink = $showLink;
         parent::__construct();
+    }
+
+    public function showLink()
+    {
+        return $this->showLink;
     }
 
     public function loadTemplate()

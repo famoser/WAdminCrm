@@ -11,7 +11,7 @@ use famoser\phpFrame\Views\ViewBase;
 if ($this instanceof ViewBase) { ?>
 
     <?php
-    /*$this->includeFile(PartHelper::getInstance()->getPart(PartHelper::PART_HEAD));*/
+    $this->includeFile(PartHelper::getInstance()->getPart(PartHelper::PART_HEAD));
     ?>
 
     <body>
@@ -35,8 +35,8 @@ if ($this instanceof ViewBase) { ?>
     <div class="center-content-wrapper">
     <div class="container">
     <?php
-    include $_SERVER["DOCUMENT_ROOT"] . "/src/Framework/Templates/_parts/messages.php";
-    echo $this->includeFile(PartHelper::getInstance()->getPart(PartHelper::PART_MESSAGES));
+    /*include $_SERVER["DOCUMENT_ROOT"] . "/src/Framework/Templates/_parts/messages.php" */
+    $this->includeFile(PartHelper::getInstance()->getPart(PartHelper::PART_MESSAGES));
     ?>
     <div class="center-content content">
 

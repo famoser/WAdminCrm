@@ -25,9 +25,9 @@ class PartHelper extends HelperBase
     const PART_HEADER_CENTER = 13;
     const PART_HEADER_CONTENT = 14;
     const PART_HEADER_CRUD = 15;
-    const PART_LOADING_PLACEHOLDER = 15;
-    const PART_MENU = 15;
-    const PART_MESSAGES = 15;
+    const PART_LOADING_PLACEHOLDER = 16;
+    const PART_MENU = 17;
+    const PART_MESSAGES = 18;
 
     /**
      * @param IModel $obj
