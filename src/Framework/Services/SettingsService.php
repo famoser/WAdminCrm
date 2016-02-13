@@ -20,7 +20,6 @@ class SettingsService extends ServiceBase
         $resp = FileHelper::getInstance()->getJsonArray($configFilePath);
         if ($resp === false)
             LogHelper::getInstance()->logFatal("could not find configuration file at " . $configFilePath);
-
         $this->setConfig($resp);
     }
 
@@ -58,7 +57,8 @@ class SettingsService extends ServiceBase
         $namespace = "famoser\\phpFrame\\";
         if (strpos($className, $namespace) === 0) {
             $name = str_replace($namespace, "", $className);
-            return $this->getConfig(array("Framework", "Services", $name));
+            $arr = explode("\\", $name);
+            return $this->tryGetConfig(array_merge(array("Framework"), $arr));
         }
         LogHelper::getInstance()->logError("Invalid call. Please use the getValueFor method");
         return "";

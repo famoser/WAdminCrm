@@ -10,6 +10,7 @@ namespace famoser\phpFrame\Helpers;
 
 use DateTime;
 use famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Core\Logging\LogItem;
 use famoser\phpFrame\Helpers\HelperBase;
 use famoser\phpFrame\Helpers\ReflectionHelper;
 use famoser\phpFrame\Interfaces\Models\IModel;
@@ -37,7 +38,7 @@ class PartHelper extends HelperBase
      * @param IModel[]|null $special
      * @return string
      */
-    public function getInput(IModel $obj, string $prop, string $display = null, string $type = "text", string $customPlaceholder = null, array $special = null)
+    public function getInput($obj, $prop, $display = null, $type = "text", $customPlaceholder = null, array $special = null)
     {
         if ($display == null)
             $display = $prop;
@@ -111,19 +112,18 @@ class PartHelper extends HelperBase
         if (!$ajax)
             $classes .= 'class="no-ajax"';
 
-        return '<form ' . $classes . ' action="' . $action . '" method="post">'.$this->getFormToken($action);
+        return '<form ' . $classes . ' action="' . $action . '" method="post">' . $this->getFormToken($action);
     }
 
     private function getFormToken($action)
     {
         $params = explode("/", $action);
-        if ($params[count($params) -1] == "create")
+        if ($params[count($params) - 1] == "create")
             return $this->getHiddenInput("create", "true");
 
         $allowed = array("update", "delete");
 
-        if (is_numeric($params[count($params) -1]) || PasswordHelper::getInstance()->checkIfHashIsValid($params[count($params) -1]))
-        {
+        if (is_numeric($params[count($params) - 1]) || PasswordHelper::getInstance()->checkIfHashIsValid($params[count($params) - 1])) {
             if (in_array($params[count($params) - 2], $allowed)) {
                 return $this->getHiddenInput($params[count($params) - 2], "true");
             }
@@ -141,7 +141,7 @@ class PartHelper extends HelperBase
     {
         $output = "</form>";
         if ($includeSubmit)
-            $output = $this->getSubmit().$output;
+            $output = $this->getSubmit() . $output;
         return $output;
     }
 
@@ -154,46 +154,52 @@ class PartHelper extends HelperBase
         return ' class="active active-page"';
     }
 
-    public function getClassesForMenuSubItem(array $controllerParams, string $menuUrl)
+    public function getClassesForMenuSubItem(array $controllerParams, $menuUrl)
     {
         $params = explode("/", $menuUrl);
         return $this->getClassForMainMenuItem($controllerParams, $params);
     }
 
-    public function getPart(int $const)
+    public function getPart($const)
     {
         if ($const == PartHelper::PART_HEAD)
-            return $this->loadFile("/Templates/_parts/headerPart.php");
+            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/head.php";
         if ($const == PartHelper::PART_FOOTER_CONTENT)
-            return $this->loadFile("/Templates/_parts/footer_content.php");
+            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/footer_content.php";
         if ($const == PartHelper::PART_FOOTER_CRUD)
-            return $this->loadFile("/Templates/_parts/footer_crud.php");
+            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/footer_crud.php";
         if ($const == PartHelper::PART_HEADER_CENTER)
-            return $this->loadFile("/Templates/_parts/header_center.php");
+            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/header_center.php";
         if ($const == PartHelper::PART_HEADER_CONTENT)
-            return $this->loadFile("/Templates/_parts/header_content.php");
+            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/header_content.php";
         if ($const == PartHelper::PART_HEADER_CRUD)
-            return $this->loadFile("/Templates/_parts/header_crud.php");
+            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/header_crud.php";
         if ($const == PartHelper::PART_LOADING_PLACEHOLDER)
-            return $this->loadFile("/Templates/_parts/loading_placeholder.php");
+            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/loading_placeholder.php";
         if ($const == PartHelper::PART_MENU)
-            return $this->loadFile("/Templates/_parts/menu.php");
+            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/menu.php";
         if ($const == PartHelper::PART_MESSAGES)
-            return $this->loadFile("/Templates/_parts/messages.php");
+            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/messages.php";
 
         LogHelper::getInstance()->logError("Part not found with const " . $const);
-        return $this->getPart(PartHelper::PART_MESSAGES);
+        return PartHelper::getPart(PartHelper::PART_MESSAGES);
     }
 
-    private function loadFile($relativeFilePath)
+    public function getLogClass(LogItem $log)
     {
-        $filePath = RuntimeService::getInstance()->getFrameworkDirectory() . $relativeFilePath;
+        $logType = LogHelper::getInstance()->convertToLogType($log->getLogLevel());
+        if ($logType == LogHelper::LOG_TYPE_USER_ERROR)
+            return "user-error";
+        if ($logType == LogHelper::LOG_TYPE_USER_INFO)
+            return "info";
+        if ($logType == LogHelper::LOG_TYPE_SYSTEM_ERROR)
+            return "system-error";
+        LogHelper::getInstance()->logError("Unknown logtype", $log);
+        return "";
+    }
 
-        ob_start();
-        include $filePath;
-        $output = ob_get_contents();
-        ob_end_clean();
-
-        return $output;
+    public function getLogText(LogItem $log)
+    {
+        return LogHelper::getInstance()->renderLogItemAsHtml($log);
     }
 }

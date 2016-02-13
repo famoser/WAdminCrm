@@ -47,7 +47,7 @@ class ReflectionHelper extends HelperBase
         return $object;
     }
 
-    public function getCallStack($skips = 3)
+    public function getCallStack($skips = 2)
     {
         $skips++;
         $callStack = "";

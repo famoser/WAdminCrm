@@ -10,6 +10,7 @@ namespace famoser\phpFrame\Services;
 
 
 use famoser\phpFrame\Controllers\ControllerBase;
+use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Models\Services\ControllerModel;
 use famoser\phpFrame\Models\View\IconMenuItem;
 
@@ -28,8 +29,13 @@ class RouteService extends ServiceBase
         }
 
         $menuInfo = $this->getConfig("Menus");
-        foreach ($menuInfo as $item) {
-            $this->getControllers()[$item["Controller"]]->setProperties($item["Name"], $item["Icon"]);
+        foreach ($menuInfo as $menu) {
+            foreach ($menu["Entries"] as $item) {
+                if (isset($this->getControllers()[$item["Controller"]]))
+                    $this->menus[$menu["Name"]] = new IconMenuItem($item["Name"], $this->controllers[$item["Controller"]]->getUrl(), $item["Icon"]);
+                else
+                    LogHelper::getInstance()->logError("unknown controller used in menu: " . $item["Controller"]);
+            }
         }
     }
 
@@ -45,13 +51,13 @@ class RouteService extends ServiceBase
      * @param string $url
      * @return ControllerModel|false
      */
-    public function getController(string $url)
+    public function getController($url)
     {
         $favController = null;
         foreach ($this->getControllers() as $controller) {
             if (strlen($url) > $controller->getUrl() && str_starts_with($url, $controller->getUrl())) {
                 if ($favController == null || strlen($favController->getUrl()) < strlen($controller->getUrl()))
-                    $favController = $controller->getUrl();
+                    $favController = $controller;
             }
         }
         return $favController;
@@ -59,14 +65,12 @@ class RouteService extends ServiceBase
 
     public function getMenu($key)
     {
-        $menu = array();
         if (isset($this->menus[$key])) {
-            foreach ($this->menus[$key]["Controllers"] as $item) {
-                if (isset($this->getControllers()[$item]))
-                    $menu[] = new IconMenuItem($this->getControllers()[$item]->getName(), $this->getControllers()[$item]->getUrl(), $this->getControllers()[$item]->getIcon());
-            }
+            return $this->menus[$key];
+        } else {
+            LogHelper::getInstance()->logError("Unknown menu: " . $key);
+            return null;
         }
-        return $menu;
     }
 
     public function getAbsoluteLink($relative)

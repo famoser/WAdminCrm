@@ -26,9 +26,9 @@ class MessageView extends ViewBase
 
     public function loadTemplate()
     {
-        $content = PartHelper::getInstance()->getPart(PartHelper::PART_HEADER_CENTER);
-        $content .= PartHelper::getInstance()->getPart(PartHelper::PART_MESSAGES);
-        $content .= PartHelper::getInstance()->getPart(PartHelper::PART_FOOTER_CENTER);
+        $content = $this->loadFile(PartHelper::getInstance()->getPart(PartHelper::PART_HEADER_CENTER));
+        $content .= $this->loadFile(PartHelper::getInstance()->getPart(PartHelper::PART_MESSAGES));
+        $content .= $this->loadFile(PartHelper::getInstance()->getPart(PartHelper::PART_FOOTER_CENTER));
         return $content;
     }
 }

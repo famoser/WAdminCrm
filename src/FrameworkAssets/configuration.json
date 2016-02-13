@@ -40,8 +40,10 @@
   "Framework": {
     "DebugMode": true,
     "AutoLoader": {
-      "famoser\\crm\\": "/src"
+      "famoser\\crm\\": "src"
     },
+    "TemplatesDirectory": "src/Templates",
+    "FrameworkAssetsDirectory": "src/FrameworkAssets",
     "Services": {
       "EmailService": {
         "SenderEmail": "server@florianalexandermoser.ch",
@@ -74,6 +76,7 @@
             "Language": "de",
             "Locale": "de_CH",
             "ResourceFiles": [
+              "de_errors.json",
               "de_strings.json"
             ],
             "FormatFiles": [

@@ -22,6 +22,7 @@ function hi_framework()
 
     $val = SettingsService::getInstance()->tryGetValueFor(array("Framework", "DebugMode"));
     RuntimeService::getInstance()->setFrameworkDirectory(__DIR__);
+    RuntimeService::getInstance()->setTemplatesDirectory($_SERVER["DOCUMENT_ROOT"] . "/" . SettingsService::getInstance()->getValueFor(array("Framework", "TemplatesDirectory")));
     if ($val === true) {
         error_reporting(E_ALL);
         ini_set('display_errors', 1);
@@ -46,18 +47,16 @@ spl_autoload_register(function ($class) {
             }
             include_once $filePath;
             return;
-        } else {
-            var_dump($class);
         }
     }
 
-    $nameSpaces = SettingsService::getInstance()->tryGetValueFor(array("Framework","AutoLoader"));
+    $nameSpaces = SettingsService::getInstance()->tryGetValueFor(array("Framework", "AutoLoader"));
     if (is_array($nameSpaces)) {
         foreach ($nameSpaces as $namespace => $folder) {
             if (strpos($class, $namespace) === 0) {
                 $newPath = str_replace($namespace, "", $class);
                 $newPath = str_replace("\\", "/", $newPath);
-                $filePath = $_SERVER["DOCUMENT_ROOT"] . "/" . $newPath . ".php";
+                $filePath = $_SERVER["DOCUMENT_ROOT"] . "/" . $folder . "/" . $newPath . ".php";
                 if (!file_exists($filePath)) {
                     LogHelper::getInstance()->logFatal("file for class name " . $class . " does not exist at " . $filePath);
                     bye_framework(false);
@@ -75,4 +74,6 @@ function bye_framework($successfull = true)
         echo "Application faillure";
         echo LogHelper::getInstance()->getLogsAsHtml();
     }
+    if (LogHelper::getInstance()->countLogItems() > 0)
+        echo LogHelper::getInstance()->getLogsAsHtml();
 }

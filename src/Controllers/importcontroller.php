@@ -2,7 +2,7 @@
 namespace famoser\crm\Controllers;
 
 use famoser\phpFrame\Controllers\ControllerBase;
-use Famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\FileHelper;
 use famoser\phpFrame\Services\DatabaseService;
 use famoser\phpFrame\Services\LocaleService;

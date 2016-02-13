@@ -8,6 +8,7 @@
  */
 namespace famoser\phpFrame\Views;
 
+use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\OutputHelper;
 use famoser\phpFrame\Models\View\IconMenuItem;
 use famoser\phpFrame\Models\View\MenuItem;
@@ -34,8 +35,6 @@ abstract class ViewBase
 
     public function __construct($title = null, $description = null)
     {
-        $this->params = unserialize(ACTIVE_PARAMS);
-
         if ($title != null)
             $this->pageTitle = $title;
         if ($description != null)
@@ -88,6 +87,21 @@ abstract class ViewBase
     public function assign($key, $value)
     {
         $this->collection[$key] = $value;
+    }
+
+    public function retrieve($key)
+    {
+        if (isset($this->collection[$key]))
+            return $this->collection[$key];
+        LogHelper::getInstance()->logError("item not found in view: " . $key);
+        return null;
+    }
+
+    public function tryRetrieve($key)
+    {
+        if (isset($this->collection[$key]))
+            return $this->collection[$key];
+        return null;
     }
 
     /**
@@ -214,12 +228,21 @@ abstract class ViewBase
     {
         ob_start();
 
-        include $file;
-        $output = ob_get_contents();
+        $this->includeFile($file);
+
+        $output = ob_get_clean();
         $output = OutputHelper::getInstance()->sanitizeOutput($output);
-        ob_end_clean();
 
         return $output;
+    }
+
+    public function includeFile($file)
+    {
+        if (file_exists($file))
+            return include $file;
+        else
+            LogHelper::getInstance()->logError("file does not exist: " . $file);
+        return "";
     }
 
     abstract public function loadTemplate();

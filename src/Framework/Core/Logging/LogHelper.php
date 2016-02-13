@@ -158,11 +158,12 @@ class LogHelper extends Singleton
     }
 
     /**
+     * @param bool $clearAfter
      * @return LogItem[]
      */
-    public function getLogs()
+    public function getLogs($clearAfter = true)
     {
-        return $this->loggerImplementation->getLogItems();
+        return $this->loggerImplementation->getLogItems($clearAfter);
     }
 
     /**
@@ -170,7 +171,7 @@ class LogHelper extends Singleton
      */
     public function countLogItems()
     {
-        return count($this->loggerImplementation->getLogItems());
+        return count($this->loggerImplementation->getLogItems(false));
     }
 
     /**
@@ -197,17 +198,17 @@ class LogHelper extends Singleton
         return $str;
     }
 
-    private function renderLogItemAsText(LogItem $log)
+    public function renderLogItemAsText(LogItem $log)
     {
         return $this->getLogLevelAsString($log->getLogLevel()) . ": " . $log->getMessage() . "\n" . $log->getSource();
     }
 
-    private function renderLogItemAsHtml(LogItem $log)
+    public function renderLogItemAsHtml(LogItem $log)
     {
         return nl2br("<b>" . $this->getLogLevelAsString($log->getLogLevel()) . "</b>: " . $log->getMessage() . "<br/>" . $log->getSource());
     }
 
-    private function getLogLevelAsString(int $logLevel)
+    private function getLogLevelAsString($logLevel)
     {
         if ($logLevel == LogHelper::LOG_LEVEL_DEBUG) {
             return "debug";
@@ -249,5 +250,14 @@ class LogHelper extends Singleton
     private function addLogItem(LogItem $log)
     {
         $this->loggerImplementation->addLogItem($log);
+    }
+
+    public function convertToLogType($const)
+    {
+        if ($const == LogHelper::LOG_USER_INFO)
+            return LogHelper::LOG_TYPE_USER_INFO;
+        if ($const == LogHelper::LOG_USER_ERROR)
+            return LogHelper::LOG_TYPE_USER_ERROR;
+        return LogHelper::LOG_TYPE_SYSTEM_ERROR;
     }
 }

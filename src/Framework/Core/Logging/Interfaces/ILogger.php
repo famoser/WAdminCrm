@@ -14,5 +14,5 @@ use famoser\phpFrame\Core\Logging\LogItem;
 interface ILogger
 {
     public function addLogItem(LogItem $item);
-    public function getLogItems();
+    public function getLogItems($clearAfter = true);
 }

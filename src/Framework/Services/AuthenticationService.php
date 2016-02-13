@@ -13,6 +13,11 @@ use famoser\phpFrame\Models\Database\LoginModel;
 
 abstract class AuthenticationService extends ServiceBase
 {
+    public function __construct()
+    {
+        parent::__construct(false);
+    }
+
     /**
      * @return LoginModel|bool
      */

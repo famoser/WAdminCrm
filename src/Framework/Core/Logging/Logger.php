@@ -21,34 +21,16 @@ class Logger implements ILogger
     }
 
     /**
+     * @param bool $clearAfter
      * @return LogItem[]
      */
-    public function getLogItems()
+    public function getLogItems($clearAfter = true)
     {
+        if ($clearAfter) {
+            $ret = $this->logItems;
+            $this->logItems = array();
+            return $ret;
+        }
         return $this->logItems;
-    }
-
-    /**
-     * @return string as HTML formatted logs
-     */
-    public function getLogsAsHtml()
-    {
-        $str = "";
-        foreach ($this->getLogItems() as $logItem) {
-            $str .= "<p>" . $logItem->renderAsHtml() . "</p>";
-        }
-        return $str;
-    }
-
-    /**
-     * @return string as string with \n line divisors formatted logs
-     */
-    public function getLogsAsText()
-    {
-        $str = "";
-        foreach ($this->getLogItems() as $logItem) {
-            $str .= $logItem->renderAsText() . "\n\n";
-        }
-        return $str;
     }
 }

@@ -1,0 +1,10 @@
+{
+  "FAILURE_SERVER_ERROR": "server error",
+  "FAILURE_NOT_FOUND": "nicht gefunden",
+  "FAILURE_ACCESS_DENIED": "zugriff verweigert",
+
+  "SUCCESS_CREATED": "objekt erfolgreich erstellt",
+  "SUCCESS_UPDATED": "objekt erfolgreich aktualisiert",
+  "SUCCESS_DELETED": "objekt erfolgreich entfernt",
+  "SUCCESS_GENERAL": "erfolgreich"
+}

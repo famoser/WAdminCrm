@@ -8,21 +8,24 @@
 use famoser\phpFrame\Helpers\PartHelper;
 use famoser\phpFrame\Models\Database\LoginModel;
 use famoser\phpFrame\Services\LocaleService;
+use famoser\phpFrame\Views\ViewBase;
 
-$model = $this->_["model"];
-if ($model instanceof LoginModel) { ?>
+if ($this instanceof ViewBase) {
+    $model = $this->tryRetrieve("model");
+    if ($model instanceof LoginModel) { ?>
 
-    <?= PartHelper::getInstance()->getFormStart(); ?>
+        <?= PartHelper::getInstance()->getFormStart(); ?>
 
-    <p><?= LocaleService::getInstance()->translate("Geben Sie Ihre E-Mail an, mit der Sie hier registriert sind.
+        <p><?= LocaleService::getInstance()->translate("Geben Sie Ihre E-Mail an, mit der Sie hier registriert sind.
     Sofern diese E-Mail im System gefunden wird, bekommen Sie eine Email zugesendet mit Informationen, wie Sie das Passwort zurücksetzten können") ?></p>
 
-    <?= PartHelper::getInstance()->getInput($model, "Username", "Email", "email"); ?><br/>
+        <?= PartHelper::getInstance()->getInput($model, "Username", "Email", "email"); ?><br/>
 
-    <?= PartHelper::getInstance()->getSubmit("send mail") ?>
+        <?= PartHelper::getInstance()->getSubmit("send mail") ?>
 
-    <?= PartHelper::getInstance()->getFormEnd(false); ?>
+        <?= PartHelper::getInstance()->getFormEnd(false); ?>
 
-    <?php
+        <?php
+    }
 }
 ?>

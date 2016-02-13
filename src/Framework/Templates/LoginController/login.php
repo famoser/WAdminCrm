@@ -9,16 +9,20 @@ use famoser\phpFrame\Helpers\PartHelper;
 use famoser\phpFrame\Models\Database\LoginModel;
 use famoser\phpFrame\Services\LocaleService;
 use famoser\phpFrame\Services\RouteService;
+use famoser\phpFrame\Views\ViewBase;
 
-$model = $this->_["model"];
-if ($model instanceof LoginModel) { ?>
+if ($this instanceof ViewBase) {
+    $model = $this->tryRetrieve("model");
+    ?>
 
     <?= PartHelper::getInstance()->getFormStart("login"); ?>
 
     <?= PartHelper::getInstance()->getInput($model, "Username", "Email", "email"); ?><br/>
     <?= PartHelper::getInstance()->getInput($model, "Password", "Password", "password"); ?><br/>
 
-    <p><a href="<?= RouteService::getInstance()->getAbsoluteLink("forgotpass"); ?>"><?= LocaleService::getInstance()->translate("forgot password") ?></a></p>
+    <p>
+        <a href="<?= RouteService::getInstance()->getAbsoluteLink("forgotpass"); ?>"><?= LocaleService::getInstance()->translate("forgot password") ?></a>
+    </p>
     <?= PartHelper::getInstance()->getSubmit("Login") ?>
 
     <?= PartHelper::getInstance()->getFormEnd(false); ?>

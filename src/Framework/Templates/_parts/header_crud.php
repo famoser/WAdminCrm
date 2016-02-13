@@ -6,14 +6,22 @@
  * Time: 10:50
  */
 use famoser\phpFrame\Helpers\PartHelper;
-use famoser\phpFrame\Helpers\RequestHelper; ?>
+use famoser\phpFrame\Helpers\RequestHelper;
+use famoser\phpFrame\Views\ViewBase;
+
+
+if ($this instanceof ViewBase) { ?>
+
+
 <?php if (RequestHelper::getInstance()->isAjaxRequest()) { ?>
-    <div class="row no-gutters content clearfix">
+<div class="row no-gutters content clearfix">
     <?php
-} else {
-    echo PartHelper::getInstance()->getPart(PartHelper::PART_HEADER_CONTENT); ?>
+    } else {
+    echo $this->includeFile(PartHelper::getInstance()->getPart(PartHelper::PART_HEADER_CONTENT)); ?>
     <div class="row content">
-    <?php
-}
-echo PartHelper::getInstance()->getPart(PartHelper::PART_MESSAGES);
-echo PartHelper::getInstance()->getPart(PartHelper::PART_LOADING_PLACEHOLDER);?>
+        <?php
+        }
+        echo $this->includeFile(PartHelper::getInstance()->getPart(PartHelper::PART_MESSAGES));
+        echo $this->includeFile(PartHelper::getInstance()->getPart(PartHelper::PART_LOADING_PLACEHOLDER)); ?>
+        <?php } ?>
+

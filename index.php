@@ -32,12 +32,14 @@ try {
     if ($controllerModel instanceof ControllerModel) {
         $controllerName = $controllerModel->getController();
         $controller = new $controllerName($request, RuntimeService::getInstance()->getControllerParams(), $files);
-        echo $controller->Display();
-        bye_framework();
+        $output = $controller->Display();
+        echo $output;
+
+        bye_framework(true);
     } else {
         header("404 Not found");
         echo "failure";
-        bye_framework();
+        bye_framework(false);
     }
 } catch (Exception $ex) {
     LogHelper::getInstance()->logException($ex);

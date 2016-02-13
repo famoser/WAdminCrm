@@ -20,10 +20,11 @@ class ResourceWrapper
         $this->config = $config;
     }
 
-    public function getKey($key)
+    public function getKey($key, $throwError = true)
     {
-        if (!isset($key)) {
-            LogHelper::getInstance()->logWarning("Not translated: " . $key);
+        if (!isset($this->config[$key])) {
+            if ($throwError)
+                LogHelper::getInstance()->logWarning("Not translated: " . $key);
             return $key;
         }
         return $this->config[$key];

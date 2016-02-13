@@ -18,12 +18,13 @@ class RuntimeService extends ServiceBase
     private $controllerParams;
 
     private $frameworkDirectory;
+    private $templatesDirectory;
 
     /**
      * @param string $uri
      * @param ControllerModel $controller
      */
-    public function setParams(string $uri, ControllerModel $controller)
+    public function setParams($uri, ControllerModel $controller)
     {
         $this->routeParams = remove_empty_entries(explode("/", $controller->getUrl()));
 
@@ -83,7 +84,7 @@ class RuntimeService extends ServiceBase
     }
 
     /**
-     * @param mixed $frameworkPath
+     * @param string $frameworkDirectory
      */
     public function setFrameworkDirectory($frameworkDirectory)
     {
@@ -96,5 +97,21 @@ class RuntimeService extends ServiceBase
     public function getControllerParams()
     {
         return $this->controllerParams;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTemplatesDirectory()
+    {
+        return $this->templatesDirectory;
+    }
+
+    /**
+     * @param mixed $templatesDirectory
+     */
+    public function setTemplatesDirectory($templatesDirectory)
+    {
+        $this->templatesDirectory = $templatesDirectory;
     }
 }

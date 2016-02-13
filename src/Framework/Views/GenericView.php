@@ -10,6 +10,8 @@ namespace famoser\phpFrame\Views;
 
 
 use famoser\phpFrame\Helpers\PartHelper;
+use famoser\phpFrame\Services\RuntimeService;
+use famoser\phpFrame\Services\SettingsService;
 
 class GenericView extends ViewBase
 {
@@ -30,7 +32,7 @@ class GenericView extends ViewBase
             $this->folder = $folder . "/";
     }
 
-    protected function useCenter(boolean $val)
+    protected function useCenter($val)
     {
         $this->useCenter = $val;
     }
@@ -41,18 +43,20 @@ class GenericView extends ViewBase
         if ($this->useCenter)
             $const = PartHelper::PART_HEADER_CENTER;
 
-        $content = PartHelper::getInstance()->getPart($const);
+        $content = $this->loadFile(PartHelper::getInstance()->getPart($const));
+
         if ($this->fromFramework) {
-            $content .= $this->loadFile($_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/" . $this->controller . "/" . $this->folder . $this->view . ".php");
+            $content .= $this->loadFile(RuntimeService::getInstance()->getFrameworkDirectory() . "/Templates/" . $this->controller . "/" . $this->folder . $this->view . ".php");
         } else {
-            $content .= $this->loadFile($_SERVER['DOCUMENT_ROOT'] . "/Templates/" . $this->controller . "/" . $this->folder . $this->view . ".php");
+            $content .= $this->loadFile(RuntimeService::getInstance()->getTemplatesDirectory() . "/" . $this->controller . "/" . $this->folder . $this->view . ".php");
         }
 
         $const = PartHelper::PART_FOOTER_CONTENT;
         if ($this->useCenter)
             $const = PartHelper::PART_FOOTER_CENTER;
 
-        $content .= PartHelper::getInstance()->getPart($const);
+        $content .= $this->loadFile(PartHelper::getInstance()->getPart($const));
+
         return $content;
     }
 }

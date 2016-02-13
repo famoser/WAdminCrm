@@ -9,23 +9,26 @@
 use famoser\phpFrame\Helpers\PartHelper;
 use famoser\phpFrame\Models\Database\LoginModel;
 use famoser\phpFrame\Services\LocaleService;
+use famoser\phpFrame\Views\ViewBase;
 
-$model = $this->_["model"];
-if ($model instanceof LoginModel) { ?>
+if ($this instanceof ViewBase) {
+    $model = $this->retrieve("model");
+    if ($model instanceof LoginModel) { ?>
 
-    <?= PartHelper::getInstance()->getFormStart(); ?>
+        <?= PartHelper::getInstance()->getFormStart(); ?>
 
-    <p><?= LocaleService::getInstance()->translate("Willkommen") ?> <?= $model->getPersonalIdentification() ?>
-        , <?= LocaleService::getInstance()->translate("bitte legen Sie ihr
+        <p><?= LocaleService::getInstance()->translate("Willkommen") ?> <?= $model->getPersonalIdentification() ?>
+            , <?= LocaleService::getInstance()->translate("bitte legen Sie ihr
         Passwort fest") ?></p>
 
-    <?= PartHelper::getInstance()->getHiddenInput("AuthHash", $model->getAuthHash()); ?>
+        <?= PartHelper::getInstance()->getHiddenInput("AuthHash", $model->getAuthHash()); ?>
 
-    <?= PartHelper::getInstance()->getInput($model, "Password", "password", "password"); ?><br/>
-    <?= PartHelper::getInstance()->getInput($model, "ConfirmPassword", "confirm password", "password"); ?><br/>
+        <?= PartHelper::getInstance()->getInput($model, "Password", "password", "password"); ?><br/>
+        <?= PartHelper::getInstance()->getInput($model, "ConfirmPassword", "confirm password", "password"); ?><br/>
 
-    <?= PartHelper::getInstance()->getFormEnd(); ?>
+        <?= PartHelper::getInstance()->getFormEnd(); ?>
 
-    <?php
+        <?php
+    }
 }
 ?>

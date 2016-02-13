@@ -10,6 +10,7 @@ namespace famoser\phpFrame\Views;
 
 use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\PartHelper;
+use famoser\phpFrame\Services\RuntimeService;
 
 class GenericCrudView extends ViewBase
 {
@@ -30,13 +31,13 @@ class GenericCrudView extends ViewBase
 
     public function loadTemplate()
     {
-        $content = PartHelper::getInstance()->getPart(PartHelper::PART_HEADER_CRUD);
+        $content = $this->loadFile(PartHelper::getInstance()->getPart(PartHelper::PART_HEADER_CRUD));
         if ($this->fromFramework){
-            $content .= $this->loadFile($_SERVER['DOCUMENT_ROOT'] . "/Framework/Templates/" . $this->controller . "/_crud/" . $this->mode . ".php");
+            $content .= $this->loadFile(RuntimeService::getInstance()->getFrameworkDirectory() . "/Templates/" . $this->controller . "/_crud/" . $this->mode . ".php");
         } else {
-            $content .= $this->loadFile($_SERVER['DOCUMENT_ROOT'] . "/Templates/" . $this->controller . "/_crud/" .  $this->mode . ".php");
+            $content .= $this->loadFile(RuntimeService::getInstance()->getTemplatesDirectory() . "/" . $this->controller . "/_crud/" .  $this->mode . ".php");
         }
-        $content .= PartHelper::getInstance()->getPart(PartHelper::PART_FOOTER_CRUD);
+        $content .= $this->loadFile(PartHelper::getInstance()->getPart(PartHelper::PART_FOOTER_CRUD));
         return $content;
     }
 }

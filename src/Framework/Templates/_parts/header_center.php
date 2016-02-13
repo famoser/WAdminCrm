@@ -10,7 +10,9 @@ use famoser\phpFrame\Views\ViewBase;
 
 if ($this instanceof ViewBase) { ?>
 
-    <?php echo PartHelper::getInstance()->getPart(PartHelper::PART_HEAD); ?>
+    <?php
+    /*$this->includeFile(PartHelper::getInstance()->getPart(PartHelper::PART_HEAD));*/
+    ?>
 
     <body>
 <div class="mobile-container">
@@ -24,7 +26,7 @@ if ($this instanceof ViewBase) { ?>
                     </a>
                 </div>
                 <div class="col-md-6">
-                    <h2 class="application"><?= $this->getApplicationName() ?></h2>
+                    <h2 class="application"><?= $this->getApplicationTitle() ?></h2>
                 </div>
             </div>
         </div>
@@ -32,8 +34,12 @@ if ($this instanceof ViewBase) { ?>
 
     <div class="center-content-wrapper">
     <div class="container">
-    <?php echo PartHelper::getInstance()->getPart(PartHelper::PART_MESSAGES); ?>
+    <?php
+    include $_SERVER["DOCUMENT_ROOT"] . "/src/Framework/Templates/_parts/messages.php";
+    echo $this->includeFile(PartHelper::getInstance()->getPart(PartHelper::PART_MESSAGES));
+    ?>
     <div class="center-content content">
 
 
-<?php } ?>
+<?php }
+?>

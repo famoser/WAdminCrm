@@ -24,14 +24,14 @@ class LocaleService extends ServiceBase
         parent::__construct();
 
         //parse language resources
-        if (!isset($config["DefaultLanguage"])) {
+        if ($this->getConfig("DefaultLanguage") == null) {
             LogHelper::getInstance()->logWarning("Default language not configured, switching to first available language");
-            $this->activeLangShort = $config["LanguageResources"][0]["Language"];
+            $this->activeLangShort = $this->getConfig("LanguageResources")[0]["Language"];
         } else
-            $this->activeLangShort = $config["DefaultLanguage"];
+            $this->activeLangShort = $this->getConfig("DefaultLanguage");
 
-        foreach ($config["LanguageResources"] as $languageResource) {
-            $this->languages[$languageResource["Language"]] = new Language($languageResource["Language"], $languageResource, SettingsService::getInstance()->getSourceDir() . "/FrameworkAssets/Locale/");
+        foreach ($this->getConfig("LanguageResources") as $languageResource) {
+            $this->languages[$languageResource["Language"]] = new Language($languageResource["Language"], $languageResource, SettingsService::getInstance()->getConfig(array("Framework", "FrameworkAssetsDirectory")) . "/Locale/");
         }
 
         if (isset($this->languages[$this->activeLangShort]))
