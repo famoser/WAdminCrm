@@ -68,12 +68,13 @@ spl_autoload_register(function ($class) {
     }
 });
 
-function bye_framework($successfull = true)
+function bye_framework($successful = true)
 {
-    if (!$successfull) {
-        echo "Application faillure";
-        echo LogHelper::getInstance()->getLogsAsHtml();
+    if (!$successful) {
+        include __DIR__ ."/Templates/_parts/messages.php";
     }
     if (LogHelper::getInstance()->countLogItems() > 0)
-        echo LogHelper::getInstance()->getLogsAsHtml();
+        include __DIR__ ."/Templates/_parts/messages.php";
+
+    exit();
 }

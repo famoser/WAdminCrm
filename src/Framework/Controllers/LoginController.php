@@ -12,8 +12,13 @@ namespace famoser\phpFrame\Controllers;
 use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\PasswordHelper;
 use famoser\phpFrame\Helpers\ReflectionHelper;
+use famoser\phpFrame\Helpers\RequestHelper;
 use famoser\phpFrame\Models\Database\LoginModel;
 use famoser\phpFrame\Services\AuthenticationService;
+use famoser\phpFrame\Services\EmailService;
+use famoser\phpFrame\Services\GenericDatabaseService;
+use famoser\phpFrame\Services\LocaleService;
+use famoser\phpFrame\Services\RuntimeService;
 use famoser\phpFrame\Views\GenericCenterView;
 
 class LoginController extends ControllerBase
@@ -34,31 +39,33 @@ class LoginController extends ControllerBase
     {
         $user = $this->authService->getUser();
         if ($user !== false) {
-            $this->exitWithControllerRedirect("customers");
+            $this->exitWithControllerRedirect($this->loggedInRedirect);
         }
 
         if (count($this->params) == 0) {
             $view = new GenericCenterView("LoginController", "login", null, true);
             return $this->returnView($view);
         } else if (count($this->params) > 0) {
-            if ($this->params[0] == "login" && isset($this->request["login"]) && $this->request["login"] == "true") {
+            if ($this->params[0] == "login") {
+                if (isset($this->request["login"]) && $this->request["login"] == "true") {
+                    //fill object
+                    ReflectionHelper::getInstance()->writeFromPostArrayToObjectProperties($this->request, $this->instance);
 
-                //fill object
-                ReflectionHelper::getInstance()->writeFromPostArrayToObjectProperties($this->request, $this->instance);
-
-                $admin = $this->authService->authenticate($this->instance->getUsername(), $this->instance->getPassword());
-                if ($admin !== false) {
-                    $this->authService->setUser($admin);
-                    $this->exitWithControllerRedirect($this->loggedInRedirect);
-                } else {
-                    $view = new GenericCenterView("LoginController", "login", null, true);
-                    $this->instance->setPassword("");
-                    $view->assign("model", $this->instance);
-                    LogHelper::getInstance()->logUserInfo("login was not successful");
-                    return $this->returnView($view);
+                    $admin = GenericDatabaseService::getInstance()->getSingle($this->instance, array("Username" => $this->instance->getUsername()), true);
+                    if ($admin instanceof LoginModel && PasswordHelper::getInstance()->validatePasswort($this->instance->getPassword(), $admin->getPasswordHash())) {
+                        AuthenticationService::getInstance()->setUser($admin);
+                        $this->exitWithRedirect($this->loggedInRedirect);
+                    } else {
+                        LogHelper::getInstance()->logUserError("login unsuccessful!");
+                        $this->instance->setPassword("");
+                    }
                 }
-            }
-            else if ($this->params[0] == "logout") {
+
+                $view = new GenericCenterView("LoginController", "login", null, true);
+                $view->assign("model", $this->instance);
+                return $this->returnView($view);
+
+            } else if ($this->params[0] == "logout") {
                 $this->authService->setUser(null);
                 $this->exitWithControllerRedirect("/");
             } else {
@@ -66,30 +73,39 @@ class LoginController extends ControllerBase
             }
         } else if (count($this->params) > 1) {
             if ($this->params[0] == "activateAccount" && PasswordHelper::getInstance()->checkIfHashIsValid($this->params[1])) {
-                $admin = $this->authService->authenticateWithHash($this->params[1]);
-
-                if ($admin === false) {
-                    LogHelper::getInstance()->logUserInfo("link not valid anymore");
-                    $view = new GenericCenterView("LoginController", "login", null, true);
-                    return $this->returnView($view);
-                } else {
+                $admin = GenericDatabaseService::getInstance()->getSingle($this->instance, array("AuthHash" => $this->params[1]), true);
+                if ($admin instanceof LoginModel) {
                     if (isset($this->request["activateAccount"]) && $this->request["activateAccount"] == true) {
                         ReflectionHelper::getInstance()->writeFromPostArrayToObjectProperties($this->request, $admin);
 
                         if ($this->canSetPassword($admin)) {
                             $admin->setPasswordHash(PasswordHelper::getInstance()->convertToPasswordHash($admin->getPassword()));
                             $admin->setAuthHash("");
-                            $this->authService->updateModel($admin);
+                            GenericDatabaseService::getInstance()->update($admin, array("Id", "AuthHash", "PasswordHash"));
                         }
                     }
 
                     $view = new GenericCenterView("LoginController", "addpass", null, true);
                     return $this->returnView($view);
+                } else {
+                    LogHelper::getInstance()->logUserInfo("link not valid anymore");
+                    $view = new GenericCenterView("LoginController", "login", null, true);
+                    return $this->returnView($view);
                 }
             } else if ($this->params[0] == "forgotpass") {
                 if (isset($this->request["forgotpass"]) && $this->request["forgotpass"] == "true") {
-                    $this->authService->resetPassword($this->request["Username"]);
-                    LogHelper::getInstance()->logUserInfo("you will be contacted by us on how to reset your password.");
+
+                    $newHash = PasswordHelper::getInstance()->createUniqueHash();
+                    $admin = GenericDatabaseService::getInstance()->getSingle($this->instance, array("Username" => $this->request["Username"]));
+                    if ($admin instanceof LoginModel) {
+                        $admin->setAuthHash($newHash);
+                        GenericDatabaseService::getInstance()->update($admin, array("Id", "AuthHash"));
+                        return EmailService::getInstance()->sendEmailFromServer(
+                            LocaleService::getInstance()->translate("password reset"),
+                            LocaleService::getInstance()->translate("your password was reset. click following link to set a new one: " . RuntimeService::getInstance()->getRouteUrl() . "/activateAccount/" . $newHash),
+                            $admin->getAuthHash());
+                    }
+                    LogHelper::getInstance()->logUserInfo("you will be contacted by us per email.");
                 }
 
                 $view = new GenericCenterView("LoginController", "forgotpass", null, true);

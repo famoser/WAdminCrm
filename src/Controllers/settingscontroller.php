@@ -1,6 +1,7 @@
 <?php
 
 namespace famoser\crm\Controllers;
+use famoser\phpFrame\Controllers\ControllerBase;
 
 /**
  * Created by PhpStorm.
@@ -10,20 +11,6 @@ namespace famoser\crm\Controllers;
  */
 class SettingsController extends ControllerBase
 {
-    private $request = null;
-    private $params = null;
-
-    /**
-     * Konstruktor, erstellet den Controllers.
-     *
-     * @param Array $request Array aus $_GET & $_POST.
-     */
-    public function __construct($request, $requestFiles, $params)
-    {
-        $this->request = $request;
-        $this->params = $params;
-    }
-
     /**
      * Methode zum Anzeigen des Contents.
      *

@@ -10,6 +10,8 @@ use famoser\phpFrame\Controllers\ControllerBase;
 use famoser\phpFrame\Core\Logging\LogHelper;
 use Famoser\phpFrame\Helpers\RequestHelper;
 use Famoser\phpFrame\Models\Services\ControllerModel;
+use famoser\phpFrame\Services\DatabaseService;
+use famoser\phpFrame\Services\GenericDatabaseService;
 use famoser\phpFrame\Services\RouteService;
 use famoser\phpFrame\Services\RuntimeService;
 use function famoser\phpSLWrapper\Framework\Hook\bye_framework;
@@ -26,6 +28,7 @@ try {
     $request = array_merge($_GET, $_POST);
     $files = $_FILES;
 
+
     $controllerModel = RouteService::getInstance()->getController($_SERVER['REQUEST_URI']);
     RuntimeService::getInstance()->setParams($_SERVER['REQUEST_URI'], $controllerModel);
 
@@ -34,15 +37,13 @@ try {
         $controller = new $controllerName($request, RuntimeService::getInstance()->getControllerParams(), $files);
         $output = $controller->Display();
         echo $output;
-
         bye_framework(true);
     } else {
         header("404 Not found");
         echo "failure";
-        bye_framework(false);
     }
 } catch (Exception $ex) {
     LogHelper::getInstance()->logException($ex);
-    bye_framework(false);
 }
+bye_framework(false);
 ?>

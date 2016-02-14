@@ -1,5 +1,11 @@
 <?php
 namespace famoser\crm\Controllers;
+use famoser\crm\Models\Database\CustomerModel;
+use famoser\crm\Models\Database\ProcedureModel;
+use famoser\crm\Models\Database\ProjectModel;
+use famoser\phpFrame\Controllers\ControllerBase;
+use famoser\phpFrame\Controllers\Generic1nController;
+use famoser\phpFrame\Services\GenericDatabaseService;
 
 /**
  * Created by PhpStorm.
@@ -7,48 +13,11 @@ namespace famoser\crm\Controllers;
  * Date: 13.09.2015
  * Time: 14:35
  */
-class ProjectsController extends ControllerBase
+class ProjectsController extends Generic1nController
 {
-    private $request = null;
-    private $params = null;
-
-    private $genericController = null;
-
-    /**
-     * Konstruktor, erstellet den Controllers.
-     *
-     * @param Array $request Array aus $_GET & $_POST.
-     */
-    public function __construct($request, $requestFiles, $params)
+    public function __construct($request, $params, $files)
     {
-        $this->request = $request;
-        $this->params = $params;
-        $this->genericController = new GenericController($this->request, $this->params, "projects", "project", "StartDate", array("add" => "edit"), null, $this->getMenu(), $this->getNRelations());
-    }
-
-    function getMenu()
-    {
-        $res = array();
-        /*
-        $menuItem = array();
-        $menuItem["href"] = "";
-        $menuItem["content"] = "active";
-        $res[] = $menuItem;
-        $menuItem2 = array();
-        $menuItem2["href"] = "all";
-        $menuItem2["content"] = "all";
-        $res[] = $menuItem2;*/
-        return $res;
-    }
-
-    function getNRelations()
-    {
-        $res = array();
-        $menuItem = array();
-        $menuItem["table"] = "customers";
-        $menuItem["orderby"] = "Company, LastName, FirstName";
-        $res[] = $menuItem;
-        return $res;
+        parent::__construct($request, $params, $files, new ProjectModel(), array(Generic1nController::CRUD_CREATE => Generic1nController::CRUD_READ));
     }
 
     /**
@@ -58,6 +27,16 @@ class ProjectsController extends ControllerBase
      */
     public function Display()
     {
+
+        if (count($this->params) > 0) {
+            if ($this->params[0] == "archived") {
+                return parent::Display(array(), array("IsArchived" => true), "StartDate DESC");
+            }
+        }
+
+        return parent::Display(array("IsArchived" => false), "StartDate DESC", new CustomerModel(), "Customer");
+
+/*
         $view = $this->NotFound();
         if (count($this->params) == 0) {
             $view = new GenericView("projects", $this->getMenu());
@@ -110,5 +89,6 @@ class ProjectsController extends ControllerBase
         }
 
         return $view->loadTemplate();
+*/
     }
 }

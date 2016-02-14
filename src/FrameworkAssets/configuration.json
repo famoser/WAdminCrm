@@ -59,13 +59,21 @@
       "DatabaseService": {
         "Connections": [
           {
-            "Default": true,
+            "Default": false,
             "Name": "hostpoint",
             "Type": "MySql",
             "Host": "floria74.mysql.db.internal",
             "Database": "floria74_scms",
             "User": "floria74_scms",
             "Password": "tzaOA2GH"
+          },
+          {
+            "Default": true,
+            "Name": "sqlite",
+            "Type": "Sqlite",
+            "Path": "files/database.sqlite",
+            "User": "root",
+            "Password": ""
           }
         ]
       },

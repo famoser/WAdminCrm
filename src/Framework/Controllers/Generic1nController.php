@@ -19,7 +19,7 @@ use famoser\phpFrame\Services\GenericDatabaseService;
 use famoser\phpFrame\Views\GenericCrudView;
 use famoser\phpFrame\Views\GenericView;
 
-class GenericController extends MenuController
+class Generic1nController extends MenuController
 {
     private $objectInstance = null;
     private $crudReplaces = null;
@@ -39,7 +39,7 @@ class GenericController extends MenuController
      * @param $params
      * @param $files
      * @param BaseDatabaseModel $objectInstance
-     * @param array|null example : array(GenericController::CRUD_CREATE => GenericController::CRUD_READ)
+     * @param array|null example : array(Generic1nController::CRUD_CREATE => Generic1nController::CRUD_READ)
      * @param array|null example : array("admins" => array(new AdminModel(), array("IsCompleted" => true), "Name"))
      */
     public function __construct($request, $params, $files, BaseDatabaseModel $objectInstance, array $crudReplaces = null, array $nRelationInstances = null)
@@ -143,7 +143,7 @@ class GenericController extends MenuController
                     }
                 }
 
-                $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericController::CRUD_CREATE)));
+                $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(Generic1nController::CRUD_CREATE)));
                 $view->assign("model", $this->getObjectInstance());
 
                 //add relations
@@ -166,7 +166,7 @@ class GenericController extends MenuController
                 if ($obj !== false) {
                     $this->setObjectInstance($obj);
 
-                    $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericController::CRUD_READ)));
+                    $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(Generic1nController::CRUD_READ)));
                     $view->assign("model", $this->getObjectInstance());
 
                     //add relations
@@ -226,7 +226,7 @@ class GenericController extends MenuController
                 if ($obj !== false) {
                     $this->setObjectInstance($obj);
 
-                    $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericController::CRUD_UPDATE)));
+                    $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(Generic1nController::CRUD_UPDATE)));
                     $view->assign("model", $this->getObjectInstance());
 
                     //add relations
@@ -261,7 +261,7 @@ class GenericController extends MenuController
                 if ($obj !== false) {
                     $this->setObjectInstance($obj);
 
-                    $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericController::CRUD_DELETE)));
+                    $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(Generic1nController::CRUD_DELETE)));
                     $view->assign("model", $this->getObjectInstance());
 
                     //add relations
@@ -290,6 +290,37 @@ class GenericController extends MenuController
         return $view->loadTemplate();
     }
 
+    public function DisplayExtended($displayCondition, $orderBy, $parentModel, $parentName)
+    {
+        if (count($this->params) == 0) {
+            return $this->Display(array(), $displayCondition, $orderBy);
+        } else {
+            if (count($this->params) > 1 && is_numeric($this->params[1])) {
+                if ($this->params[0] == "by" . strtolower($parentName)) {
+                    $customer = GenericDatabaseService::getInstance()->getById($parentModel, $this->params[1]);
+                    if ($customer != null) {
+                        return $this->Display(array(), array($parentName."Id" => $customer->getId()), $orderBy);
+                    } else {
+                        return $this->returnFailure(ControllerBase::FAILURE_NOT_FOUND);
+                    }
+                } else {
+                    if ($this->params[0] == "add") {
+                        $model = $this->getObjectInstance();
+                        $customer = GenericDatabaseService::getInstance()->getById($parentModel, $this->params[1]);
+                        if ($customer != null && $customer != false) {
+                            $idMethod = "set".$parentName."Id";
+                            $model->$idMethod($this->params[1]);
+                            $modelMethod = "set".$parentName;
+                            $model->$modelMethod($customer);
+                        }
+                    }
+                }
+            }
+        }
+
+        return $this->Display();
+    }
+
     private function getMode($mode)
     {
         if ($this->crudReplaces != null && is_array($this->crudReplaces) && isset($this->crudReplaces[$mode]))
@@ -300,13 +331,13 @@ class GenericController extends MenuController
 
     private function getFilenameFromMode($mode)
     {
-        if ($mode == GenericController::CRUD_CREATE)
+        if ($mode == Generic1nController::CRUD_CREATE)
             return "create";
-        else if ($mode == GenericController::CRUD_READ)
+        else if ($mode == Generic1nController::CRUD_READ)
             return "read";
-        else if ($mode == GenericController::CRUD_UPDATE)
+        else if ($mode == Generic1nController::CRUD_UPDATE)
             return "update";
-        else if ($mode == GenericController::CRUD_DELETE)
+        else if ($mode == Generic1nController::CRUD_DELETE)
             return "delete";
         else
             LogHelper::getInstance()->logFatal("Invalid crud action! Please use one of the constants in GenericController");

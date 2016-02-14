@@ -77,7 +77,7 @@ class ReflectionHelper extends HelperBase
     public function removeNamespace($model)
     {
         $class = get_class($model);
-        return substr($class, strrpos($class, "\\"));
+        return substr($class, strrpos($class, "\\") + 1);
     }
 
     public function getNamespace($model)

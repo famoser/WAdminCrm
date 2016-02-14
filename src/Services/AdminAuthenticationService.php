@@ -9,8 +9,15 @@
 namespace famoser\crm\Services;
 
 
+use famoser\crm\Models\Database\AdminModel;
+use famoser\crm\Models\Database\PersonModel;
+use famoser\phpFrame\Helpers\PasswordHelper;
 use famoser\phpFrame\Models\Database\LoginModel;
 use famoser\phpFrame\Services\AuthenticationService;
+use famoser\phpFrame\Services\DatabaseService;
+use famoser\phpFrame\Services\EmailService;
+use famoser\phpFrame\Services\GenericDatabaseService;
+use famoser\phpFrame\Services\LocaleService;
 
 class AdminAuthenticationService extends AuthenticationService
 {
@@ -22,7 +29,11 @@ class AdminAuthenticationService extends AuthenticationService
      */
     public function authenticate($username, $password)
     {
-        // TODO: Implement authenticate() method.
+        $admin = GenericDatabaseService::getInstance()->getSingle(new AdminModel(), array("Username" => $username), true);
+        if ($admin instanceof AdminModel && PasswordHelper::getInstance()->validatePasswort($password, $admin->getPasswordHash())) {
+            return $admin;
+        }
+        return false;
     }
 
     /**
@@ -31,7 +42,11 @@ class AdminAuthenticationService extends AuthenticationService
      */
     public function authenticateWithHash($hash)
     {
-        // TODO: Implement authenticateWithHash() method.
+        $admin = GenericDatabaseService::getInstance()->getSingle(new AdminModel(), array("AuthHash" => $hash), true);
+        if ($admin instanceof AdminModel) {
+            return $admin;
+        }
+        return false;
     }
 
     /**
@@ -43,8 +58,18 @@ class AdminAuthenticationService extends AuthenticationService
         // TODO: Implement updateModel() method.
     }
 
-    public function resetPassword($username)
+    public function resetPassword($username, $link)
     {
-        // TODO: Implement resetPassword() method.
+        $newHash = PasswordHelper::getInstance()->createUniqueHash();
+        $admin = GenericDatabaseService::getInstance()->getSingle(new AdminModel(), array("Username" => $username));
+        if ($admin instanceof AdminModel) {
+            $admin->setAuthHash($newHash);
+            GenericDatabaseService::getInstance()->update($admin, array("Id", "AuthHash"));
+            return EmailService::getInstance()->sendEmailFromServer(
+                LocaleService::getInstance()->translate("password reset"),
+                LocaleService::getInstance()->translate("your password was reset. click following link to set a new one: "),
+                LocaleService::getInstance()->translate("your password "));
+        }
+        return false;
     }
 }

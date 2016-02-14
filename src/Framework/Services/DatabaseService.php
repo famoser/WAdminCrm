@@ -35,7 +35,7 @@ class DatabaseService extends ServiceBase
 
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct(true, "famoser\\phpFrame\\Services\\DatabaseService");
     }
 
     public function exportDatabase($filename, $name = null)
@@ -124,6 +124,7 @@ class DatabaseService extends ServiceBase
         //todo
         return "Faillure";
     }
+
     /**
      * @param string|null $name
      * @return PDO
@@ -179,6 +180,8 @@ class DatabaseService extends ServiceBase
     {
         if ($connection["Type"] == "MySql") {
             return $this->makePdo("mysql:host=" . $connection["Host"] . ";dbname=" . $connection["Database"] . ";charset=utf8", $connection["User"], $connection["Password"], DatabaseService::DRIVER_TYPE_MYSQL);
+        } else if ($connection["Type"] = "Sqlite") {
+            return $this->makePdo("sqlite:" . $_SERVER["DOCUMENT_ROOT"] . "/" . $connection["Path"] . ";charset=utf8", $connection["User"], $connection["Password"], DatabaseService::DRIVER_TYPE_SQLITE);
         } else {
             LogHelper::getInstance()->logError("Unknown connection type: " . $connection["Type"], $connection);
             return null;

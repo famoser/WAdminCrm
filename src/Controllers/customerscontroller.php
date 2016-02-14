@@ -4,7 +4,7 @@ namespace famoser\crm\Controllers;
 use famoser\crm\Models\Database\CustomerModel;
 use famoser\crm\Services\CustomerDatabaseService;
 use famoser\phpFrame\Controllers\ControllerBase;
-use famoser\phpFrame\Controllers\GenericController;
+use famoser\phpFrame\Controllers\Generic1nController;
 use famoser\phpFrame\Helpers\FormatHelper;
 use famoser\phpFrame\Models\View\MenuItem;
 use famoser\phpFrame\Services\DatabaseService;
@@ -17,13 +17,13 @@ use famoser\phpFrame\Views\GenericView;
  * Date: 23.05.2015
  * Time: 13:52
  */
-class CustomersController extends GenericController
+class CustomersController extends Generic1nController
 {
     public function __construct($request, $params, $files)
     {
         $defaultObj = new CustomerModel();
         $defaultObj->setCustomerSinceDate(FormatHelper::getInstance()->dateFromString("today"));
-        parent::__construct($request, $params, $files, $defaultObj, array(GenericController::CRUD_CREATE => GenericController::CRUD_UPDATE));
+        parent::__construct($request, $params, $files, $defaultObj, array(Generic1nController::CRUD_CREATE => Generic1nController::CRUD_UPDATE));
 
         $this->addMenuItem(new MenuItem("all", ""));
         $this->addMenuItem(new MenuItem("with active projects", "active"));

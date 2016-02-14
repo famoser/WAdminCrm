@@ -38,7 +38,7 @@ class GenericDatabaseService extends DatabaseService
      */
     public function getAll(BaseDatabaseModel $model, $condition = null, $addRelationships = true, $orderBy = null, $additionalSql = null)
     {
-        $table = ReflectionHelper::getInstance()->removeNamespace($model);
+        $table = $this->getTableName($model);
 
         if ($orderBy != null)
             $orderBy = " ORDER BY " . $orderBy;
@@ -75,7 +75,7 @@ class GenericDatabaseService extends DatabaseService
      */
     public function getSingle(BaseDatabaseModel $model, $condition = null, $addRelationships = true, $orderBy = "")
     {
-        $table = ReflectionHelper::getInstance()->removeNamespace($model);
+        $table = $this->getTableName($model);
 
         if ($orderBy != "")
             $orderBy = " ORDER BY " . $orderBy;
@@ -138,7 +138,7 @@ class GenericDatabaseService extends DatabaseService
 
     public function getPropertyByCondition(BaseDatabaseModel $model, $property, $condition = null, $orderBy = null)
     {
-        $table = ReflectionHelper::getInstance()->removeNamespace($model);
+        $table = $this->getTableName($model);
 
         if ($orderBy != null)
             $orderBy = " ORDER BY " . $orderBy;
@@ -161,9 +161,9 @@ class GenericDatabaseService extends DatabaseService
     public function create(BaseDatabaseModel $model)
     {
         $arr = $model->getDatabaseArray();
-        $table = ReflectionHelper::getInstance()->removeNamespace($model);
+        $table = $this->getTableName($model);
 
-        $arr = $this->prepareGenericArray($arr);
+        $arr = $this->cleanUpGenericArray($arr);
         if (isset($arr["Id"])) {
             unset($arr["Id"]);
         }
@@ -175,16 +175,24 @@ class GenericDatabaseService extends DatabaseService
         return false;
     }
 
-    public function update(BaseDatabaseModel $model)
+    public function update(BaseDatabaseModel $model, array $allowedArr = null)
     {
         $arr = $model->getDatabaseArray();
-        $table = ReflectionHelper::getInstance()->removeNamespace($model);
+        
+        $table = $this->getTableName($model);
 
-        $arr = $this->prepareGenericArray($arr);
+        $arr = $this->cleanUpGenericArray($arr);
+        $params = $arr;
+        if (is_array($allowedArr)) {
+            $params = array();
+            foreach ($allowedArr as $item) {
+                $params[$item] = $arr[$item];
+            }
+        }
         if (!isset($arr["Id"]) || $arr["Id"] == 0) {
             return false;
         } else {
-            return $this->updateInternal($table, $arr);
+            return $this->updateInternal($table, $params);
         }
     }
 
@@ -195,7 +203,7 @@ class GenericDatabaseService extends DatabaseService
 
     public function deleteById(BaseDatabaseModel $model, $id)
     {
-        $table = ReflectionHelper::getInstance()->removeNamespace($model);
+        $table = $this->getTableName($model);
         return $this->deleteInternal($table, $id);
     }
 
@@ -323,5 +331,11 @@ class GenericDatabaseService extends DatabaseService
         }
 
         return $params;
+    }
+    
+    private function getTableName(BaseDatabaseModel $model)
+    {
+        $modelName = $table = ReflectionHelper::getInstance()->removeNamespace($model);
+        return $modelName;
     }
 }

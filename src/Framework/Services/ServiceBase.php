@@ -16,11 +16,12 @@ class ServiceBase extends Singleton
 {
     private $config;
 
-    public function __construct($getConfig = true)
+    public function __construct($getConfig = true, $customName = null)
     {
         if ($getConfig) {
-            $className = get_called_class();
-            $this->config = SettingsService::getInstance()->getFrameworkConfig($className);
+            if ($customName == null)
+                $customName = get_called_class();
+            $this->config = SettingsService::getInstance()->getFrameworkConfig($customName);
         }
     }
 
