@@ -4,7 +4,7 @@ namespace famoser\crm\Controllers;
 use famoser\crm\Models\Database\MilestoneModel;
 use famoser\crm\Models\Database\ProcedureModel;
 use famoser\phpFrame\Controllers\ControllerBase;
-use famoser\phpFrame\Controllers\Generic1nController;
+use famoser\phpFrame\Controllers\GenericController;
 use famoser\phpFrame\Helpers\FormatHelper;
 use famoser\phpFrame\Services\GenericDatabaseService;
 
@@ -14,11 +14,11 @@ use famoser\phpFrame\Services\GenericDatabaseService;
  * Date: 13.09.2015
  * Time: 16:03
  */
-class ProceduresController extends Generic1nController
+class ProceduresController extends GenericController
 {
     public function __construct($request, $params, $files)
     {
-        parent::__construct($request, $params, $files, new ProcedureModel(), array(Generic1nController::CRUD_CREATE => Generic1nController::CRUD_READ));
+        parent::__construct($request, $params, $files, new ProcedureModel(), array(GenericController::CRUD_CREATE => GenericController::CRUD_READ));
     }
 
     public function Display()

@@ -178,7 +178,7 @@ class GenericDatabaseService extends DatabaseService
     public function update(BaseDatabaseModel $model, array $allowedArr = null)
     {
         $arr = $model->getDatabaseArray();
-        
+
         $table = $this->getTableName($model);
 
         $arr = $this->cleanUpGenericArray($arr);
@@ -198,7 +198,9 @@ class GenericDatabaseService extends DatabaseService
 
     public function delete(BaseDatabaseModel $model)
     {
-        return $this->deleteById($model, $model->getId());
+        if ($model->getId() != 0)
+            return $this->deleteById($model, $model->getId());
+        return true;
     }
 
     public function deleteById(BaseDatabaseModel $model, $id)
@@ -332,10 +334,10 @@ class GenericDatabaseService extends DatabaseService
 
         return $params;
     }
-    
+
     private function getTableName(BaseDatabaseModel $model)
     {
-        $modelName = $table = ReflectionHelper::getInstance()->removeNamespace($model);
+        $modelName = $table = ReflectionHelper::getInstance()->getObjectName($model);
         return $modelName;
     }
 }

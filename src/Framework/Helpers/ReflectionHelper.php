@@ -27,6 +27,46 @@ class ReflectionHelper extends HelperBase
         return $val;
     }
 
+    public function writeArrayIntoObject($obj, array $params)
+    {
+        if (is_object($obj)) {
+            foreach ($params as $key => $val) {
+                $methodName = "set" . $key;
+                if (method_exists($obj, $methodName)) {
+                    $obj->$methodName($val);
+                }
+            }
+        }
+    }
+
+    public function addRelationPropertiesToObject($obj, array $relations)
+    {
+        $found = false;
+        if (is_object($obj)) {
+            foreach ($relations as $key => $val) {
+                $methodName = "set" . $key . "Id";
+                if (method_exists($obj, $methodName)) {
+                    $obj->$methodName($val);
+                    $found = true;
+                }
+            }
+        }
+        return $found;
+    }
+
+    public function getPropertyOfObjects(array $obj, $propName, $skips = 0, $max = 10000)
+    {
+        for ($i = $skips; $i < $max && $i < count($obj); $i++) {
+            if (is_object($obj[$i])) {
+                $methodName = "get" . $propName;
+                if (method_exists($obj[$i],$methodName)) {
+                    return $obj[$i]->$methodName();
+                }
+            }
+        }
+        return null;
+    }
+
     public function getPropertyOfObject($obj, $propName)
     {
         if (is_object($obj)) {
@@ -36,6 +76,28 @@ class ReflectionHelper extends HelperBase
             LogHelper::getInstance()->logError("Method " . $functionName . " does not exist");
         }
         return "";
+    }
+
+    public function setPropertyOfObject($obj, $propName, $value)
+    {
+        if (is_object($obj)) {
+            $functionName = "set" . $propName;
+            if (method_exists($obj, $functionName)) {
+                $obj->$functionName($value);
+                return true;
+            }
+            LogHelper::getInstance()->logError("Method " . $functionName . " does not exist");
+        }
+        return false;
+    }
+
+    public function hasObjectProperty($obj, $propName)
+    {
+        if (is_object($obj)) {
+            $functionName = "get" . $propName;
+            return method_exists($obj, $functionName);
+        }
+        return false;
     }
 
     public function getObjectAsJson($object)
@@ -74,7 +136,7 @@ class ReflectionHelper extends HelperBase
         return $callStack;
     }
 
-    public function removeNamespace($model)
+    public function getObjectName($model)
     {
         $class = get_class($model);
         return substr($class, strrpos($class, "\\") + 1);
@@ -91,7 +153,7 @@ class ReflectionHelper extends HelperBase
         return get_class($model);
     }
 
-    public function writeFromPostArrayToObjectProperties(array $properties, $model)
+    public function writeFromPostArrayToObjectProperties($model, array $properties)
     {
         $ignoreKeys = array();
         foreach ($properties as $key => $val) {

@@ -48,12 +48,13 @@ class PartHelper extends HelperBase
             $placeholder = ' placeholder="' . $prop . '" ';
 
         $val = ReflectionHelper::getInstance()->getPropertyOfObject($obj, $prop);
+        $propName = $this->getPropertyName($obj, $prop);
 
         $html = '<label for="' . $prop . '">' . $display . '</label><br/>';
         if ($type == "textarea") {
-            $html .= '<textarea' . $placeholder . ' class="interactive" id="' . $prop . '" name="' . $prop . '">' . $val . '</textarea>';
+            $html .= '<textarea' . $placeholder . ' class="interactive" id="' . $prop . '" name="' . $propName . '">' . $val . '</textarea>';
         } else if ($type == "select" || (strpos($type, "multiple") !== false && strpos($type, "select") !== false)) {
-            $html .= '<select' . $placeholder . ' name="' . $prop . '" id="' . $prop . '"';
+            $html .= '<select' . $placeholder . ' name="' . $propName . '" id="' . $prop . '"';
             if (strpos($type, "multiple") !== false) {
                 $html .= 'multiple';
             }
@@ -67,7 +68,7 @@ class PartHelper extends HelperBase
             $html .= '</select>';
         } else {
 
-            $html .= '<input' . $placeholder . ' id="' . $prop . '" name="' . $prop . '" type="' . $type . '"';
+            $html .= '<input' . $placeholder . ' id="' . $prop . '" name="' . $propName . '" type="' . $type . '"';
             if ($type == "checkbox") {
                 if ($val == 1) {
                     $html .= ' checked="checked" value="true"';
@@ -87,15 +88,27 @@ class PartHelper extends HelperBase
             }
             $html .= ">";
             if ($type == "checkbox")
-                $html .= $this->getHiddenInput($prop . "CheckboxPlaceholder", true);
+                $html .= $this->getHiddenInput($obj, $prop . "CheckboxPlaceholder", true);
         }
 
         return $html;
     }
 
-    public function getHiddenInput($key, $value)
+    public function getHiddenKeyValue($key, $value)
     {
         return '<input type="hidden" name="' . $key . '" value="' . $value . '">';
+    }
+
+    public function getHiddenInput($obj, $prop, $value)
+    {
+        $propName = $this->getPropertyName($obj, $prop);
+        return '<input type="hidden" name="' . $propName . '" value="' . $value . '">';
+    }
+
+    private function getPropertyName($obj, $prop)
+    {
+        $modelName = ReflectionHelper::getInstance()->getObjectName($obj);
+        return $modelName . "[" . $prop . "]";
     }
 
     public function getSubmit($customText = "save")
@@ -119,16 +132,16 @@ class PartHelper extends HelperBase
     {
         $params = explode("/", $action);
         if ($params[count($params) - 1] == "create")
-            return $this->getHiddenInput("create", "true");
+            return $this->getHiddenKeyValue("create", "true");
 
         $allowed = array("update", "delete");
 
         if (is_numeric($params[count($params) - 1]) || PasswordHelper::getInstance()->checkIfHashIsValid($params[count($params) - 1])) {
             if (in_array($params[count($params) - 2], $allowed)) {
-                return $this->getHiddenInput($params[count($params) - 2], "true");
+                return $this->getHiddenKeyValue($params[count($params) - 2], "true");
             }
         } else {
-            return $this->getHiddenInput($params[count($params) - 1], "true");
+            return $this->getHiddenKeyValue($params[count($params) - 1], "true");
         }
         return "";
     }
@@ -163,23 +176,23 @@ class PartHelper extends HelperBase
     public function getPart($const)
     {
         if ($const == PartHelper::PART_HEAD)
-            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/head.php";
+            return RuntimeService::getInstance()->getFrameworkDirectory() . "/Templates/_parts/head.php";
         if ($const == PartHelper::PART_FOOTER_CONTENT)
-            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/footer_content.php";
+            return RuntimeService::getInstance()->getFrameworkDirectory() . "/Templates/_parts/footer_content.php";
         if ($const == PartHelper::PART_FOOTER_CRUD)
-            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/footer_crud.php";
+            return RuntimeService::getInstance()->getFrameworkDirectory() . "/Templates/_parts/footer_crud.php";
         if ($const == PartHelper::PART_HEADER_CENTER)
-            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/header_center.php";
+            return RuntimeService::getInstance()->getFrameworkDirectory() . "/Templates/_parts/header_center.php";
         if ($const == PartHelper::PART_HEADER_CONTENT)
-            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/header_content.php";
+            return RuntimeService::getInstance()->getFrameworkDirectory() . "/Templates/_parts/header_content.php";
         if ($const == PartHelper::PART_HEADER_CRUD)
-            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/header_crud.php";
+            return RuntimeService::getInstance()->getFrameworkDirectory() . "/Templates/_parts/header_crud.php";
         if ($const == PartHelper::PART_LOADING_PLACEHOLDER)
-            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/loading_placeholder.php";
+            return RuntimeService::getInstance()->getFrameworkDirectory() . "/Templates/_parts/loading_placeholder.php";
         if ($const == PartHelper::PART_MENU)
-            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/menu.php";
+            return RuntimeService::getInstance()->getFrameworkDirectory() . "/Templates/_parts/menu.php";
         if ($const == PartHelper::PART_MESSAGES)
-            return RuntimeService::getInstance()->getFrameworkDirectory() ."/Templates/_parts/messages.php";
+            return RuntimeService::getInstance()->getFrameworkDirectory() . "/Templates/_parts/messages.php";
 
         LogHelper::getInstance()->logError("Part not found with const " . $const);
         return PartHelper::getPart(PartHelper::PART_MESSAGES);
