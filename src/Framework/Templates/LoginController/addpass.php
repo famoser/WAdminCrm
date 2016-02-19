@@ -21,7 +21,7 @@ if ($this instanceof ViewBase) {
             , <?= LocaleService::getInstance()->translate("bitte legen Sie ihr
         Passwort fest") ?></p>
 
-        <?= PartHelper::getInstance()->getHiddenInput("AuthHash", $model->getAuthHash()); ?>
+        <?= PartHelper::getInstance()->getHiddenInput($model, "AuthHash"); ?>
 
         <?= PartHelper::getInstance()->getInput($model, "Password", "password", "password"); ?><br/>
         <?= PartHelper::getInstance()->getInput($model, "ConfirmPassword", "confirm password", "password"); ?><br/>

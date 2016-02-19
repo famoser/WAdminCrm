@@ -23,7 +23,6 @@ class ProceduresController extends GenericController
     {
         parent::__construct($request, $params, $files, array(GenericController::CRUD_CREATE => GenericController::CRUD_READ));
 
-
         $procedure = new ControllerConfigModel(new ProcedureModel(), "Procedure");
         $procedure->configureList(null, null, null, "StartDateTime");
         $procedure->configureCrud(array("EndDateTime" => FormatHelper::getInstance()->dateTimeFromString("now"),

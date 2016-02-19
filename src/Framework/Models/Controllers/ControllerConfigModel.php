@@ -17,6 +17,7 @@ class ControllerConfigModel
     private $instance;
     private $name;
     private $friendlyName;
+    private $controllerLink;
 
     private $listName;
     private $listFilter = array();
@@ -31,7 +32,7 @@ class ControllerConfigModel
     private $oneNChildren = array();
     private $nOneParents = array();
 
-    public function __construct(BaseDatabaseModel $model, $friendlyName)
+    public function __construct(BaseDatabaseModel $model, $friendlyName, $controllerLink = null)
     {
         $this->instance = $model;
         $this->name = ReflectionHelper::getInstance()->getObjectName($model);;
@@ -39,6 +40,10 @@ class ControllerConfigModel
 
         //set defaults
         $this->listName = $friendlyName;
+        if ($controllerLink == null)
+            $this->controllerLink = strtolower($friendlyName . "s");
+        else
+            $this->controllerLink = $controllerLink;
     }
 
     /**
@@ -106,7 +111,7 @@ class ControllerConfigModel
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getFriendlyName()
     {
@@ -114,7 +119,15 @@ class ControllerConfigModel
     }
 
     /**
-     * @return mixed
+     * @return string
+     */
+    public function getMultiplyFriendlyName()
+    {
+        return $this->friendlyName . "s";
+    }
+
+    /**
+     * @return array
      */
     public function getListFilter()
     {
@@ -219,5 +232,13 @@ class ControllerConfigModel
     public function getListLoadEnabled()
     {
         return $this->listLoadEnabled;
+    }
+
+    /**
+     * @return null
+     */
+    public function getControllerLink()
+    {
+        return $this->controllerLink;
     }
 }

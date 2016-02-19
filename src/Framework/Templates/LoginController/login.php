@@ -15,7 +15,7 @@ if ($this instanceof ViewBase) {
     $model = $this->tryRetrieve("model");
     ?>
 
-    <?= PartHelper::getInstance()->getFormStart("login"); ?>
+    <?= PartHelper::getInstance()->getFormStart("login", false); ?>
 
     <?= PartHelper::getInstance()->getInput($model, "Username", "Email", "email"); ?><br/>
     <?= PartHelper::getInstance()->getInput($model, "Password", "Password", "password"); ?><br/>

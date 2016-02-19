@@ -14,7 +14,10 @@ use famoser\phpFrame\Core\Logging\LogItem;
 use famoser\phpFrame\Helpers\HelperBase;
 use famoser\phpFrame\Helpers\ReflectionHelper;
 use famoser\phpFrame\Interfaces\Models\IModel;
+use famoser\phpFrame\Models\Database\BaseDatabaseModel;
+use famoser\phpFrame\Models\Database\BaseModel;
 use famoser\phpFrame\Services\RuntimeService;
+use famoser\phpFrame\Views\ViewBase;
 
 class PartHelper extends HelperBase
 {
@@ -29,6 +32,11 @@ class PartHelper extends HelperBase
     const PART_MENU = 17;
     const PART_MESSAGES = 18;
 
+    const DIALOG_CREATE = 20;
+    const DIALOG_READ = 21;
+    const DIALOG_UPDATE = 22;
+    const DIALOG_DELETE = 23;
+
     /**
      * @param IModel $obj
      * @param string $prop
@@ -40,8 +48,13 @@ class PartHelper extends HelperBase
      */
     public function getInput($obj, $prop, $display = null, $type = "text", $customPlaceholder = null, array $special = null)
     {
+        if ($type == "hidden") {
+            return $this->getHiddenInput($obj, $prop);
+        }
+
         if ($display == null)
             $display = $prop;
+
         if ($customPlaceholder != null)
             $placeholder = ' placeholder="' . $customPlaceholder . '" ';
         else
@@ -88,10 +101,104 @@ class PartHelper extends HelperBase
             }
             $html .= ">";
             if ($type == "checkbox")
-                $html .= $this->getHiddenInput($obj, $prop . "CheckboxPlaceholder", true);
+                $html .= $this->addHiddenInput($obj, $prop . "CheckboxPlaceholder", true);
         }
 
         return $html;
+    }
+
+    private function formatProperty($value, $propName)
+    {
+        if (str_starts_with($propName, "Is")) {
+            return $value == 1 ? "true" : "false";
+        } else if (str_ends_with($propName, "Date")) {
+            return FormatHelper::getInstance()->date($value);
+        } else if (str_ends_with($propName, "DateTime")) {
+            return FormatHelper::getInstance()->dateTime($value);
+        } else if (str_ends_with($propName, "Time")) {
+            return FormatHelper::getInstance()->time($value);
+        } else {
+            return $value;
+        }
+    }
+
+    public function getControllerLink($href)
+    {
+        if (str_starts_with($href, "/")) {
+            return $href;
+        } else {
+            return RuntimeService::getInstance()->getRouteUrlWithoutController() . "/" . $href;
+        }
+    }
+
+    public function getDialogButtons($baseHref, $id, array $types)
+    {
+        $html = '<div class="btn-group">';
+
+        $editButtons = array();
+        foreach ($types as $type) {
+            $link = "create";
+            if ($type == PartHelper::DIALOG_UPDATE) {
+                $link = "update";
+            } else if ($type == PartHelper::DIALOG_READ) {
+                $link = "read";
+            } else if ($type == PartHelper::DIALOG_DELETE) {
+                $link = "delete";
+            }
+            $editButtons[] = $link . '_button_' . $id;
+        }
+
+        foreach ($types as $type) {
+            $html .= $this->getSingleButton($baseHref, $id, $editButtons, $type);
+        }
+
+        $html .= '</div>';
+        return $html;
+    }
+
+    private function getSingleButton($baseHref, $id, $buttonIds, $dialogType)
+    {
+        $link = "read";
+        $icon = "flaticon-notes26";
+        $text = "read";
+        $type = "info";
+        $colorClass = "info-action";
+        if ($dialogType == PartHelper::DIALOG_CREATE) {
+            $link = "create";
+            $icon = "flaticon-add13";
+            $text = "edit";
+            $type = "warning";
+            $colorClass = "warning-action";
+        } else if ($dialogType == PartHelper::DIALOG_UPDATE) {
+            $link = "update";
+            $icon = "flaticon-pencil124";
+            $text = "edit";
+            $type = "warning";
+            $colorClass = "warning-action";
+        } else if ($dialogType == PartHelper::DIALOG_DELETE) {
+            $link = "delete";
+            $icon = "flaticon-cancel22";
+            $text = "delete";
+            $type = "error";
+            $colorClass = "error-action";
+        }
+
+        $html = "";
+
+        for ($i = 0; $i < count($buttonIds); $i++) {
+            $html .= 'data-dialog-idbutton' . $id . '="' . $buttonIds[$i] . '" ';
+        }
+
+        return '<a id="' . $link . '_button_' . $id . '"
+                   href="' . $baseHref . "/" . $link . "/" . $id . '"
+                   class="tilebutton dialogbutton onlyicon ' . $colorClass . '"
+                   ' . $html . '
+                   data-dialog-title="' . $text . '"
+                   data-dialog-type="' . $type . '"
+                   data-dialog-size="wide"
+                   role="button">
+                    <span class="' . $icon . '">' . $text . '</span>
+                </a>';
     }
 
     public function getHiddenKeyValue($key, $value)
@@ -99,7 +206,14 @@ class PartHelper extends HelperBase
         return '<input type="hidden" name="' . $key . '" value="' . $value . '">';
     }
 
-    public function getHiddenInput($obj, $prop, $value)
+    public function getHiddenInput($obj, $prop)
+    {
+        $propName = $this->getPropertyName($obj, $prop);
+        $value = ReflectionHelper::getInstance()->getPropertyOfObject($obj, $prop);
+        return '<input type="hidden" name="' . $propName . '" value="' . $value . '">';
+    }
+
+    private function addHiddenInput($obj, $prop, $value)
     {
         $propName = $this->getPropertyName($obj, $prop);
         return '<input type="hidden" name="' . $propName . '" value="' . $value . '">';
@@ -125,7 +239,8 @@ class PartHelper extends HelperBase
         if (!$ajax)
             $classes .= 'class="no-ajax"';
 
-        return '<form ' . $classes . ' action="' . $action . '" method="post">' . $this->getFormToken($action);
+        return '
+<form ' . $classes . ' action="' . $action . '" method="post">' . $this->getFormToken($action);
     }
 
     private function getFormToken($action)
@@ -171,6 +286,90 @@ class PartHelper extends HelperBase
     {
         $params = explode("/", $menuUrl);
         return $this->getClassForMainMenuItem($controllerParams, $params);
+    }
+
+    public function editDatabaseProperties(BaseDatabaseModel $model, ViewBase $view, $excludedProps = null)
+    {
+        $html = "";
+        $props = $model->getDatabaseArray();
+        foreach ($props as $key => $val) {
+            if (in_array($key, $excludedProps))
+                continue;
+
+            if (str_ends_with($key, "Id") && strlen($key) > 2) {
+                $objName = substr($key, 0, -2);
+                $arrName = $objName . "s";
+                $arr = $view->tryRetrieve($arrName);
+                if (is_array($arr)) {
+                    $html .= $this->getInput($model, $key, $objName, "select", "choose a " . $objName, $arr);
+                }
+            } else {
+                $type = "text";
+                $equals = array("Id");
+                $starts = array("Is");
+                $ends = array("Text",
+                    "Email",
+                    "Password",
+                    "AuthHash",
+                    "DateTime",
+                    "Time",
+                    "Date");
+
+                $equalAssign = array("Id" => "hidden");
+                $startAssign = array("Is" => "checkbox");
+                $endAssign = array(
+                    "Text" => "text",
+                    "Email" => "email",
+                    "Password" => "password",
+                    "AuthHash" => "hidden",
+                    "DateTime" => "datetime",
+                    "Time" => "time",
+                    "Date" => "date");
+
+                $equalVal = str_equals_with_any($key, $equals, true);
+                $startVal = str_starts_with_any($key, $starts, true);
+                $endVal = str_ends_with_any($key, $ends, true);
+
+                if ($equalAssign !== false)
+                    $type = $equalAssign[$equalVal];
+                else if ($startVal !== false)
+                    $type = $startAssign[$startVal];
+                else if ($endVal !== false)
+                    $type = $endAssign[$endVal];
+
+                $html .= $this->getInput($model, $key, null, $type);
+            }
+        }
+        return $html;
+    }
+
+    public function readDatabaseProperties(BaseDatabaseModel $model, ViewBase $view, $excludedProps = null)
+    {
+        $html = "";
+        $props = $model->getDatabaseArray();
+        foreach ($props as $key => $val) {
+            if (in_array($key, $excludedProps))
+                continue;
+
+            if (str_ends_with($key, "Id") && strlen($key) > 2) {
+                $objName = substr($key, 0, -2);
+                $obj = $view->tryRetrieve($objName);
+                if ($obj instanceof BaseModel) {
+                    $html .= "<p><b>" . $objName . "</b>" . $obj->getIdentification() . "</p>";
+                }
+            } else {
+                $equalHides = array("Id" => "hidden");
+                $endHides = array("Password", "AuthHash");
+
+                $equalVal = str_equals_with_any($key, $equalHides, true);
+                $endVal = str_ends_with_any($key, $endHides, true);
+
+                if ($equalVal === false && $endVal === false) {
+                    $html .= "<p><b>" . $key . "</b>" . $this->formatProperty($val, $key) . "</p>";
+                }
+            }
+        }
+        return $html;
     }
 
     public function getPart($const)

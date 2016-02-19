@@ -9,9 +9,11 @@
 
 namespace famoser\phpSLWrapper\Framework\Hook;
 
+use famoser\crm\Controllers\MainController;
 use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Services\RuntimeService;
 use famoser\phpFrame\Services\SettingsService;
+use famoser\phpFrame\Views\MessageView;
 use famoser\phpSLWrapper\Framework;
 
 function hi_framework()
@@ -68,13 +70,7 @@ spl_autoload_register(function ($class) {
     }
 });
 
-function bye_framework($successful = true)
+function bye_framework()
 {
-    if (!$successful) {
-        include __DIR__ ."/Templates/_parts/messages.php";
-    }
-    if (LogHelper::getInstance()->countLogItems() > 0)
-        include __DIR__ ."/Templates/_parts/messages.php";
-
     exit();
 }

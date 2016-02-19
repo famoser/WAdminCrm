@@ -22,7 +22,7 @@ class TimeTaskModel extends BaseThingModel
     private $CostCeiling;
 
     private $IsCompleted;
-    private $PercentageComplete;
+    private $CompletedPercentage;
 
     private $IsArchived;
 
@@ -35,7 +35,7 @@ class TimeTaskModel extends BaseThingModel
             "DeadlineDate" => $this->getDeadlineDate(),
             "EndDate" => $this->getEndDate(),
             "CostCeiling" => $this->getCostCeiling(),
-            "PercentageComplete" => $this->getPercentageComplete(),
+            "PercentageComplete" => $this->getCompletedPercentage(),
             "IsArchived" => $this->getIsArchived(),
             "PaymentId" => $this->getPaymentId()
         );
@@ -109,17 +109,17 @@ class TimeTaskModel extends BaseThingModel
     /**
      * @return int
      */
-    public function getPercentageComplete()
+    public function getCompletedPercentage()
     {
-        return $this->PercentageComplete;
+        return $this->CompletedPercentage;
     }
 
     /**
-     * @param int $PercentageComplete
+     * @param int $CompletedPercentage
      */
-    public function setPercentageComplete($PercentageComplete)
+    public function setCompletedPercentage($CompletedPercentage)
     {
-        $this->PercentageComplete = $PercentageComplete;
+        $this->CompletedPercentage = $CompletedPercentage;
     }
 
     /**

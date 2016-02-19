@@ -66,6 +66,15 @@ class RuntimeService extends ServiceBase
         return implode("/", $this->getRouteParams());
     }
 
+    /**
+     * @return string $params
+     */
+    public function getRouteUrlWithoutController()
+    {
+        $routeUrl = $this->getRouteUrl();
+        return substr($routeUrl, 0, strripos($routeUrl, "/"));
+    }
+
 
     /**
      * @return string $params
@@ -92,7 +101,7 @@ class RuntimeService extends ServiceBase
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getControllerParams()
     {

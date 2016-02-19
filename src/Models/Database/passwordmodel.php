@@ -13,7 +13,7 @@ class PasswordModel extends BaseThingModel
 {
     private $Location;
     private $Username;
-    private $Password;
+    private $PasswordText;
     private $Notes;
 
     private $CustomerId;

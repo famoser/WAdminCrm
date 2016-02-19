@@ -2,10 +2,12 @@
 namespace famoser\crm\Controllers;
 
 use famoser\crm\Models\Database\CustomerModel;
+use famoser\crm\Models\Database\PersonModel;
 use famoser\crm\Services\CustomerDatabaseService;
 use famoser\phpFrame\Controllers\ControllerBase;
-use famoser\phpFrame\Controllers\Generic1nController;
+use famoser\phpFrame\Controllers\GenericController;
 use famoser\phpFrame\Helpers\FormatHelper;
+use famoser\phpFrame\Models\Controllers\ControllerConfigModel;
 use famoser\phpFrame\Models\View\MenuItem;
 use famoser\phpFrame\Services\DatabaseService;
 use famoser\phpFrame\Services\GenericDatabaseService;
@@ -17,16 +19,24 @@ use famoser\phpFrame\Views\GenericView;
  * Date: 23.05.2015
  * Time: 13:52
  */
-class CustomersController extends Generic1nController
+class CustomersController extends GenericController
 {
     public function __construct($request, $params, $files)
     {
-        $defaultObj = new CustomerModel();
-        $defaultObj->setCustomerSinceDate(FormatHelper::getInstance()->dateFromString("today"));
-        parent::__construct($request, $params, $files, $defaultObj, array(Generic1nController::CRUD_CREATE => Generic1nController::CRUD_UPDATE));
+        parent::__construct($request, $params, $files, "Customer", array(GenericController::CRUD_CREATE => GenericController::CRUD_UPDATE));
 
         $this->addMenuItem(new MenuItem("all", ""));
         $this->addMenuItem(new MenuItem("with active projects", "active"));
+
+        $person = new ControllerConfigModel(new PersonModel(), "Person");
+        $person->configureList(false);
+        $this->addControllerConfig($person);
+
+        $customer = new ControllerConfigModel(new CustomerModel(), "Customer");
+        $customer->configureCrud(array("CustomerSinceDate" => FormatHelper::getInstance()->dateFromString("today")));
+        $customer->configureList(null, null, null, "CustomerSinceDate DESC");
+        $customer->addOneNChild($person);
+        $this->addControllerConfig($customer);
     }
 
     /**

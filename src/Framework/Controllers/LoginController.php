@@ -49,7 +49,7 @@ class LoginController extends ControllerBase
             if ($this->params[0] == "login") {
                 if (isset($this->request["login"]) && $this->request["login"] == "true") {
                     //fill object
-                    ReflectionHelper::getInstance()->writeFromPostArrayToObjectProperties($this->request, $this->instance);
+                    ReflectionHelper::getInstance()->writeFromPostArrayToObjectProperties($this->instance, $this->request);
 
                     $admin = GenericDatabaseService::getInstance()->getSingle($this->instance, array("Username" => $this->instance->getUsername()), true);
                     if ($admin instanceof LoginModel && PasswordHelper::getInstance()->validatePasswort($this->instance->getPassword(), $admin->getPasswordHash())) {
@@ -64,7 +64,6 @@ class LoginController extends ControllerBase
                 $view = new GenericCenterView("LoginController", "login", null, true);
                 $view->assign("model", $this->instance);
                 return $this->returnView($view);
-
             } else if ($this->params[0] == "logout") {
                 $this->authService->setUser(null);
                 $this->exitWithControllerRedirect("/");

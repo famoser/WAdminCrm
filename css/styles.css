@@ -857,7 +857,8 @@ form.no-replace.submitting .loading-content{
     background-color: rgb(208, 255, 208);
 }
 
-.greenbefore:before {
+.greenbefore:before,
+.info-action {
     color: rgb(0, 192, 0);
 }
 
@@ -866,7 +867,8 @@ form.no-replace.submitting .loading-content{
     background-color: rgb(255, 239, 208);
 }
 
-.yellowbefore:before {
+.yellowbefore:before,
+.warning-action {
     color: rgb(240, 160, 0);
 }
 
@@ -875,6 +877,7 @@ form.no-replace.submitting .loading-content{
     background-color: rgb(255, 208, 208);
 }
 
-.redbefore:before {
+.redbefore:before,
+.error-action {
     color: rgb(240, 0, 0);
 }

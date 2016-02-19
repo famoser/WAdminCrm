@@ -10,6 +10,7 @@ namespace famoser\phpFrame\Views;
 
 use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\OutputHelper;
+use famoser\phpFrame\Models\Controllers\ControllerConfigModel;
 use famoser\phpFrame\Models\View\IconMenuItem;
 use famoser\phpFrame\Models\View\MenuItem;
 
@@ -24,6 +25,8 @@ abstract class ViewBase
     private $pageDescription;
     private $pageAuthor;
     private $pageAuthorUrl;
+
+    private $viewModels = array();
 
     private $applicationTitle;
     private $applicationUrl;
@@ -77,6 +80,10 @@ abstract class ViewBase
         $this->params = $params;
     }
 
+    public function addViewModel($key)
+    {
+        $this->viewModels[] = $key;
+    }
 
     /**
      * Ordnet eine Variable einem bestimmten Schlüssel zu.
@@ -222,6 +229,14 @@ abstract class ViewBase
     public function setApplicationTitle($applicationTitle)
     {
         $this->applicationTitle = $applicationTitle;
+    }
+
+    /**
+     * @return ControllerConfigModel[]
+     */
+    public function getViewModels()
+    {
+        return $this->viewModels;
     }
 
     protected function loadFile($file)

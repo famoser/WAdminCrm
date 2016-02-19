@@ -7,6 +7,7 @@
  */
 
 use famoser\phpFrame\Controllers\ControllerBase;
+use famoser\phpFrame\Controllers\FrameworkController;
 use famoser\phpFrame\Core\Logging\LogHelper;
 use Famoser\phpFrame\Helpers\RequestHelper;
 use Famoser\phpFrame\Models\Services\ControllerModel;
@@ -19,31 +20,40 @@ use function Famoser\phpSLWrapper\Framework\Hook\hi_framework;
 
 session_start();
 
+// $_GET und $_POST zusammenfasen
+$request = array_merge($_GET, $_POST);
+$files = $_FILES;
+
 include_once $_SERVER['DOCUMENT_ROOT'] . "/src/Framework/hook.php";
 
 try {
-    hi_framework();
+    try {
+        hi_framework();
 
-// $_GET und $_POST zusammenfasen
-    $request = array_merge($_GET, $_POST);
-    $files = $_FILES;
+        $controllerModel = RouteService::getInstance()->getController($_SERVER['REQUEST_URI']);
+        RuntimeService::getInstance()->setParams($_SERVER['REQUEST_URI'], $controllerModel);
 
-
-    $controllerModel = RouteService::getInstance()->getController($_SERVER['REQUEST_URI']);
-    RuntimeService::getInstance()->setParams($_SERVER['REQUEST_URI'], $controllerModel);
-
-    if ($controllerModel instanceof ControllerModel) {
-        $controllerName = $controllerModel->getController();
-        $controller = new $controllerName($request, RuntimeService::getInstance()->getControllerParams(), $files);
-        $output = $controller->Display();
+        if ($controllerModel instanceof ControllerModel) {
+            $controllerName = $controllerModel->getController();
+            $controller = new $controllerName($request, RuntimeService::getInstance()->getControllerParams(), $files);
+            $output = $controller->Display();
+            echo $output;
+            bye_framework();
+        } else {
+            $controller = new FrameworkController($request, RuntimeService::getInstance()->getControllerParams(), $files);
+            $output = $controller->Display(FrameworkController::CONTROLLER_NOT_FOUND);
+            echo $output;
+            bye_framework();
+        }
+    } catch (Exception $ex) {
+        LogHelper::getInstance()->logException($ex);
+        $controller = new FrameworkController($request, RuntimeService::getInstance()->getControllerParams(), $files);
+        $output = $controller->Display(FrameworkController::SHOW_MESSAGE);
         echo $output;
-        bye_framework(true);
-    } else {
-        header("404 Not found");
-        echo "failure";
+        bye_framework();
     }
 } catch (Exception $ex) {
-    LogHelper::getInstance()->logException($ex);
+    //this will never ever happen!
+    echo $ex;
+    bye_framework();
 }
-bye_framework(false);
-?>

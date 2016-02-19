@@ -24,6 +24,42 @@ function str_ends_with($haystack, $needle)
     return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
 }
 
+function str_starts_with_any($haystack, array $needles, $returnValue = false)
+{
+    foreach ($needles as $needle) {
+        if (str_starts_with($haystack, $needle))
+            if ($returnValue)
+                return $needle;
+            else
+                return true;
+    }
+    return false;
+}
+
+function str_equals_with_any($haystack, array $needles, $returnValue = false)
+{
+    foreach ($needles as $needle) {
+        if ($haystack == $needle)
+            if ($returnValue)
+                return $needle;
+            else
+                return true;
+    }
+    return false;
+}
+
+function str_ends_with_any($haystack, array $needles, $returnValue = false)
+{
+    foreach ($needles as $needle) {
+        if (str_ends_with($haystack, $needle))
+            if ($returnValue)
+                return $needle;
+            else
+                return true;
+    }
+    return false;
+}
+
 function remove_empty_entries(array $arr)
 {
     $res = array();
