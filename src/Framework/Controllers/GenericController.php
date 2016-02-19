@@ -21,16 +21,13 @@ use famoser\phpFrame\Views\GenericCrudView;
 use famoser\phpFrame\Views\GenericView;
 use famoser\phpFrame\Views\ViewBase;
 
-class GenericController extends MenuController
+abstract class GenericController extends MenuController
 {
-    private $objectInstance = null;
     private $crudReplaces = null;
-    private $nRelationInstances = null;
     private $controllerName;
-    private $friendlyObjectName;
+    private $defaultFriendlyObjectName;
 
-    private $additionalViewProps;
-
+    private $additionalViewProps = array();
     private $editObjects = array();
 
     //same values in GenericCrudView!
@@ -44,17 +41,15 @@ class GenericController extends MenuController
      * @param $request
      * @param $params
      * @param $files
-     * @param BaseDatabaseModel $objectInstance
      * @param array|null example : array(Generic1nController::CRUD_CREATE => Generic1nController::CRUD_READ)
      * @param array|null example : array("admins" => array(new AdminModel(), array("IsCompleted" => true), "Name"))
      */
-    public function __construct($request, $params, $files, BaseDatabaseModel $objectInstance, array $crudReplaces = null)
+    public function __construct($request, $params, $files, $defaultFriendlyObjectName, array $crudReplaces = null)
     {
         parent::__construct($request, $params, $files);
 
-        $this->objectInstance = $objectInstance;
+        $this->defaultFriendlyObjectName = $defaultFriendlyObjectName;
         $this->crudReplaces = $crudReplaces;
-
         $this->controllerName = ReflectionHelper::getInstance()->getObjectName($this);
     }
 
@@ -82,7 +77,7 @@ class GenericController extends MenuController
     /**
      * @return ControllerConfigModel[]
      */
-    private function getEditObjects()
+    protected function getEditObjects()
     {
         return $this->editObjects;
     }
@@ -101,6 +96,7 @@ class GenericController extends MenuController
             $view = new GenericView($this->controllerName);
 
             foreach ($this->getEditObjects() as $item) {
+                if ($item->getListLoadEnabled())
                 $view->assign($item->getMultipleListName(), GenericDatabaseService::getInstance()->getAll($item->getInstance(), $item->getListFilter(), $item->getListLoadRelations(), $item->getListOrderBy()));
             }
 
@@ -140,7 +136,7 @@ class GenericController extends MenuController
 
 
                         if ($successful) {
-                            LogHelper::getInstance()->logUserInfo($this->friendlyObjectName . " was added");
+                            LogHelper::getInstance()->logUserInfo($this->defaultFriendlyObjectName . " was added");
                             $this->exitWithControllerRedirect("update/" . $this->getEditObjects()[0]->getInstance()->getId());
                         } else {
                             //remove all failed objects to keep database clean
@@ -185,9 +181,9 @@ class GenericController extends MenuController
                             }
 
                             if ($successful)
-                                LogHelper::getInstance()->logUserInfo($this->friendlyObjectName . " was updated");
+                                LogHelper::getInstance()->logUserInfo($this->defaultFriendlyObjectName . " was updated");
                             else
-                                LogHelper::getInstance()->logError($this->friendlyObjectName . " could not be updated");
+                                LogHelper::getInstance()->logError($this->defaultFriendlyObjectName . " could not be updated");
                         }
 
                         $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericController::CRUD_UPDATE)));
@@ -216,9 +212,9 @@ class GenericController extends MenuController
                             }
 
                             if ($successful)
-                                LogHelper::getInstance()->logUserInfo($this->friendlyObjectName . " was deleted");
+                                LogHelper::getInstance()->logUserInfo($this->defaultFriendlyObjectName . " was deleted");
                             else
-                                LogHelper::getInstance()->logError($this->friendlyObjectName . " could not be deleted");
+                                LogHelper::getInstance()->logError($this->defaultFriendlyObjectName . " could not be deleted");
                         }
 
                         $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericController::CRUD_DELETE)));
@@ -280,7 +276,7 @@ class GenericController extends MenuController
                 $params[0] = "add";
             }
         }
-        return $this->Display($params);
+        return self::Display($params);
     }
 
     private function getMode($mode)

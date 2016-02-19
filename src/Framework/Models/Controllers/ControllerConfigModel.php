@@ -19,13 +19,14 @@ class ControllerConfigModel
     private $friendlyName;
 
     private $listName;
-    private $listFilter;
+    private $listFilter = array();
     private $listOrderBy;
-    private $listLoadRelations;
+    private $listLoadRelations = true;
+    private $listLoadEnabled = true;
 
-    private $crudForbiddenProperties;
-    private $crudDefaultProperties;
-    private $crudOverWriteProperties;
+    private $crudForbiddenProperties = array();
+    private $crudDefaultProperties = array();
+    private $crudOverWriteProperties = array();
 
     private $oneNChildren = array();
     private $nOneParents = array();
@@ -35,21 +36,47 @@ class ControllerConfigModel
         $this->instance = $model;
         $this->name = ReflectionHelper::getInstance()->getObjectName($model);;
         $this->friendlyName = $friendlyName;
+
+        //set defaults
+        $this->listName = $friendlyName;
     }
 
-    public function configureList($listName, array $listFilter, $listOrderBy = "", $listLoadRelations = true)
+    /**
+     * pass null to keep default
+     * @param null $listLoadEnabled
+     * @param null $listName
+     * @param array|null $listFilter
+     * @param null $listOrderBy
+     * @param null $listLoadRelations
+     */
+    public function configureList($listLoadEnabled = null, $listName = null, array $listFilter = null, $listOrderBy = null, $listLoadRelations = null)
     {
-        $this->listName = $listName;
-        $this->listFilter = $listFilter;
-        $this->listOrderBy = $listOrderBy;
-        $this->listLoadRelations = $listLoadRelations;
+        if ($listLoadEnabled !== null)
+            $this->listLoadEnabled = $listLoadEnabled;
+        if ($listName !== null)
+            $this->listName = $listName;
+        if (is_array($listFilter))
+            $this->listFilter = $listFilter;
+        if ($listOrderBy !== null)
+            $this->listOrderBy = $listOrderBy;
+        if ($listLoadRelations != null)
+            $this->listLoadRelations = $listLoadRelations;
     }
 
-    public function configureCrud(array $allowedProperties, array $defaultProperties, array $overWriteProperties)
+    /**
+     * pass null to keep default
+     * @param array $defaultProperties
+     * @param array|null $allowedProperties
+     * @param array|null $overWriteProperties
+     */
+    public function configureCrud(array $defaultProperties, array $allowedProperties = null, array $overWriteProperties = null)
     {
-        $this->crudForbiddenProperties = $allowedProperties;
-        $this->crudDefaultProperties = $defaultProperties;
-        $this->crudOverWriteProperties = $overWriteProperties;
+        if (is_array($allowedProperties))
+            $this->crudForbiddenProperties = $allowedProperties;
+        if (is_array($defaultProperties))
+            $this->crudDefaultProperties = $defaultProperties;
+        if (is_array($overWriteProperties))
+            $this->crudOverWriteProperties = $overWriteProperties;
     }
 
     public function addOneNChild(ControllerConfigModel $config)
@@ -115,7 +142,7 @@ class ControllerConfigModel
      */
     public function getCrudForbiddenProperties()
     {
-        return $this->forceArrayReturn($this->crudForbiddenProperties);
+        return $this->crudForbiddenProperties;
     }
 
     /**
@@ -135,19 +162,7 @@ class ControllerConfigModel
      */
     public function getCrudDefaultProperties()
     {
-        return $this->forceArrayReturn($this->crudDefaultProperties);
-    }
-
-    /**
-     * @param $arr
-     * @return array
-     */
-    private function forceArrayReturn($arr)
-    {
-        if ($arr == null)
-            return array();
-        else
-            return $arr;
+        return $this->crudDefaultProperties;
     }
 
     /**
@@ -155,7 +170,7 @@ class ControllerConfigModel
      */
     public function getCrudOverWriteProperties()
     {
-        return $this->forceArrayReturn($this->crudOverWriteProperties);
+        return $this->crudOverWriteProperties;
     }
 
     /**
@@ -196,5 +211,13 @@ class ControllerConfigModel
     public function getNOneParents()
     {
         return $this->nOneParents;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getListLoadEnabled()
+    {
+        return $this->listLoadEnabled;
     }
 }

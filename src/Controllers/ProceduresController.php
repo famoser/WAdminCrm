@@ -1,11 +1,14 @@
 <?php
 namespace famoser\crm\Controllers;
 
+use famoser\crm\Models\Database\CustomerModel;
 use famoser\crm\Models\Database\MilestoneModel;
 use famoser\crm\Models\Database\ProcedureModel;
+use famoser\crm\Models\Database\ProjectModel;
 use famoser\phpFrame\Controllers\ControllerBase;
 use famoser\phpFrame\Controllers\GenericController;
 use famoser\phpFrame\Helpers\FormatHelper;
+use famoser\phpFrame\Models\Controllers\ControllerConfigModel;
 use famoser\phpFrame\Services\GenericDatabaseService;
 
 /**
@@ -18,29 +21,17 @@ class ProceduresController extends GenericController
 {
     public function __construct($request, $params, $files)
     {
-        parent::__construct($request, $params, $files, new ProcedureModel(), array(GenericController::CRUD_CREATE => GenericController::CRUD_READ));
-    }
+        parent::__construct($request, $params, $files, array(GenericController::CRUD_CREATE => GenericController::CRUD_READ));
 
-    public function Display()
-    {
-        if (count($this->params) > 0) {
-            if ($this->params[0] == "archived") {
-                return parent::Display(array(), null, "StartDateTime DESC");
-            } else if (count($this->params) > 1 && is_numeric($this->params[1])) {
-                if ($this->params[0] == "add") {
-                    $model = $this->getObjectInstance();
-                    if ($model instanceof ProcedureModel) {
-                        $lastEndDateTime = GenericDatabaseService::getInstance()->getPropertyByCondition($this->getObjectInstance(), "EndDateTime", array("MilestoneId" => $this->params[1]), "EndDateTime DESC");
-                        if ($lastEndDateTime != null) {
-                            if (FormatHelper::getInstance()->timeSpanMinutesShort($lastEndDateTime, FormatHelper::getInstance()->dateTimeFromString("now")) < 400)
-                                $model->setStartDateTime($lastEndDateTime);
-                            else
-                                $model->setStartDateTime(FormatHelper::getInstance()->dateTimeFromString("now - 1 hour"));
-                        }
-                    }
-                }
-            }
-        }
-        return parent::DisplayExtended(null, "StartDateTime DESC", new MilestoneModel(), "Milestone");
+
+        $procedure = new ControllerConfigModel(new ProcedureModel(), "Procedure");
+        $procedure->configureList(null, null, null, "StartDateTime");
+        $procedure->configureCrud(array("EndDateTime" => FormatHelper::getInstance()->dateTimeFromString("now"),
+            "StartDateTime" => FormatHelper::getInstance()->dateTimeFromString("now - 1 hour")));
+
+        $milestone = new ControllerConfigModel(new MilestoneModel(), "Milestone");
+        $procedure->addOneNParent($milestone);
+
+        $this->addControllerConfig($procedure);
     }
 }
