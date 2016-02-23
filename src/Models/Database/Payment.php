@@ -9,9 +9,9 @@
 namespace famoser\crm\Models\Database;
 
 
-use famoser\phpFrame\Models\Database\BaseThingModel;
+use famoser\crm\Models\Database\Base\BaseThing;
 
-class PaymentModel extends BaseThingModel
+class Payment extends BaseThing
 {
     private $Amount;
     private $BillingDate;
@@ -71,7 +71,7 @@ class PaymentModel extends BaseThingModel
     }
 
     /**
-     * @return CustomerModel
+     * @return Customer
      */
     public function getCustomer()
     {
@@ -79,7 +79,7 @@ class PaymentModel extends BaseThingModel
     }
 
     /**
-     * @param CustomerModel $Customer
+     * @param Customer $Customer
      */
     public function setCustomer($Customer)
     {

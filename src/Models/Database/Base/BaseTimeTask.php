@@ -9,10 +9,10 @@
 namespace famoser\crm\Models\Database\Base;
 
 
-use famoser\crm\Models\Database\PaymentModel;
-use famoser\phpFrame\Models\Database\BaseThingModel;
+use famoser\crm\Models\Database\Payment;
+use famoser\crm\Models\Database\Person;
 
-class TimeTaskModel extends BaseThingModel
+abstract class BaseTimeTask extends BaseThing
 {
     private $StartDate;
     private $DeadlineDate;
@@ -26,6 +26,9 @@ class TimeTaskModel extends BaseThingModel
 
     private $IsArchived;
 
+    private $PersonId;
+    private $Person;
+
     private $PaymentId;
     private $Payment;
 
@@ -37,6 +40,7 @@ class TimeTaskModel extends BaseThingModel
             "CostCeiling" => $this->getCostCeiling(),
             "PercentageComplete" => $this->getCompletedPercentage(),
             "IsArchived" => $this->getIsArchived(),
+            "PersonId" => $this->getPersonId(),
             "PaymentId" => $this->getPaymentId()
         );
         return array_merge($props, parent::getDatabaseArray());
@@ -155,7 +159,7 @@ class TimeTaskModel extends BaseThingModel
     }
 
     /**
-     * @return PaymentModel
+     * @return Payment
      */
     public function getPayment()
     {
@@ -163,7 +167,7 @@ class TimeTaskModel extends BaseThingModel
     }
 
     /**
-     * @param PaymentModel $Payment
+     * @param Payment $Payment
      */
     public function setPayment($Payment)
     {
@@ -200,5 +204,37 @@ class TimeTaskModel extends BaseThingModel
     public function setIsCompleted($IsCompleted)
     {
         $this->IsCompleted = $IsCompleted;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPersonId()
+    {
+        return $this->PersonId;
+    }
+
+    /**
+     * @param int $PersonId
+     */
+    public function setPersonId($PersonId)
+    {
+        $this->PersonId = $PersonId;
+    }
+
+    /**
+     * @return Person
+     */
+    public function getPerson()
+    {
+        return $this->Person;
+    }
+
+    /**
+     * @param Person $Person
+     */
+    public function setPerson($Person)
+    {
+        $this->Person = $Person;
     }
 }

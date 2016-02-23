@@ -11,6 +11,7 @@ use famoser\phpFrame\Controllers\FrameworkController;
 use famoser\phpFrame\Core\Logging\LogHelper;
 use Famoser\phpFrame\Helpers\RequestHelper;
 use Famoser\phpFrame\Models\Services\ControllerModel;
+use famoser\phpFrame\Services\AuthenticationService;
 use famoser\phpFrame\Services\DatabaseService;
 use famoser\phpFrame\Services\GenericDatabaseService;
 use famoser\phpFrame\Services\RouteService;

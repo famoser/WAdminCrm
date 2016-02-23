@@ -9,20 +9,19 @@
 namespace famoser\crm\Models\Database;
 
 
+use famoser\crm\Models\Database\Base\BasePersonalThing;
 use famoser\phpFrame\Helpers\FormatHelper;
-use famoser\phpFrame\Models\Database\BaseThingModel;
 
-class ProcedureModel extends BaseThingModel
+class Procedure extends BasePersonalThing
 {
     private $PaymentPerHour;
     private $StartDateTime;
     private $EndDateTime;
 
+    private $ProcedureType;
+
     private $MilestoneId;
     private $Milestone;
-
-    private $AdminId;
-    private $Admin;
 
     public function totalCost()
     {
@@ -48,8 +47,9 @@ class ProcedureModel extends BaseThingModel
         $props = array("PaymentPerHour" => $this->getPaymentPerHour(),
             "StartDateTime" => $this->getStartDateTime(),
             "EndDateTime" => $this->getEndDateTime(),
+            "ProcedureType" => $this->getProcedureType(),
             "MilestoneId" => $this->getMilestoneId(),
-            "AdminId" => $this->getAdminId()
+            "AdminId" => $this->getPersonId()
         );
         return array_merge($props, parent::getDatabaseArray());
     }
@@ -119,7 +119,7 @@ class ProcedureModel extends BaseThingModel
     }
 
     /**
-     * @return MilestoneModel
+     * @return Milestone
      */
     public function getMilestone()
     {
@@ -127,7 +127,7 @@ class ProcedureModel extends BaseThingModel
     }
 
     /**
-     * @param MilestoneModel $Milestone
+     * @param Milestone $Milestone
      */
     public function setMilestone($Milestone)
     {
@@ -135,34 +135,18 @@ class ProcedureModel extends BaseThingModel
     }
 
     /**
-     * @return int
+     * @return mixed
      */
-    public function getAdminId()
+    public function getProcedureType()
     {
-        return $this->AdminId;
+        return $this->ProcedureType;
     }
 
     /**
-     * @param int $AdminId
+     * @param mixed $ProcedureType
      */
-    public function setAdminId($AdminId)
+    public function setProcedureType($ProcedureType)
     {
-        $this->AdminId = $AdminId;
-    }
-
-    /**
-     * @return AdminModel
-     */
-    public function getAdmin()
-    {
-        return $this->Admin;
-    }
-
-    /**
-     * @param AdminModel $Admin
-     */
-    public function setAdmin($Admin)
-    {
-        $this->Admin = $Admin;
+        $this->ProcedureType = $ProcedureType;
     }
 }

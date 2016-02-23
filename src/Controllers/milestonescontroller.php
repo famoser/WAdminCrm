@@ -1,9 +1,9 @@
 <?php
 namespace famoser\crm\Controllers;
 
-use famoser\crm\Models\Database\MilestoneModel;
-use famoser\crm\Models\Database\ProcedureModel;
-use famoser\crm\Models\Database\ProjectModel;
+use famoser\crm\Models\Database\Milestone;
+use famoser\crm\Models\Database\Procedure;
+use famoser\crm\Models\Database\Project;
 use famoser\phpFrame\Controllers\ControllerBase;
 use famoser\phpFrame\Controllers\GenericController;
 use famoser\phpFrame\Helpers\FormatHelper;
@@ -45,14 +45,14 @@ class MilestonesController extends GenericController
         $this->addMenuItem(new MenuItem("active", ""));
         $this->addMenuItem(new MenuItem("archived", "archived"));
 
-        $milestone = new ControllerConfigModel(new MilestoneModel(), "Milestone");
+        $milestone = new ControllerConfigModel(new Milestone(), "Milestone");
         $milestone->configureList(null, null, null, "StartDate DESC");
         $milestone->configureCrud(array("StartDate" => FormatHelper::getInstance()->dateFromString("today")));
 
-        $project = new ControllerConfigModel(new ProjectModel(), "Project");
+        $project = new ControllerConfigModel(new Project(), "Project");
         $milestone->addOneNParent($project);
 
-        $procedure = new ControllerConfigModel(new ProcedureModel(), "Procedure");
+        $procedure = new ControllerConfigModel(new Procedure(), "Procedure");
         $milestone->addOneNChild($procedure);
 
         $this->addControllerConfig($milestone);

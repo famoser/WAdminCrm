@@ -1,7 +1,8 @@
 <?php
 
 namespace famoser\crm\Models\Database;
-use famoser\crm\Models\Database\Base\TimeTaskModel;
+
+use famoser\crm\Models\Database\Base\BaseTimeTask;
 
 
 /**
@@ -10,7 +11,7 @@ use famoser\crm\Models\Database\Base\TimeTaskModel;
  * Date: 13.09.2015
  * Time: 13:16
  */
-class ProjectModel extends TimeTaskModel
+class Project extends BaseTimeTask
 {
     private $CustomerId;
     private $Customer;
@@ -66,7 +67,7 @@ class ProjectModel extends TimeTaskModel
     }
 
     /**
-     * @return CustomerModel
+     * @return Customer
      */
     public function getCustomer()
     {
@@ -74,7 +75,7 @@ class ProjectModel extends TimeTaskModel
     }
 
     /**
-     * @param CustomerModel $Customer
+     * @param Customer $Customer
      */
     public function setCustomer($Customer)
     {
@@ -82,7 +83,7 @@ class ProjectModel extends TimeTaskModel
     }
 
     /**
-     * @return MilestoneModel[]
+     * @return Milestone[]
      */
     public function getMilestones()
     {
@@ -90,7 +91,7 @@ class ProjectModel extends TimeTaskModel
     }
 
     /**
-     * @param MilestoneModel[] $Milestones
+     * @param Milestone[] $Milestones
      */
     public function setMilestones(array $Milestones)
     {

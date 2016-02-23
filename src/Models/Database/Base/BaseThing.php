@@ -6,17 +6,34 @@
  * Time: 12:44
  */
 
-namespace famoser\phpFrame\Models\Database;
+namespace famoser\crm\Models\Database\Base;
 
 
-class BaseThingModel extends BaseDatabaseModel
+use famoser\phpFrame\Models\Database\BaseDatabaseModel;
+
+class BaseThing extends BaseDatabaseModel
 {
     protected $Name;
     protected $Description;
 
+    /**
+     * @return string
+     */
     public function getIdentification()
     {
         return $this->getName();
+    }
+
+    /**
+     * @return array
+     */
+    public function getDatabaseArray()
+    {
+        $props = array(
+            "Name" => $this->getName(),
+            "Description" => $this->getDescription(),
+        );
+        return array_merge($props, parent::getDatabaseArray());
     }
 
     /**
@@ -50,5 +67,4 @@ class BaseThingModel extends BaseDatabaseModel
     {
         $this->Description = $Description;
     }
-
 }

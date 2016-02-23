@@ -1,8 +1,8 @@
 <?php
 namespace famoser\crm\Controllers;
 
-use famoser\crm\Models\Database\AdminModel;
-use famoser\crm\Models\Database\CustomerModel;
+use famoser\crm\Models\Database\Admin;
+use famoser\crm\Models\Database\Customer;
 use famoser\crm\Services\AdminAuthenticationService;
 use famoser\crm\Services\CustomerAuthenticationService;
 use famoser\phpFrame\Controllers\ControllerBase;
@@ -27,7 +27,7 @@ class MainController extends LoginController
 {
     public function __construct($request, $params, $files)
     {
-        parent::__construct($request, $params, $files, new AdminModel(), AdminAuthenticationService::getInstance(), "customers");
+        parent::__construct($request, $params, $files, new Admin(), AdminAuthenticationService::getInstance(), "customers");
     }
 
     public function Display()

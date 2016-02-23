@@ -1,7 +1,7 @@
 <?php
 namespace famoser\crm\Models\Database;
 
-use famoser\crm\Models\Database\Base\BasePersonModel;
+use famoser\crm\Models\Database\Base\BasePerson;
 use famoser\phpFrame\Models\Database\LoginModel;
 
 /**
@@ -10,7 +10,7 @@ use famoser\phpFrame\Models\Database\LoginModel;
  * Date: 5/18/2015
  * Time: 7:44 PM
  */
-class AdminModel extends LoginModel
+class Admin extends LoginModel
 {
     private $Email;
 
@@ -74,7 +74,7 @@ class AdminModel extends LoginModel
     }
 
     /**
-     * @return PersonModel
+     * @return Person
      */
     public function getPerson()
     {
@@ -82,7 +82,7 @@ class AdminModel extends LoginModel
     }
 
     /**
-     * @param PersonModel $Person
+     * @param Person $Person
      */
     public function setPerson($Person)
     {

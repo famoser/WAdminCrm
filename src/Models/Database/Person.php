@@ -12,7 +12,7 @@ namespace famoser\crm\Models\Database;
 
 use famoser\phpFrame\Models\Database\BasePersonalModel;
 
-class PersonModel extends BasePersonalModel
+class Person extends BasePersonalModel
 {
     public $FirstName;
     public $LastName;

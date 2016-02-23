@@ -77,7 +77,5 @@ if ($this instanceof ViewBase) { ?>
                 </div>
             <?php }
         } ?>
-
-
     </div>
 <?php } ?>

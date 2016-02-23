@@ -1,6 +1,7 @@
 <?php
 namespace famoser\crm\Models\Database;
-use famoser\crm\Models\Database\Base\BasePersonModel;
+
+use famoser\crm\Models\Database\Base\BasePerson;
 use famoser\phpFrame\Models\Database\BasePersonalModel;
 
 
@@ -10,7 +11,7 @@ use famoser\phpFrame\Models\Database\BasePersonalModel;
  * Date: 5/18/2015
  * Time: 7:44 PM
  */
-class CustomerModel extends BasePersonModel
+class Customer extends BasePerson
 {
     private $Company;
     private $CustomerSinceDate;
@@ -71,7 +72,7 @@ class CustomerModel extends BasePersonModel
     }
 
     /**
-     * @return ProjectModel[]
+     * @return Project[]
      */
     public function getProjects()
     {
@@ -79,7 +80,7 @@ class CustomerModel extends BasePersonModel
     }
 
     /**
-     * @param ProjectModel[] $Projects
+     * @param Project[] $Projects
      */
     public function setProjects($Projects)
     {

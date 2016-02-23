@@ -1,7 +1,8 @@
 <?php
 
 namespace famoser\crm\Models\Database;
-use famoser\phpFrame\Models\Database\BaseThingModel;
+
+use famoser\crm\Models\Database\Base\BaseThing;
 
 /**
  * Created by PhpStorm.
@@ -9,7 +10,7 @@ use famoser\phpFrame\Models\Database\BaseThingModel;
  * Date: 13.09.2015
  * Time: 13:17
  */
-class PasswordModel extends BaseThingModel
+class Password extends BaseThing
 {
     private $Location;
     private $Username;
@@ -26,7 +27,7 @@ class PasswordModel extends BaseThingModel
     {
         $props = array("Location" => $this->getLocation(),
             "Username" => $this->getUsername(),
-            "Password" => $this->getPassword(),
+            "Password" => $this->getPasswordText(),
             "Notes" => $this->getNotes(),
             "CustomerId" => $this->getCustomerId()
         );
@@ -68,17 +69,17 @@ class PasswordModel extends BaseThingModel
     /**
      * @return string
      */
-    public function getPassword()
+    public function getPasswordText()
     {
-        return $this->Password;
+        return $this->PasswordText;
     }
 
     /**
-     * @param string $Password
+     * @param string $PasswordText
      */
-    public function setPassword($Password)
+    public function setPasswordText($PasswordText)
     {
-        $this->Password = $Password;
+        $this->PasswordText = $PasswordText;
     }
 
     /**
@@ -114,7 +115,7 @@ class PasswordModel extends BaseThingModel
     }
 
     /**
-     * @return CustomerModel
+     * @return Customer
      */
     public function getCustomer()
     {
@@ -122,7 +123,7 @@ class PasswordModel extends BaseThingModel
     }
 
     /**
-     * @param CustomerModel $Customer
+     * @param Customer $Customer
      */
     public function setCustomer($Customer)
     {
@@ -146,7 +147,7 @@ class PasswordModel extends BaseThingModel
     }
 
     /**
-     * @return ProjectModel
+     * @return Project
      */
     public function getProject()
     {
@@ -154,7 +155,7 @@ class PasswordModel extends BaseThingModel
     }
 
     /**
-     * @param ProjectModel $Project
+     * @param Project $Project
      */
     public function setProject($Project)
     {

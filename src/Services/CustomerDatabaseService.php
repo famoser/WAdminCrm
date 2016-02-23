@@ -9,8 +9,8 @@
 namespace famoser\crm\Services;
 
 
-use famoser\crm\Models\Database\CustomerModel;
-use famoser\crm\Models\Database\ProjectModel;
+use famoser\crm\Models\Database\Customer;
+use famoser\crm\Models\Database\Project;
 use famoser\phpFrame\Services\GenericDatabaseService;
 
 class CustomerDatabaseService extends GenericDatabaseService
@@ -19,7 +19,7 @@ class CustomerDatabaseService extends GenericDatabaseService
     {
         //$sql = "SELECT * FROM projects WHERE IsCompletedBool = false GROUP BY CustomerId";
 
-        $customers = $this->getPropertyByCondition(new ProjectModel(), "CustomerId", array("IsCompletedBool" => false));
+        $customers = $this->getPropertyByCondition(new Project(), "CustomerId", array("IsCompletedBool" => false));
         $customerIds = array();
         foreach ($customers as $cust) {
             if (!isset($customerIds[$cust]))
@@ -28,7 +28,7 @@ class CustomerDatabaseService extends GenericDatabaseService
 
         $customers = array();
         foreach ($customerIds as $key => $val) {
-            $customers[] = $this->getById(new CustomerModel(), $key);
+            $customers[] = $this->getById(new Customer(), $key);
         }
 
         return $customers;

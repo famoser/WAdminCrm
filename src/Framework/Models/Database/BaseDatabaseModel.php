@@ -13,7 +13,11 @@ use famoser\phpFrame\Interfaces\Models\IDatabaseModel;
 
 abstract class BaseDatabaseModel extends BaseModel implements IDatabaseModel
 {
-    protected $Id;
+    private $Id;
+    private $ChangedById;
+    private $CreatedById;
+    private $ChangeDateTime;
+    private $CreateDateTime;
 
     public function getId()
     {
@@ -27,6 +31,38 @@ abstract class BaseDatabaseModel extends BaseModel implements IDatabaseModel
 
     public function getDatabaseArray()
     {
-        return array($this->getId());
+        return array("Id" => $this->getId());
+    }
+
+    /**
+     * @return int
+     */
+    public function getChangedById()
+    {
+        return $this->ChangedById;
+    }
+
+    /**
+     * @return string
+     */
+    public function getChangeDateTime()
+    {
+        return $this->ChangeDateTime;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreateDateTime()
+    {
+        return $this->CreateDateTime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedById()
+    {
+        return $this->CreatedById;
     }
 }

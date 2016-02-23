@@ -14,6 +14,7 @@ use famoser\phpFrame\Core\Logging\LogItem;
 use famoser\phpFrame\Helpers\HelperBase;
 use famoser\phpFrame\Helpers\ReflectionHelper;
 use famoser\phpFrame\Interfaces\Models\IModel;
+use famoser\phpFrame\Models\Controllers\ControllerConfigModel;
 use famoser\phpFrame\Models\Database\BaseDatabaseModel;
 use famoser\phpFrame\Models\Database\BaseModel;
 use famoser\phpFrame\Services\RuntimeService;
@@ -131,7 +132,14 @@ class PartHelper extends HelperBase
         }
     }
 
-    public function getDialogButtons($baseHref, $id, array $types)
+    /**
+     * @param $baseHref
+     * @param $id
+     * @param array $types
+     * @param ControllerConfigModel $baseLinks
+     * @return string
+     */
+    public function getDialogButtons($baseHref, $id, array $types, $baseLinks = null)
     {
         $html = '<div class="btn-group">';
 
@@ -152,11 +160,20 @@ class PartHelper extends HelperBase
             $html .= $this->getSingleButton($baseHref, $id, $editButtons, $type);
         }
 
+        /*
+        if ($baseLinks != null) {
+            foreach ($baseLinks->getOneNChildren() as $oneNChild) {
+                $html .= $this->getSingleButton(PartHelper::getInstance()->getControllerLink($oneNChild->getControllerLink()), $id, $editButtons, PartHelper::DIALOG_CREATE);
+            }
+        }
+        */
+
         $html .= '</div>';
         return $html;
     }
 
-    private function getSingleButton($baseHref, $id, $buttonIds, $dialogType)
+    private
+    function getSingleButton($baseHref, $id, $buttonIds, $dialogType)
     {
         $link = "read";
         $icon = "flaticon-notes26";
@@ -201,36 +218,42 @@ class PartHelper extends HelperBase
                 </a>';
     }
 
-    public function getHiddenKeyValue($key, $value)
+    public
+    function getHiddenKeyValue($key, $value)
     {
         return '<input type="hidden" name="' . $key . '" value="' . $value . '">';
     }
 
-    public function getHiddenInput($obj, $prop)
+    public
+    function getHiddenInput($obj, $prop)
     {
         $propName = $this->getPropertyName($obj, $prop);
         $value = ReflectionHelper::getInstance()->getPropertyOfObject($obj, $prop);
         return '<input type="hidden" name="' . $propName . '" value="' . $value . '">';
     }
 
-    private function addHiddenInput($obj, $prop, $value)
+    private
+    function addHiddenInput($obj, $prop, $value)
     {
         $propName = $this->getPropertyName($obj, $prop);
         return '<input type="hidden" name="' . $propName . '" value="' . $value . '">';
     }
 
-    private function getPropertyName($obj, $prop)
+    private
+    function getPropertyName($obj, $prop)
     {
         $modelName = ReflectionHelper::getInstance()->getObjectName($obj);
         return $modelName . "[" . $prop . "]";
     }
 
-    public function getSubmit($customText = "save")
+    public
+    function getSubmit($customText = "save")
     {
         return '<input type="submit" value="' . $customText . '" class="btn">';
     }
 
-    public function getFormStart($action = null, $ajax = true)
+    public
+    function getFormStart($action = null, $ajax = true)
     {
         if ($action == null)
             $action = RuntimeService::getInstance()->getTotalUrl();
@@ -243,7 +266,8 @@ class PartHelper extends HelperBase
 <form ' . $classes . ' action="' . $action . '" method="post">' . $this->getFormToken($action);
     }
 
-    private function getFormToken($action)
+    private
+    function getFormToken($action)
     {
         $params = explode("/", $action);
         if ($params[count($params) - 1] == "create")
@@ -265,7 +289,8 @@ class PartHelper extends HelperBase
      * @param boolean $includeSubmit
      * @return string
      */
-    public function getFormEnd($includeSubmit = true)
+    public
+    function getFormEnd($includeSubmit = true)
     {
         $output = "</form>";
         if ($includeSubmit)
@@ -273,7 +298,8 @@ class PartHelper extends HelperBase
         return $output;
     }
 
-    public function getClassForMainMenuItem(array $routeParams, array $totalParams)
+    public
+    function getClassForMainMenuItem(array $routeParams, array $totalParams)
     {
         for ($i = 0; $i < count($routeParams); $i++) {
             if (!isset($totalParams) || $totalParams[$i] != $routeParams[$i])
@@ -282,13 +308,15 @@ class PartHelper extends HelperBase
         return ' class="active active-page"';
     }
 
-    public function getClassesForMenuSubItem(array $controllerParams, $menuUrl)
+    public
+    function getClassesForMenuSubItem(array $controllerParams, $menuUrl)
     {
         $params = explode("/", $menuUrl);
         return $this->getClassForMainMenuItem($controllerParams, $params);
     }
 
-    public function editDatabaseProperties(BaseDatabaseModel $model, ViewBase $view, $excludedProps = null)
+    public
+    function editDatabaseProperties(BaseDatabaseModel $model, ViewBase $view, $excludedProps = null)
     {
         $html = "";
         $props = $model->getDatabaseArray();
@@ -343,7 +371,8 @@ class PartHelper extends HelperBase
         return $html;
     }
 
-    public function readDatabaseProperties(BaseDatabaseModel $model, ViewBase $view, $excludedProps = null)
+    public
+    function readDatabaseProperties(BaseDatabaseModel $model, ViewBase $view, $excludedProps = null)
     {
         $html = "";
         $props = $model->getDatabaseArray();
@@ -372,7 +401,8 @@ class PartHelper extends HelperBase
         return $html;
     }
 
-    public function getPart($const)
+    public
+    function getPart($const)
     {
         if ($const == PartHelper::PART_HEAD)
             return RuntimeService::getInstance()->getFrameworkDirectory() . "/Templates/_parts/head.php";
@@ -397,7 +427,8 @@ class PartHelper extends HelperBase
         return PartHelper::getPart(PartHelper::PART_MESSAGES);
     }
 
-    public function getLogClass(LogItem $log)
+    public
+    function getLogClass(LogItem $log)
     {
         $logType = LogHelper::getInstance()->convertToLogType($log->getLogLevel());
         if ($logType == LogHelper::LOG_TYPE_USER_ERROR)
@@ -410,7 +441,8 @@ class PartHelper extends HelperBase
         return "";
     }
 
-    public function getLogText(LogItem $log)
+    public
+    function getLogText(LogItem $log)
     {
         return LogHelper::getInstance()->renderLogItemAsHtml($log);
     }

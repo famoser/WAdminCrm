@@ -161,6 +161,11 @@ class GenericDatabaseService extends DatabaseService
     public function create(BaseDatabaseModel $model)
     {
         $arr = $model->getDatabaseArray();
+        $arr["ChangeDateTime"] = FormatHelper::getInstance()->dateTimeFromString("now");
+        $arr["CreateDateTime"] = FormatHelper::getInstance()->dateTimeFromString("now");
+        $arr["ChangedById"] = AuthenticationService::getInstance()->getUser()->getId();
+        $arr["CreatedById"] = AuthenticationService::getInstance()->getUser()->getId();
+
         $table = $this->getTableName($model);
 
         $arr = $this->cleanUpGenericArray($arr);
@@ -178,6 +183,8 @@ class GenericDatabaseService extends DatabaseService
     public function update(BaseDatabaseModel $model, array $allowedArr = null)
     {
         $arr = $model->getDatabaseArray();
+        $arr["ChangeDateTime"] = FormatHelper::getInstance()->dateTimeFromString("now");
+        $arr["ChangedById"] = AuthenticationService::getInstance()->getUser()->getId();
 
         $table = $this->getTableName($model);
 

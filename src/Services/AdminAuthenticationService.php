@@ -9,8 +9,8 @@
 namespace famoser\crm\Services;
 
 
-use famoser\crm\Models\Database\AdminModel;
-use famoser\crm\Models\Database\PersonModel;
+use famoser\crm\Models\Database\Admin;
+use famoser\crm\Models\Database\Person;
 use famoser\phpFrame\Helpers\PasswordHelper;
 use famoser\phpFrame\Models\Database\LoginModel;
 use famoser\phpFrame\Services\AuthenticationService;
@@ -29,8 +29,8 @@ class AdminAuthenticationService extends AuthenticationService
      */
     public function authenticate($username, $password)
     {
-        $admin = GenericDatabaseService::getInstance()->getSingle(new AdminModel(), array("Username" => $username), true);
-        if ($admin instanceof AdminModel && PasswordHelper::getInstance()->validatePasswort($password, $admin->getPasswordHash())) {
+        $admin = GenericDatabaseService::getInstance()->getSingle(new Admin(), array("Username" => $username), true);
+        if ($admin instanceof Admin && PasswordHelper::getInstance()->validatePasswort($password, $admin->getPasswordHash())) {
             return $admin;
         }
         return false;
@@ -42,8 +42,8 @@ class AdminAuthenticationService extends AuthenticationService
      */
     public function authenticateWithHash($hash)
     {
-        $admin = GenericDatabaseService::getInstance()->getSingle(new AdminModel(), array("AuthHash" => $hash), true);
-        if ($admin instanceof AdminModel) {
+        $admin = GenericDatabaseService::getInstance()->getSingle(new Admin(), array("AuthHash" => $hash), true);
+        if ($admin instanceof Admin) {
             return $admin;
         }
         return false;
@@ -61,8 +61,8 @@ class AdminAuthenticationService extends AuthenticationService
     public function resetPassword($username, $link)
     {
         $newHash = PasswordHelper::getInstance()->createUniqueHash();
-        $admin = GenericDatabaseService::getInstance()->getSingle(new AdminModel(), array("Username" => $username));
-        if ($admin instanceof AdminModel) {
+        $admin = GenericDatabaseService::getInstance()->getSingle(new Admin(), array("Username" => $username));
+        if ($admin instanceof Admin) {
             $admin->setAuthHash($newHash);
             GenericDatabaseService::getInstance()->update($admin, array("Id", "AuthHash"));
             return EmailService::getInstance()->sendEmailFromServer(

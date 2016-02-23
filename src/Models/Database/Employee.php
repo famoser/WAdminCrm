@@ -12,7 +12,7 @@ namespace famoser\crm\Models\Database;
 
 use famoser\phpFrame\Models\Database\BasePersonalModel;
 
-class EmployeeModel extends BasePersonalModel
+class Employee extends BasePersonalModel
 {
     private $PaymentPerHour;
     private $CanModifyPayment;
@@ -32,7 +32,11 @@ class EmployeeModel extends BasePersonalModel
 
     public function getDatabaseArray()
     {
-        $props = array("CanModifyPayment" => $this->getCanModifyPayment(), "PaymentPerHour" => $this->getPaymentPerHour(), "PersonId" => $this->getPersonId());
+        $props = array(
+            "CanModifyPayment" => $this->getCanModifyPayment(),
+            "PaymentPerHour" => $this->getPaymentPerHour(),
+            "PersonId" => $this->getPersonId());
+
         return array_merge($props, parent::getDatabaseArray());
     }
 
@@ -85,7 +89,7 @@ class EmployeeModel extends BasePersonalModel
     }
 
     /**
-     * @return PersonModel
+     * @return Person
      */
     public function getPerson()
     {
@@ -93,7 +97,7 @@ class EmployeeModel extends BasePersonalModel
     }
 
     /**
-     * @param PersonModel $Person
+     * @param Person $Person
      */
     public function setPerson($Person)
     {

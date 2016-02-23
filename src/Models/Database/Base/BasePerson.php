@@ -9,10 +9,10 @@
 namespace famoser\crm\Models\Database\Base;
 
 
-use famoser\crm\Models\Database\PersonModel;
+use famoser\crm\Models\Database\Person;
 use famoser\phpFrame\Models\Database\BasePersonalModel;
 
-abstract class BasePersonModel extends BasePersonalModel
+abstract class BasePerson extends BasePersonalModel
 {
     private $PersonId;
     private $Person;
@@ -40,7 +40,7 @@ abstract class BasePersonModel extends BasePersonalModel
     }
 
     /**
-     * @return PersonModel
+     * @return Person
      */
     public function getPerson()
     {
@@ -48,7 +48,7 @@ abstract class BasePersonModel extends BasePersonalModel
     }
 
     /**
-     * @param PersonModel $Person
+     * @param Person $Person
      */
     public function setPerson($Person)
     {

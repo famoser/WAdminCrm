@@ -9,10 +9,9 @@
 namespace famoser\crm\Models\Database;
 
 
+use famoser\crm\Models\Database\Base\BaseTimeTask;
 
-use famoser\crm\Models\Database\Base\TimeTaskModel;
-
-class MilestoneModel extends TimeTaskModel
+class Milestone extends BaseTimeTask
 {
     private $ProjectId;
     private $Project;
@@ -69,7 +68,7 @@ class MilestoneModel extends TimeTaskModel
     }
 
     /**
-     * @return ProjectModel
+     * @return Project
      */
     public function getProject()
     {
@@ -77,7 +76,7 @@ class MilestoneModel extends TimeTaskModel
     }
 
     /**
-     * @param ProjectModel $Project
+     * @param Project $Project
      */
     public function setProject($Project)
     {
@@ -85,7 +84,7 @@ class MilestoneModel extends TimeTaskModel
     }
 
     /**
-     * @return ProcedureModel[]
+     * @return Procedure[]
      */
     public function getProcedures()
     {
@@ -93,7 +92,7 @@ class MilestoneModel extends TimeTaskModel
     }
 
     /**
-     * @param ProcedureModel[] $Procedures
+     * @param Procedure[] $Procedures
      */
     public function setProcedures(array $Procedures)
     {
