@@ -1,0 +1,146 @@
+/*
+colors:
+    background: rgb(255,255,255); (white)
+    accent-light: rgb(186, 197, 227); (light-blue)
+    accent: rgb(45, 101, 161); (blue)
+    accent-dark: rgb(56, 84, 113); (dark-blue)
+
+    text primary: rgb(183, 186, 199); (light grey)
+    text secondary: rgb(80, 83, 88); (grey)
+    border: rgb(183, 186, 199); (light grey);
+
+    menu: rgb(241, 241, 244);
+
+    link (link & disabled button): rgb(45, 101, 161);
+    link.active: rgb(56, 84, 113);
+
+    button (primary color): rgb(56, 84, 113);
+    button (primary color replacement): rgb(186, 197, 227);
+    button.active: rgb(43, 67, 92);
+
+    light-green: rgb(208, 255, 208);
+    dark-green: rgb(0, 192, 0);
+
+    light-yellow: rgb(255, 239, 208);
+    dark-yellow: rgb(240, 160, 0);
+
+    light-red: rgb(255, 208, 208);
+    dark-red: rgb(240, 0, 0);
+*/
+
+.info-message-before:before,
+.info-message {
+    background-color: rgb(208, 255, 208);
+    color: rgb(80, 83, 88);
+}
+
+.info-action-before:before,
+.info-action {
+    color: rgb(0, 192, 0);
+    background: #ffffff;
+}
+
+.warning-message-before:before,
+.warning-message {
+    background-color: rgb(255, 239, 208);
+    color: rgb(80, 83, 88);
+}
+
+.warning-action-before:before,
+.warning-action {
+    color: rgb(240, 160, 0);
+    background-color: #ffffff;
+}
+
+.danger-message-before:before,
+.danger-message {
+    background-color: rgb(255, 208, 208);
+    color: rgb(80, 83, 88);
+}
+
+.danger-action-before:before,
+.danger-action {
+    color: rgb(240, 0, 0);
+    background-color: #ffffff;
+}
+
+.neutral-message-before:before,
+.neutral-message,
+input[type=submit]:hover, input[type=submit]:active, input[type=submit]:focus,
+.arrow-top {
+    background-color: rgb(186, 197, 227);
+    color: rgb(80, 83, 88);
+}
+
+.neutral-action-before:before,
+.neutral-action,
+input[type=submit],
+.arrow-top:hover, .arrow-top:active, .arrow-top:focus {
+    color: rgb(45, 101, 161);
+    background-color: #ffffff;
+}
+
+hr {
+    border-color: rgb(183, 186, 199);
+}
+
+/* classes */
+.border-bottom {
+    border-bottom: solid 1px rgb(183, 186, 199);;
+}
+
+.border-top {
+    border-top: solid 1px rgb(183, 186, 199);;
+}
+
+.border-left {
+    border-left: solid 1px rgb(183, 186, 199);;
+}
+
+.border-right {
+    border-right: solid 1px rgb(183, 186, 199);;
+}
+
+/* nodes */
+body {
+    background-size: cover;
+    background: url("../images/background.jpg") fixed center center;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: "Frutiger Thin", sans-serif;
+    color: rgb(183, 186, 199);
+}
+
+a {
+    color: rgb(45, 101, 161);
+}
+
+a:hover, a:active, a:focus {
+    color: rgb(56, 84, 113);
+}
+
+p,
+input, select, textarea,
+tr, td, th {
+    font-family: "Frutiger Regular", sans-serif;
+    color: rgb(80, 83, 88);
+}
+
+input, select, textarea {
+    border-color: rgb(183, 186, 199);
+}
+
+input:active,
+input:focus,
+select:active,
+select:focus,
+textarea:active,
+textarea:focus {
+    border-color: rgb(80, 83, 88);
+}
+
+/* elements */
+#loading-bar {
+    background-color: rgb(186, 197, 227);
+}

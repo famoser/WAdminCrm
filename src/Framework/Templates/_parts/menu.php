@@ -31,7 +31,7 @@ if ($this instanceof ViewBase) { ?>
             <div class="secondary-menu-items">
                 <ul class="tiles">
                     <li>
-                        <a class="tile floatright" href="logout">
+                        <a class="tile float-right" href="logout">
                             <span class="flaticon-cancel22" aria-hidden="true"></span>Logout
                         </a>
                     </li>

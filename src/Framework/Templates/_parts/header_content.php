@@ -14,7 +14,7 @@ if ($this instanceof ViewBase) { ?>
 <?php echo PartHelper::getInstance()->getPart(PartHelper::PART_HEAD); ?>
 <body>
 <div class="mobile-container">
-    <div id="loadingbar"></div>
+    <div id="loading-bar"></div>
 
     <a class="arrow-top"></a>
 
@@ -23,7 +23,7 @@ if ($this instanceof ViewBase) { ?>
             <div class="clearfix">
                 <div class="col-md-3">
                     <a href="/">
-                        <img class="brand" width="111" height="33" alt="Admin Logo" src="/images/Logo.png">
+                        <img class="brand" width="111" height="33" alt="Admin Logo" src="/src/Framework/Content/images/Logo.png">
                     </a>
                     <ul class="tiles menu-toggle">
                         <li>

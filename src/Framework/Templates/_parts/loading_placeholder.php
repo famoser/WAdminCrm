@@ -6,5 +6,5 @@
  * Time: 00:00
  */?>
 <div class="loading-content">
-    <img src="/images/puff.svg" alt="wird geladen...">
+    <img src="/src/Framework/Content/images/puff-loading.svg" alt="wird geladen...">
 </div>
