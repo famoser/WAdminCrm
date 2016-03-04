@@ -34,11 +34,12 @@ if ($this instanceof ViewBase) { ?>
 
     <div class="center-content-wrapper">
     <div class="container">
+    <div class="center-content">
     <?php
     /*include $_SERVER["DOCUMENT_ROOT"] . "/src/Framework/Templates/_parts/messages.php" */
     $this->includeFile(PartHelper::getInstance()->getPart(PartHelper::PART_MESSAGES));
     ?>
-    <div class="center-content content">
+    <div class="content">
 
 
 <?php }

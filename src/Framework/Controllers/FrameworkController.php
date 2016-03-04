@@ -16,9 +16,9 @@ class FrameworkController extends ControllerBase
     const SHOW_MESSAGE = 1;
     const CONTROLLER_NOT_FOUND = 2;
 
-    public function __construct($request, $params, $files)
+    public function __construct()
     {
-        parent::__construct($request, $params, $files);
+        parent::__construct(null, null, null);
     }
 
     public function Display($action = FrameworkController::SHOW_MESSAGE)

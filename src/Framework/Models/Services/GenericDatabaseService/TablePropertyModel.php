@@ -128,40 +128,41 @@ class TablePropertyModel
 
     private function getTypeName($driverType)
     {
-        if (TablePropertyModel::TYPE_N1_RELATION)
-            return $this->getTypeName(TablePropertyModel::TYPE_INTEGER);
-
         if ($driverType == GenericDatabaseService::DRIVER_TYPE_MYSQL) {
-            if (TablePropertyModel::TYPE_TEXT)
+            if (TablePropertyModel::TYPE_TEXT == $this->getType())
                 return "TEXT";
-            else if (TablePropertyModel::TYPE_INTEGER)
+            else if (TablePropertyModel::TYPE_INTEGER == $this->getType())
                 return "INT";
-            else if (TablePropertyModel::TYPE_DOUBLE)
+            else if (TablePropertyModel::TYPE_DOUBLE == $this->getType())
                 return "DOUBLE";
-            else if (TablePropertyModel::TYPE_BOOLEAN)
+            else if (TablePropertyModel::TYPE_BOOLEAN == $this->getType())
                 return "TINYINT(1)";
-            else if (TablePropertyModel::TYPE_DATE)
+            else if (TablePropertyModel::TYPE_DATE == $this->getType())
                 return "DATE";
-            else if (TablePropertyModel::TYPE_DATETIME)
+            else if (TablePropertyModel::TYPE_DATETIME == $this->getType())
                 return "DATETIME";
-            else if (TablePropertyModel::TYPE_TIME)
+            else if (TablePropertyModel::TYPE_TIME == $this->getType())
                 return "TIME";
+            else if (TablePropertyModel::TYPE_N1_RELATION == $this->getType())
+                return "INT";
             return false;
         } else {
-            if (TablePropertyModel::TYPE_TEXT)
+            if (TablePropertyModel::TYPE_TEXT == $this->getType())
                 return "TEXT";
-            else if (TablePropertyModel::TYPE_INTEGER)
+            else if (TablePropertyModel::TYPE_INTEGER == $this->getType())
                 return "INTEGER";
-            else if (TablePropertyModel::TYPE_DOUBLE)
+            else if (TablePropertyModel::TYPE_DOUBLE == $this->getType())
                 return "REAL";
-            else if (TablePropertyModel::TYPE_BOOLEAN)
+            else if (TablePropertyModel::TYPE_BOOLEAN == $this->getType())
                 return "INTEGER";
-            else if (TablePropertyModel::TYPE_DATE)
+            else if (TablePropertyModel::TYPE_DATE == $this->getType())
                 return "TEXT";
-            else if (TablePropertyModel::TYPE_DATETIME)
+            else if (TablePropertyModel::TYPE_DATETIME == $this->getType())
                 return "TEXT";
-            else if (TablePropertyModel::TYPE_TIME)
+            else if (TablePropertyModel::TYPE_TIME == $this->getType())
                 return "TEXT";
+            else if (TablePropertyModel::TYPE_N1_RELATION == $this->getType())
+                return "INTEGER";
             return false;
         }
     }
@@ -181,7 +182,7 @@ class TablePropertyModel
 
             $sql = $this->name . " " . $this->getTypeName($driverType);
             if ($this->autoIncrement === true) {
-                $sql .= " AUTOINCREMENT";
+                $sql .= " AUTO_INCREMENT";
             }
             if ($this->primaryKey === true) {
                 $sql .= " PRIMARY KEY";

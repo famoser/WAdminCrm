@@ -151,7 +151,7 @@
           },
           {
             "TableName": "NewsEntries",
-            "ObjectName": "famoser\\crm\\Models\\Database\\NewEntryModel",
+            "ObjectName": "famoser\\crm\\Models\\Database\\NewsEntryModel",
             "Properties": []
           },
           {
@@ -321,8 +321,8 @@
             ]
           },
           {
-            "TableName": "ProjectEmployeeRelations",
-            "ObjectName": "famoser\\crm\\Models\\Database\\ProjectEmployeeRelationModel",
+            "TableName": "ProjectPersonRelations",
+            "ObjectName": "famoser\\crm\\Models\\Database\\ProjectPersonRelationModel",
             "Properties": [
               {
                 "Name": "ProjectPersonRelationType",
@@ -422,6 +422,10 @@
                 "Type": "double"
               },
               {
+                "Name": "FixPrice",
+                "Type": "double"
+              },
+              {
                 "Name": "IsCompleted",
                 "Type": "bool"
               },
@@ -430,12 +434,20 @@
                 "Type": "int"
               },
               {
-                "Name": "CompletedPercentage",
-                "Type": "int"
+                "Name": "FinalPrice",
+                "Type": "double"
               },
               {
-                "Name": "EndDate",
-                "Type": "date"
+                "Name": "BillingPrice",
+                "Type": "double"
+              },
+              {
+                "Name": "IsPayed",
+                "Type": "bool"
+              },
+              {
+                "Name": "IsArchived",
+                "Type": "bool"
               },
               {
                 "Name": "PaymentId",
@@ -477,7 +489,7 @@
             ]
           },
           {
-            "ObjectName": "famoser\\crm\\Models\\Database\\Base\\LoginDatabaseModel",
+            "ObjectName": "famoser\\phpFrame\\Models\\Database\\LoginDatabaseModel",
             "Properties": [
               {
                 "Name": "Email",
@@ -505,7 +517,15 @@
             ]
           },
           {
-            "ObjectName": "famoser\\crm\\Models\\Database\\Base\\BasePersonalDatabaseModel",
+            "ObjectName": "famoser\\phpFrame\\Models\\Database\\BasePersonalDatabaseModel",
+            "Properties": []
+          },
+          {
+            "ObjectName": "famoser\\phpFrame\\Models\\BasePersonalModel",
+            "Properties": []
+          },
+          {
+            "ObjectName": "famoser\\phpFrame\\Models\\BaseModel",
             "Properties": []
           }
         ]

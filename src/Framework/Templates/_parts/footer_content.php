@@ -10,7 +10,8 @@
 use famoser\phpFrame\Views\ViewBase;
 
 if ($this instanceof ViewBase) { ?>
-
+    <!-- end content -->
+    </div>
     </div> <!-- Ende tab-content -->
     <div class="endspacer"></div>
     </div><!-- Ende container -->

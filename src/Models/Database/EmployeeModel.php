@@ -11,7 +11,7 @@ namespace famoser\crm\Models\Database;
 
 use famoser\crm\Models\Database\Base\PersonalDatabaseModel;
 
-class EmployeeDatabaseModel extends PersonalDatabaseModel
+class EmployeeModel extends PersonalDatabaseModel
 {
     private $DefaultPaymentPerHour;
 

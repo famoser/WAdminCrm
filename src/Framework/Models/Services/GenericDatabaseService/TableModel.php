@@ -50,8 +50,6 @@ class TableModel
                         return $res + TableModel::TABLE_PROPERTY_CONST_ADD;
                     }
                 }
-
-                $this->objectName = $config["ObjectName"];
             } else {
                 return TableModel::ERROR_PROPERTIES_NO_ARRAY;
             }
@@ -71,6 +69,14 @@ class TableModel
     /**
      * @return string
      */
+    public function getTempTableName()
+    {
+        return $this->tableName . "Temp";
+    }
+
+    /**
+     * @return string
+     */
     public function getObjectName()
     {
         return $this->objectName;
@@ -84,9 +90,17 @@ class TableModel
         return $this->properties;
     }
 
+    /**
+     * @param InputPropertyModel[] $props
+     */
+    public function addProperties(array $props)
+    {
+        $this->properties = array_merge($this->properties, $props);
+    }
+
     public function getInstance()
     {
-        return new $this->objectName();
+        return new $this->objectName;
     }
 
     public static function evaluateError($error)
@@ -103,9 +117,11 @@ class TableModel
         return "unknown error";
     }
 
-    public function getCreateTableSql($driverType)
+    public function getCreateTableSql($driverType, $tableName = null)
     {
-        $sql = "CREATE TABLE " . $this->getTableName() . " (";
+        if ($tableName == null)
+            $tableName = $this->getTableName();
+        $sql = "CREATE TABLE " . $tableName . " (";
         $propSql = array();
         foreach ($this->getProperties() as $property) {
             if ($property->getType() != TablePropertyModel::TYPE_1N_RELATION)

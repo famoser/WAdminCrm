@@ -33,6 +33,7 @@ try {
 
         $controllerModel = RouteService::getInstance()->getController($_SERVER['REQUEST_URI']);
         RuntimeService::getInstance()->setParams($_SERVER['REQUEST_URI'], $controllerModel);
+        RuntimeService::getInstance()->setParams($_SERVER['REQUEST_URI'], $controllerModel);
 
         if ($controllerModel instanceof ControllerModel) {
             $controllerName = $controllerModel->getController();
@@ -48,10 +49,7 @@ try {
         }
     } catch (Exception $ex) {
         LogHelper::getInstance()->logException($ex);
-        $controller = new FrameworkController($request, RuntimeService::getInstance()->getControllerParams(), $files);
-        $output = $controller->Display(FrameworkController::SHOW_MESSAGE);
-        echo $output;
-        bye_framework();
+        bye_framework(false);
     }
 } catch (Exception $ex) {
     //this will never ever happen!
