@@ -74,3 +74,10 @@ function remove_empty_entries(array $arr)
         return array_values($res);
     return $res;
 }
+
+function get_class_lineage($object)
+{
+    $class_name = get_class($object);
+    $parents = array_values(class_parents($class_name));
+    return array_merge(array($class_name), $parents);
+}

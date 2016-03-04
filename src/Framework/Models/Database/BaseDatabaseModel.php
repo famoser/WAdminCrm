@@ -10,6 +10,7 @@ namespace famoser\phpFrame\Models\Database;
 
 
 use famoser\phpFrame\Interfaces\Models\IDatabaseModel;
+use famoser\phpFrame\Models\BaseModel;
 
 abstract class BaseDatabaseModel extends BaseModel implements IDatabaseModel
 {
@@ -27,11 +28,6 @@ abstract class BaseDatabaseModel extends BaseModel implements IDatabaseModel
     public function setId($id)
     {
         $this->Id = $id;
-    }
-
-    public function getDatabaseArray()
-    {
-        return array("Id" => $this->getId());
     }
 
     /**

@@ -1,8 +1,8 @@
 <?php
 namespace famoser\crm\Controllers;
 
-use famoser\crm\Models\Database\Customer;
-use famoser\crm\Models\Database\Person;
+use famoser\crm\Models\Database\CustomerModel;
+use famoser\crm\Models\Database\PersonModel;
 use famoser\crm\Services\CustomerDatabaseService;
 use famoser\phpFrame\Controllers\ControllerBase;
 use famoser\phpFrame\Controllers\GenericController;
@@ -28,11 +28,11 @@ class CustomersController extends GenericController
         $this->addMenuItem(new MenuItem("all", ""));
         $this->addMenuItem(new MenuItem("with active projects", "active"));
 
-        $person = new ControllerConfigModel(new Person(), "Person");
+        $person = new ControllerConfigModel(new PersonModel(), "Person");
         $person->configureList(false);
         $this->addControllerConfig($person);
 
-        $customer = new ControllerConfigModel(new Customer(), "Customer");
+        $customer = new ControllerConfigModel(new CustomerModel(), "Customer");
         $customer->configureCrud(array("CustomerSinceDate" => FormatHelper::getInstance()->dateFromString("today")));
         $customer->configureList(null, null, null, "CustomerSinceDate DESC");
         $customer->addOneNChild($person);

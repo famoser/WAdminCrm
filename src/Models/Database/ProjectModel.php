@@ -2,7 +2,7 @@
 
 namespace famoser\crm\Models\Database;
 
-use famoser\crm\Models\Database\Base\BaseTimeTask;
+use famoser\crm\Models\Database\Base\TimeTaskModel;
 
 
 /**
@@ -11,12 +11,13 @@ use famoser\crm\Models\Database\Base\BaseTimeTask;
  * Date: 13.09.2015
  * Time: 13:16
  */
-class Project extends BaseTimeTask
+class ProjectModel extends TimeTaskModel
 {
     private $CustomerId;
     private $Customer;
 
     private $Milestones;
+    private $ProjectRelations;
 
     public function totalCost()
     {
@@ -43,13 +44,6 @@ class Project extends BaseTimeTask
         return $this->getName();
     }
 
-    public function getDatabaseArray()
-    {
-        $props = array("CustomerId" => $this->getCustomerId());
-        return array_merge($props, parent::getDatabaseArray());
-    }
-
-
     /**
      * @return int
      */
@@ -67,7 +61,7 @@ class Project extends BaseTimeTask
     }
 
     /**
-     * @return Customer
+     * @return CustomerModel
      */
     public function getCustomer()
     {
@@ -75,7 +69,7 @@ class Project extends BaseTimeTask
     }
 
     /**
-     * @param Customer $Customer
+     * @param CustomerModel $Customer
      */
     public function setCustomer($Customer)
     {
@@ -83,7 +77,7 @@ class Project extends BaseTimeTask
     }
 
     /**
-     * @return Milestone[]
+     * @return MilestoneModel[]
      */
     public function getMilestones()
     {
@@ -91,10 +85,26 @@ class Project extends BaseTimeTask
     }
 
     /**
-     * @param Milestone[] $Milestones
+     * @param MilestoneModel[] $Milestones
      */
     public function setMilestones(array $Milestones)
     {
         $this->Milestones = $Milestones;
+    }
+
+    /**
+     * @return ProjectPersonRelationModel[]
+     */
+    public function getProjectRelations()
+    {
+        return $this->ProjectRelations;
+    }
+
+    /**
+     * @param ProjectPersonRelationModel[] $ProjectRelations
+     */
+    public function setProjectRelations($ProjectRelations)
+    {
+        $this->ProjectRelations = $ProjectRelations;
     }
 }

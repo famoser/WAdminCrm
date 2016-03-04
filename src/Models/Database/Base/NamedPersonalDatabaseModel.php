@@ -2,16 +2,14 @@
 /**
  * Created by PhpStorm.
  * User: famoser
- * Date: 11.02.2016
- * Time: 12:44
+ * Date: 28.02.2016
+ * Time: 15:45
  */
 
 namespace famoser\crm\Models\Database\Base;
 
 
-use famoser\phpFrame\Models\Database\BaseDatabaseModel;
-
-class BaseThing extends BaseDatabaseModel
+abstract class NamedPersonalDatabaseModel extends PersonalDatabaseModel
 {
     protected $Name;
     protected $Description;
@@ -25,15 +23,11 @@ class BaseThing extends BaseDatabaseModel
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getDatabaseArray()
+    public function getPersonalIdentification()
     {
-        $props = array(
-            "Name" => $this->getName(),
-            "Description" => $this->getDescription(),
-        );
-        return array_merge($props, parent::getDatabaseArray());
+        return $this->getName();
     }
 
     /**

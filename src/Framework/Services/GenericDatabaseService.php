@@ -17,6 +17,11 @@ use PDO;
 
 class GenericDatabaseService extends DatabaseService
 {
+    public function getClassInfo($object)
+    {
+        $arr = get_class_lineage($object);
+    }
+
     /**
      * @param BaseDatabaseModel $model
      * @param $id

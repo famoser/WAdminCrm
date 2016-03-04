@@ -9,9 +9,9 @@
 namespace famoser\phpFrame\Models\Database;
 
 
-abstract class LoginModel extends BasePersonalModel
+abstract class LoginDatabaseModel extends BasePersonalDatabaseModel
 {
-    private $Username;
+    private $Email;
     private $PasswordHash;
     private $AuthHash;
 
@@ -23,24 +23,24 @@ abstract class LoginModel extends BasePersonalModel
      */
     public function getDatabaseArray()
     {
-        $props = array("Username" => $this->getUsername(), "PasswordHash" => $this->getPasswordHash(), "AuthHash" => $this->getAuthHash());
+        $props = array("Email" => $this->getEmail(), "PasswordHash" => $this->getPasswordHash(), "AuthHash" => $this->getAuthHash());
         return array_merge($props, parent::getDatabaseArray());
     }
 
     /**
      * @return string
      */
-    public function getUsername()
+    public function getEmail()
     {
-        return $this->Username;
+        return $this->Email;
     }
 
     /**
-     * @param string $Username
+     * @param string $Email
      */
-    public function setUsername($Username)
+    public function setEmail($Email)
     {
-        $this->Username = $Username;
+        $this->Email = $Email;
     }
 
     /**
@@ -76,7 +76,7 @@ abstract class LoginModel extends BasePersonalModel
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPassword()
     {
@@ -84,7 +84,7 @@ abstract class LoginModel extends BasePersonalModel
     }
 
     /**
-     * @param mixed $Password
+     * @param string $Password
      */
     public function setPassword($Password)
     {
@@ -92,7 +92,7 @@ abstract class LoginModel extends BasePersonalModel
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getConfirmPassword()
     {
@@ -100,7 +100,7 @@ abstract class LoginModel extends BasePersonalModel
     }
 
     /**
-     * @param mixed $ConfirmPassword
+     * @param string $ConfirmPassword
      */
     public function setConfirmPassword($ConfirmPassword)
     {

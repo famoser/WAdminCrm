@@ -9,22 +9,20 @@
 namespace famoser\crm\Models\Database;
 
 
+use famoser\crm\Models\Database\Base\PersonalDatabaseModel;
 use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Models\Database\BaseDatabaseModel;
 
-class ProjectRelation extends BaseDatabaseModel
+class ProjectPersonRelationModel extends PersonalDatabaseModel
 {
     const PROJECT_MANAGER = 1;
     const PROJECT_PARTICIPANT = 2;
     const PROJECT_VIEWER = 3;
 
-    private $ProjectRelationType;
+    private $ProjectPersonRelationType;
 
     private $ProjectId;
     private $Project;
-
-    private $AdminId;
-    private $Admin;
 
     public function getIdentification()
     {
@@ -33,11 +31,11 @@ class ProjectRelation extends BaseDatabaseModel
 
     public function getProjectRelationTypeText($const)
     {
-        if ($const == ProjectRelation::PROJECT_MANAGER)
+        if ($const == ProjectPersonRelationModel::PROJECT_MANAGER)
             return "project manager";
-        if ($const == ProjectRelation::PROJECT_PARTICIPANT)
+        if ($const == ProjectPersonRelationModel::PROJECT_PARTICIPANT)
             return "project participant";
-        if ($const == ProjectRelation::PROJECT_VIEWER)
+        if ($const == ProjectPersonRelationModel::PROJECT_VIEWER)
             return "project viewer";
 
         LogHelper::getInstance()->logError("unknown const: " . $const);
@@ -46,23 +44,23 @@ class ProjectRelation extends BaseDatabaseModel
 
     public function getProjectRelationTypeAsText()
     {
-        return $this->getProjectRelationTypeText($this->getProjectRelationType());
+        return $this->getProjectRelationTypeText($this->getProjectPersonRelationType());
     }
 
     /**
      * @return mixed
      */
-    public function getProjectRelationType()
+    public function getProjectPersonRelationType()
     {
-        return $this->ProjectRelationType;
+        return $this->ProjectPersonRelationType;
     }
 
     /**
-     * @param mixed $ProjectRelationType
+     * @param mixed $ProjectPersonRelationType
      */
-    public function setProjectRelationType($ProjectRelationType)
+    public function setProjectPersonRelationType($ProjectPersonRelationType)
     {
-        $this->ProjectRelationType = $ProjectRelationType;
+        $this->ProjectPersonRelationType = $ProjectPersonRelationType;
     }
 
     /**

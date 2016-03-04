@@ -9,18 +9,22 @@
 namespace famoser\crm\Models\Database\Base;
 
 
-use famoser\crm\Models\Database\Person;
-use famoser\phpFrame\Models\Database\BasePersonalModel;
+use famoser\crm\Models\Database\PersonModel;
+use famoser\phpFrame\Models\Database\BasePersonalDatabaseModel;
 
-abstract class BasePerson extends BasePersonalModel
+abstract class PersonalDatabaseModel extends BasePersonalDatabaseModel
 {
     private $PersonId;
     private $Person;
 
-    public function getDatabaseArray()
+    public function getIdentification()
     {
-        $props = array("PersonId" => $this->getPersonId());
-        return array_merge($props, parent::getDatabaseArray());
+        return $this->getPerson()->getIdentification();
+    }
+
+    public function getPersonalIdentification()
+    {
+        return $this->getPerson()->getPersonalIdentification();
     }
 
     /**
@@ -40,7 +44,7 @@ abstract class BasePerson extends BasePersonalModel
     }
 
     /**
-     * @return Person
+     * @return PersonModel
      */
     public function getPerson()
     {
@@ -48,7 +52,7 @@ abstract class BasePerson extends BasePersonalModel
     }
 
     /**
-     * @param Person $Person
+     * @param PersonModel $Person
      */
     public function setPerson($Person)
     {

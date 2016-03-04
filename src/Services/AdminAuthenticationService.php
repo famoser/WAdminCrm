@@ -9,10 +9,10 @@
 namespace famoser\crm\Services;
 
 
-use famoser\crm\Models\Database\Admin;
-use famoser\crm\Models\Database\Person;
+use famoser\crm\Models\Database\UserModel;
+use famoser\crm\Models\Database\PersonModel;
 use famoser\phpFrame\Helpers\PasswordHelper;
-use famoser\phpFrame\Models\Database\LoginModel;
+use famoser\phpFrame\Models\Database\LoginDatabaseModel;
 use famoser\phpFrame\Services\AuthenticationService;
 use famoser\phpFrame\Services\DatabaseService;
 use famoser\phpFrame\Services\EmailService;
@@ -25,12 +25,12 @@ class AdminAuthenticationService extends AuthenticationService
     /**
      * @param $username
      * @param $password
-     * @return LoginModel
+     * @return LoginDatabaseModel
      */
     public function authenticate($username, $password)
     {
-        $admin = GenericDatabaseService::getInstance()->getSingle(new Admin(), array("Username" => $username), true);
-        if ($admin instanceof Admin && PasswordHelper::getInstance()->validatePasswort($password, $admin->getPasswordHash())) {
+        $admin = GenericDatabaseService::getInstance()->getSingle(new UserModel(), array("Username" => $username), true);
+        if ($admin instanceof UserModel && PasswordHelper::getInstance()->validatePasswort($password, $admin->getPasswordHash())) {
             return $admin;
         }
         return false;
@@ -38,22 +38,22 @@ class AdminAuthenticationService extends AuthenticationService
 
     /**
      * @param $hash
-     * @return LoginModel
+     * @return LoginDatabaseModel
      */
     public function authenticateWithHash($hash)
     {
-        $admin = GenericDatabaseService::getInstance()->getSingle(new Admin(), array("AuthHash" => $hash), true);
-        if ($admin instanceof Admin) {
+        $admin = GenericDatabaseService::getInstance()->getSingle(new UserModel(), array("AuthHash" => $hash), true);
+        if ($admin instanceof UserModel) {
             return $admin;
         }
         return false;
     }
 
     /**
-     * @param LoginModel $model
+     * @param LoginDatabaseModel $model
      * @return bool
      */
-    public function updateModel(LoginModel $model)
+    public function updateModel(LoginDatabaseModel $model)
     {
         // TODO: Implement updateModel() method.
     }
@@ -61,8 +61,8 @@ class AdminAuthenticationService extends AuthenticationService
     public function resetPassword($username, $link)
     {
         $newHash = PasswordHelper::getInstance()->createUniqueHash();
-        $admin = GenericDatabaseService::getInstance()->getSingle(new Admin(), array("Username" => $username));
-        if ($admin instanceof Admin) {
+        $admin = GenericDatabaseService::getInstance()->getSingle(new UserModel(), array("Username" => $username));
+        if ($admin instanceof UserModel) {
             $admin->setAuthHash($newHash);
             GenericDatabaseService::getInstance()->update($admin, array("Id", "AuthHash"));
             return EmailService::getInstance()->sendEmailFromServer(

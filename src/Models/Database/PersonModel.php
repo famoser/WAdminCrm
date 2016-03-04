@@ -9,18 +9,17 @@
 namespace famoser\crm\Models\Database;
 
 
+use famoser\phpFrame\Models\Database\BasePersonalDatabaseModel;
 
-use famoser\phpFrame\Models\Database\BasePersonalModel;
-
-class Person extends BasePersonalModel
+class PersonModel extends BasePersonalDatabaseModel
 {
     public $FirstName;
     public $LastName;
-    public $AddressExtension;
     public $Street;
-    public $Land;
+    public $AddressExtension;
     public $ZipCode;
     public $Place;
+    public $Land;
     public $TelPrivat;
     public $TelBusiness;
     public $Mobile;
@@ -36,25 +35,6 @@ class Person extends BasePersonalModel
     public function getPersonalIdentification()
     {
         return $this->getFirstName();
-    }
-
-    public function getDatabaseArray()
-    {
-        $props = array("FirstName" => $this->getFirstName(),
-            "LastName" => $this->getLastName(),
-            "AddressExtension" => $this->getAddressExtension(),
-            "Street" => $this->getStreet(),
-            "Land" => $this->getLand(),
-            "ZipCode" => $this->getZipCode(),
-            "Place" => $this->getPlace(),
-            "TelPrivat" => $this->getTelPrivat(),
-            "TelBusiness" => $this->getTelBusiness(),
-            "Mobile" => $this->getMobile(),
-            "Email" => $this->getEmail(),
-            "BirthDate" => $this->getBirthDate(),
-            "Description" => $this->getDescription(),
-        );
-        return array_merge($props, parent::getDatabaseArray());
     }
 
     /**

@@ -9,42 +9,29 @@
 namespace famoser\crm\Models\Database\Base;
 
 
-use famoser\crm\Models\Database\Payment;
-use famoser\crm\Models\Database\Person;
+use famoser\crm\Models\Database\PaymentModel;
+use famoser\crm\Models\Database\PersonModel;
 
-abstract class BaseTimeTask extends BaseThing
+abstract class TimeTaskModel extends NamedPersonalDatabaseModel
 {
     private $StartDate;
     private $DeadlineDate;
     private $EndDate;
-
-    private $FinalPrice;
     private $CostCeiling;
+    private $FixPrice;
 
     private $IsCompleted;
     private $CompletedPercentage;
 
-    private $IsArchived;
+    private $FinalPrice;
+    private $BillingPrice;
 
-    private $PersonId;
-    private $Person;
+    private $IsPayed;
+    private $IsArchived;
 
     private $PaymentId;
     private $Payment;
 
-    public function getDatabaseArray()
-    {
-        $props = array("StartDate" => $this->getStartDate(),
-            "DeadlineDate" => $this->getDeadlineDate(),
-            "EndDate" => $this->getEndDate(),
-            "CostCeiling" => $this->getCostCeiling(),
-            "PercentageComplete" => $this->getCompletedPercentage(),
-            "IsArchived" => $this->getIsArchived(),
-            "PersonId" => $this->getPersonId(),
-            "PaymentId" => $this->getPaymentId()
-        );
-        return array_merge($props, parent::getDatabaseArray());
-    }
 
     /**
      * @return string
@@ -159,7 +146,7 @@ abstract class BaseTimeTask extends BaseThing
     }
 
     /**
-     * @return Payment
+     * @return PaymentModel
      */
     public function getPayment()
     {
@@ -167,7 +154,7 @@ abstract class BaseTimeTask extends BaseThing
     }
 
     /**
-     * @param Payment $Payment
+     * @param PaymentModel $Payment
      */
     public function setPayment($Payment)
     {
@@ -207,34 +194,50 @@ abstract class BaseTimeTask extends BaseThing
     }
 
     /**
-     * @return int
+     * @return mixed
      */
-    public function getPersonId()
+    public function getBillingPrice()
     {
-        return $this->PersonId;
+        return $this->BillingPrice;
     }
 
     /**
-     * @param int $PersonId
+     * @param mixed $BillingPrice
      */
-    public function setPersonId($PersonId)
+    public function setBillingPrice($BillingPrice)
     {
-        $this->PersonId = $PersonId;
+        $this->BillingPrice = $BillingPrice;
     }
 
     /**
-     * @return Person
+     * @return mixed
      */
-    public function getPerson()
+    public function getIsPayed()
     {
-        return $this->Person;
+        return $this->IsPayed;
     }
 
     /**
-     * @param Person $Person
+     * @param mixed $IsPayed
      */
-    public function setPerson($Person)
+    public function setIsPayed($IsPayed)
     {
-        $this->Person = $Person;
+        $this->IsPayed = $IsPayed;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFixPrice()
+    {
+        return $this->FixPrice;
+    }
+
+    /**
+     * @param mixed $FixPrice
+     */
+    public function setFixPrice($FixPrice)
+    {
+        $this->FixPrice = $FixPrice;
     }
 }

@@ -1,8 +1,9 @@
 <?php
 namespace famoser\crm\Models\Database;
 
-use famoser\crm\Models\Database\Base\BasePerson;
-use famoser\phpFrame\Models\Database\LoginModel;
+use famoser\crm\Models\Database\Base\PersonalDatabaseModel;
+use famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Models\Database\LoginDatabaseModel;
 
 /**
  * Created by PhpStorm.
@@ -10,9 +11,12 @@ use famoser\phpFrame\Models\Database\LoginModel;
  * Date: 5/18/2015
  * Time: 7:44 PM
  */
-class Admin extends LoginModel
+class UserModel extends LoginDatabaseModel
 {
-    private $Email;
+    const ROLE_MANAGER = 1;
+    const ROLE_EMPLOYEE = 2;
+
+    private $RoleType;
 
     private $PersonId;
     private $Person;
@@ -41,20 +45,15 @@ class Admin extends LoginModel
         return array_merge($props, parent::getDatabaseArray());
     }
 
-    /**
-     * @return string
-     */
-    public function getEmail()
+    public function getRoleTypeText($const)
     {
-        return $this->Email;
-    }
+        if ($const == UserModel::ROLE_EMPLOYEE)
+            return "employee";
+        if ($const == UserModel::ROLE_MANAGER)
+            return "manager";
 
-    /**
-     * @param string $Email
-     */
-    public function setEmail($Email)
-    {
-        $this->Email = $Email;
+        LogHelper::getInstance()->logError("unknown const: " . $const);
+        return "unknown";
     }
 
     /**
@@ -74,7 +73,7 @@ class Admin extends LoginModel
     }
 
     /**
-     * @return Person
+     * @return PersonModel
      */
     public function getPerson()
     {
@@ -82,10 +81,26 @@ class Admin extends LoginModel
     }
 
     /**
-     * @param Person $Person
+     * @param PersonModel $Person
      */
     public function setPerson($Person)
     {
         $this->Person = $Person;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRoleType()
+    {
+        return $this->RoleType;
+    }
+
+    /**
+     * @param mixed $RoleType
+     */
+    public function setRoleType($RoleType)
+    {
+        $this->RoleType = $RoleType;
     }
 }

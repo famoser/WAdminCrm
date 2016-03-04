@@ -9,7 +9,7 @@
 namespace famoser\phpFrame\Services;
 
 
-use famoser\phpFrame\Models\Database\LoginModel;
+use famoser\phpFrame\Models\Database\LoginDatabaseModel;
 
 class AuthenticationService extends ServiceBase
 {
@@ -19,7 +19,7 @@ class AuthenticationService extends ServiceBase
     }
 
     /**
-     * @return LoginModel|bool
+     * @return LoginDatabaseModel|bool
      */
     public function getUser()
     {
@@ -29,9 +29,9 @@ class AuthenticationService extends ServiceBase
     }
 
     /**
-     * @param LoginModel $user
+     * @param LoginDatabaseModel $user
      */
-    public function setUser(LoginModel $user)
+    public function setUser(LoginDatabaseModel $user)
     {
         if ($user == null)
             unset($_SESSION["user"]);
