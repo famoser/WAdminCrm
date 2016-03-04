@@ -21,7 +21,7 @@ use famoser\phpFrame\Services\LocaleService;
 use famoser\phpFrame\Services\RuntimeService;
 use famoser\phpFrame\Views\GenericCenterView;
 
-class LoginController extends ControllerBase
+abstract class LoginControllerBase extends ControllerBase
 {
     private $instance;
     private $authService;

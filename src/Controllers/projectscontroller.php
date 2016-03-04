@@ -7,7 +7,7 @@ use famoser\crm\Models\Database\MilestoneModel;
 use famoser\crm\Models\Database\ProcedureModel;
 use famoser\crm\Models\Database\ProjectModel;
 use famoser\phpFrame\Controllers\ControllerBase;
-use famoser\phpFrame\Controllers\GenericController;
+use famoser\phpFrame\Controllers\GenericControllerBase;
 use famoser\phpFrame\Helpers\FormatHelper;
 use famoser\phpFrame\Models\Controllers\ControllerConfigModel;
 use famoser\phpFrame\Services\GenericDatabaseService;
@@ -22,7 +22,7 @@ class ProjectsController extends TimeTaskController
 {
     public function __construct($request, $params, $files)
     {
-        parent::__construct($request, $params, $files, "Project", array(GenericController::CRUD_CREATE => GenericController::CRUD_READ));
+        parent::__construct($request, $params, $files, "Project", array(GenericControllerBase::CRUD_CREATE => GenericControllerBase::CRUD_READ));
 
         $project = new ControllerConfigModel(new ProjectModel(), "Project");
         $project->configureList(null, null, null, "StartDate DESC");

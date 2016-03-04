@@ -21,7 +21,7 @@ use famoser\phpFrame\Views\GenericCrudView;
 use famoser\phpFrame\Views\GenericView;
 use famoser\phpFrame\Views\ViewBase;
 
-abstract class GenericController extends MenuController
+abstract class GenericControllerBase extends MenuControllerBase
 {
     private $crudReplaces = null;
     private $controllerName;
@@ -146,7 +146,7 @@ abstract class GenericController extends MenuController
                         }
                     }
 
-                    $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericController::CRUD_CREATE)));
+                    $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericControllerBase::CRUD_CREATE)));
                     $this->addEditObjectsPropertiesToView($view);
 
                     return $this->returnView($view);
@@ -155,7 +155,7 @@ abstract class GenericController extends MenuController
             if (count($params) > 1 && isset($params[1]) && is_numeric($params[1])) {
                 if ($params[0] == "read") {
                     if ($this->fillInstancesWithPassedId($params[1])) {
-                        $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericController::CRUD_READ)));
+                        $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericControllerBase::CRUD_READ)));
                         $this->addEditObjectsPropertiesToView($view);
 
                         return $this->returnView($view);
@@ -186,7 +186,7 @@ abstract class GenericController extends MenuController
                                 LogHelper::getInstance()->logError($this->defaultFriendlyObjectName . " could not be updated");
                         }
 
-                        $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericController::CRUD_UPDATE)));
+                        $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericControllerBase::CRUD_UPDATE)));
                         $this->addEditObjectsPropertiesToView($view);
 
                         return $this->returnView($view);
@@ -217,7 +217,7 @@ abstract class GenericController extends MenuController
                                 LogHelper::getInstance()->logError($this->defaultFriendlyObjectName . " could not be deleted");
                         }
 
-                        $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericController::CRUD_DELETE)));
+                        $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericControllerBase::CRUD_DELETE)));
                         $this->addEditObjectsPropertiesToView($view);
 
                         return $this->returnView($view);
@@ -241,7 +241,7 @@ abstract class GenericController extends MenuController
 
         if (count($params) > 1 && isset($params[1]) && is_numeric($params[1])) {
             if (strpos($params[0], "by") === 0) {
-                $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericController::CRUD_UPDATE)));
+                $view = new GenericCrudView($this->controllerName, $this->getFilenameFromMode($this->getMode(GenericControllerBase::CRUD_UPDATE)));
                 $this->addEditObjectsPropertiesToView($view);
                 $found = false;
 
@@ -289,13 +289,13 @@ abstract class GenericController extends MenuController
 
     private function getFilenameFromMode($mode)
     {
-        if ($mode == GenericController::CRUD_CREATE)
+        if ($mode == GenericControllerBase::CRUD_CREATE)
             return "create";
-        else if ($mode == GenericController::CRUD_READ)
+        else if ($mode == GenericControllerBase::CRUD_READ)
             return "read";
-        else if ($mode == GenericController::CRUD_UPDATE)
+        else if ($mode == GenericControllerBase::CRUD_UPDATE)
             return "update";
-        else if ($mode == GenericController::CRUD_DELETE)
+        else if ($mode == GenericControllerBase::CRUD_DELETE)
             return "delete";
         else
             LogHelper::getInstance()->logFatal("Invalid crud action! Please use one of the constants in GenericController");

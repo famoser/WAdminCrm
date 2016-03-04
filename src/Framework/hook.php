@@ -9,7 +9,7 @@
 
 namespace famoser\phpSLWrapper\Framework\Hook;
 
-use famoser\crm\Controllers\MainController;
+use famoser\crm\Controllers\MainControllerBase;
 use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Services\RuntimeService;
 use famoser\phpFrame\Services\SettingsService;

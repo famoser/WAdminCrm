@@ -8,18 +8,62 @@
 
 namespace famoser\phpFrame\Services;
 
+use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\FormatHelper;
 use famoser\phpFrame\Helpers\PasswordHelper;
 use famoser\phpFrame\Helpers\ReflectionHelper;
 use famoser\phpFrame\Models\Database\BaseDatabaseModel;
 use famoser\phpFrame\Models\Database\BaseModel;
+use famoser\phpFrame\Models\Services\GenericDatabaseService\TableModel;
 use PDO;
 
 class GenericDatabaseService extends DatabaseService
 {
-    public function getClassInfo($object)
+    private $tables;
+
+    public function setup()
     {
-        $arr = get_class_lineage($object);
+        $objectConfigs = $this->getConfig("Objects");
+        $tableConfigs = $this->getConfig("Tables");
+
+        $objects = array();
+        foreach ($objectConfigs as $objectConfig) {
+            $tableModel = new TableModel();
+            $res = $tableModel->setConfig($objectConfig, true);
+            if ($res === true) {
+                $objects[$objectConfig["ObjectName"]] = $tableModel;
+            } else {
+                LogHelper::getInstance()->logError("Error in " . $objectConfig["ObjectName"] . ": " . TableModel::evaluateError($res));
+                return false;
+            }
+        }
+
+        $this->tables = array();
+        foreach ($tableConfigs as $tableConfig) {
+            $tableModel = new TableModel();
+            $res = $tableModel->setConfig($tableConfig);
+            if ($res === true) {
+                $tables[$tableConfig["ObjectName"]] = $tableModel;
+            } else {
+                LogHelper::getInstance()->logError("Error in " . $tableConfig["ObjectName"] . ": " . TableModel::evaluateError($res));
+                return false;
+            }
+        }
+
+        foreach ($this->getTables() as $table) {
+            $inst = $table->getInstance();
+            var_dump(ReflectionHelper::getInstance()->getInheritanceTree($inst));
+        }
+
+        return true;
+    }
+
+    /**
+     * @return TableModel[]
+     */
+    private function getTables()
+    {
+        return $this->tables;
     }
 
     /**

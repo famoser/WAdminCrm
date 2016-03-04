@@ -15,7 +15,7 @@ use famoser\phpFrame\Services\RuntimeService;
 use famoser\phpFrame\Views\MessageView;
 use famoser\phpFrame\Views\RawView;
 
-class ApiControllerBase extends ControllerBase
+abstract class ApiControllerBase extends ControllerBase
 {
     public function Display()
     {

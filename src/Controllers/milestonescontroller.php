@@ -5,7 +5,7 @@ use famoser\crm\Models\Database\MilestoneModel;
 use famoser\crm\Models\Database\ProcedureModel;
 use famoser\crm\Models\Database\ProjectModel;
 use famoser\phpFrame\Controllers\ControllerBase;
-use famoser\phpFrame\Controllers\GenericController;
+use famoser\phpFrame\Controllers\GenericControllerBase;
 use famoser\phpFrame\Helpers\FormatHelper;
 use famoser\phpFrame\Models\Controllers\ControllerConfigModel;
 use famoser\phpFrame\Models\Database\BaseDatabaseModel;
@@ -20,7 +20,7 @@ use famoser\phpFrame\Views\GenericView;
  * Date: 13.09.2015
  * Time: 16:03
  */
-class MilestonesController extends GenericController
+class MilestonesController extends GenericControllerBase
 {
     /*
     /**
@@ -40,7 +40,7 @@ class MilestonesController extends GenericController
         parent::__construct($request,
             $params,
             $files,
-            array(GenericController::CRUD_CREATE => GenericController::CRUD_UPDATE));
+            array(GenericControllerBase::CRUD_CREATE => GenericControllerBase::CRUD_UPDATE));
 
         $this->addMenuItem(new MenuItem("active", ""));
         $this->addMenuItem(new MenuItem("archived", "archived"));

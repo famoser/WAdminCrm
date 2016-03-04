@@ -9,6 +9,7 @@
 namespace famoser\phpFrame\Views;
 
 
+use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\PartHelper;
 use famoser\phpFrame\Services\RuntimeService;
 use famoser\phpFrame\Services\SettingsService;
@@ -39,17 +40,28 @@ class GenericView extends ViewBase
 
     public function loadTemplate()
     {
+        $content = "";
+        if ($this->fromFramework) {
+            $filePath = RuntimeService::getInstance()->getFrameworkDirectory() . "/Templates/" . $this->controller . "/" . $this->folder . $this->view . ".php";
+        } else {
+            $filePath = RuntimeService::getInstance()->getTemplatesDirectory() . "/" . $this->controller . "/" . $this->folder . $this->view . ".php";
+        }
+
+        if (file_exists($filePath)) {
+            $fileContent = $this->loadFile($filePath);
+            if (trim($fileContent) == "")
+                LogHelper::getInstance()->logError("output of file " . $filePath . "is empty");
+            else
+                $content .= $fileContent;
+        } else
+            LogHelper::getInstance()->logError("output file not found: " . $filePath);
+
+
         $const = PartHelper::PART_HEADER_CONTENT;
         if ($this->useCenter)
             $const = PartHelper::PART_HEADER_CENTER;
 
-        $content = $this->loadFile(PartHelper::getInstance()->getPart($const));
-
-        if ($this->fromFramework) {
-            $content .= $this->loadFile(RuntimeService::getInstance()->getFrameworkDirectory() . "/Templates/" . $this->controller . "/" . $this->folder . $this->view . ".php");
-        } else {
-            $content .= $this->loadFile(RuntimeService::getInstance()->getTemplatesDirectory() . "/" . $this->controller . "/" . $this->folder . $this->view . ".php");
-        }
+        $content = $this->loadFile(PartHelper::getInstance()->getPart($const)) . $content;
 
         $const = PartHelper::PART_FOOTER_CONTENT;
         if ($this->useCenter)

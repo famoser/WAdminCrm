@@ -75,6 +75,9 @@ class RouteService extends ServiceBase
 
     public function getAbsoluteLink($relative)
     {
+        $starts = array("http", "www");
+        if (str_starts_with_any($relative, $starts))
+            return $relative;
         return RuntimeService::getInstance()->getRouteUrl() . "/" . $relative;
     }
 }

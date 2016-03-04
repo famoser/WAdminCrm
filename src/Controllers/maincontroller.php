@@ -6,7 +6,7 @@ use famoser\crm\Models\Database\CustomerModel;
 use famoser\crm\Services\AdminAuthenticationService;
 use famoser\crm\Services\CustomerAuthenticationService;
 use famoser\phpFrame\Controllers\ControllerBase;
-use famoser\phpFrame\Controllers\LoginController;
+use famoser\phpFrame\Controllers\LoginControllerBase;
 use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\PasswordHelper;
 use famoser\phpFrame\Helpers\ReflectionHelper;
@@ -23,7 +23,7 @@ use famoser\phpFrame\Views\GenericView;
  * Date: 23.05.2015
  * Time: 13:51
  */
-class MainController extends LoginController
+class MainController extends LoginControllerBase
 {
     public function __construct($request, $params, $files)
     {

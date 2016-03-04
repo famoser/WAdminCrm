@@ -59,7 +59,7 @@ abstract class ControllerBase
                 LogHelper::getInstance()->logUserError(LocaleService::getInstance()->getResources()->getKey("FAILURE_ACCESS_DENIED"));
             } else if ($code == ControllerBase::FAILURE_NOT_FOUND) {
                 header("HTTP/1.0 404 Not Found");
-                LogHelper::getInstance()->logUserError(LocaleService::getInstance()->getResources()->getKey("FAILURE_NOT_FOUND"));
+                LogHelper::getInstance()->logError(LocaleService::getInstance()->getResources()->getKey("FAILURE_NOT_FOUND"));
             } else if ($code == ControllerBase::FAILURE_SERVER_ERROR) {
                 header("HTTP/1.0 500 Internal Server Error");
                 LogHelper::getInstance()->logError(LocaleService::getInstance()->getResources()->getKey("FAILURE_SERVER_ERROR"));
