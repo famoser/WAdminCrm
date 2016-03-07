@@ -9,9 +9,9 @@
 namespace famoser\crm\Controllers\Base;
 
 
-use famoser\phpFrame\Controllers\GenericController;
+use famoser\phpFrame\Controllers\GenericControllerBase;
 
-abstract class TimeTaskController extends GenericController
+abstract class TimeTaskController extends GenericControllerBase
 {
     public function Display($customParams = null)
     {

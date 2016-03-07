@@ -17,6 +17,10 @@
       "Controller": "famoser\\crm\\Controllers\\ApiController"
     },
     {
+      "Url": "/installation",
+      "Controller": "famoser\\crm\\Controllers\\InstallationController"
+    },
+    {
       "Url": "/customers",
       "Controller": "famoser\\crm\\Controllers\\CustomersController"
     },
@@ -74,6 +78,455 @@
             "Path": "files/database.sqlite",
             "User": "root",
             "Password": ""
+          }
+        ],
+        "Tables": [
+          {
+            "TableName": "Customers",
+            "ObjectName": "famoser\\crm\\Models\\Database\\CustomerModel",
+            "Properties": [
+              {
+                "Name": "Company",
+                "Type": "text"
+              },
+              {
+                "Name": "CustomerSinceDate",
+                "Type": "date"
+              },
+              {
+                "Name": "Url",
+                "Type": "text"
+              },
+              {
+                "Name": "UrlAccessCode",
+                "Type": "text"
+              },
+              {
+                "Name": "Projects",
+                "Type": "__1nRelation",
+                "TargetObjectName": "famoser\\crm\\Models\\Database\\ProjectModel"
+              }
+            ]
+          },
+          {
+            "TableName": "Employees",
+            "ObjectName": "famoser\\crm\\Models\\Database\\EmployeeModel",
+            "Properties": [
+              {
+                "Name": "DefaultPaymentPerHour",
+                "Type": "double"
+              }
+            ]
+          },
+          {
+            "TableName": "Expenses",
+            "ObjectName": "famoser\\crm\\Models\\Database\\ExpenseModel",
+            "Properties": [
+              {
+                "Name": "ExpenseType",
+                "Type": "enum"
+              },
+              {
+                "Name": "Amount",
+                "Type": "bool"
+              }
+            ]
+          },
+          {
+            "TableName": "Milestones",
+            "ObjectName": "famoser\\crm\\Models\\Database\\MilestoneModel",
+            "Properties": [
+              {
+                "Name": "ProjectId",
+                "Type": "__n1Relation",
+                "TargetObjectName": "famoser\\crm\\Models\\Database\\ProjectModel",
+                "TargetPropertyName": "Project"
+              },
+              {
+                "Name": "Procedures",
+                "Type": "__1nRelation",
+                "TargetObjectName": "famoser\\crm\\Models\\Database\\ProcedureModel"
+              }
+            ]
+          },
+          {
+            "TableName": "NewsEntries",
+            "ObjectName": "famoser\\crm\\Models\\Database\\NewsEntryModel",
+            "Properties": []
+          },
+          {
+            "TableName": "Passwords",
+            "ObjectName": "famoser\\crm\\Models\\Database\\PasswordModel",
+            "Properties": [
+              {
+                "Name": "Location",
+                "Type": "text"
+              },
+              {
+                "Name": "Username",
+                "Type": "text"
+              },
+              {
+                "Name": "Password",
+                "Type": "text"
+              },
+              {
+                "Name": "Notes",
+                "Type": "text"
+              }
+            ]
+          },
+          {
+            "TableName": "Payments",
+            "ObjectName": "famoser\\crm\\Models\\Database\\PaymentModel",
+            "Properties": [
+              {
+                "Name": "BillingAmount",
+                "Type": "double"
+              },
+              {
+                "Name": "BillingDate",
+                "Type": "date"
+              },
+              {
+                "Name": "BillingIdentification",
+                "Type": "text"
+              },
+              {
+                "Name": "IsPaid",
+                "Type": "bool"
+              },
+              {
+                "Name": "PaymentAmount",
+                "Type": "double"
+              },
+              {
+                "Name": "PaymentDate",
+                "Type": "date"
+              },
+              {
+                "Name": "PaymentType",
+                "Type": "enum"
+              },
+              {
+                "Name": "PayedByPersonId",
+                "Type": "__n1Relation",
+                "TargetObjectName": "famoser\\crm\\Models\\Database\\PersonModel",
+                "TargetPropertyName": "PayedByPerson"
+              }
+            ]
+          },
+          {
+            "TableName": "Persons",
+            "ObjectName": "famoser\\crm\\Models\\Database\\PersonModel",
+            "Properties": [
+              {
+                "Name": "FirstName",
+                "Type": "text"
+              },
+              {
+                "Name": "LastName",
+                "Type": "text"
+              },
+              {
+                "Name": "Street",
+                "Type": "text"
+              },
+              {
+                "Name": "AddressExtension",
+                "Type": "text"
+              },
+              {
+                "Name": "ZipCode",
+                "Type": "text"
+              },
+              {
+                "Name": "Place",
+                "Type": "text"
+              },
+              {
+                "Name": "TelPrivat",
+                "Type": "text"
+              },
+              {
+                "Name": "TelBusiness",
+                "Type": "text"
+              },
+              {
+                "Name": "Mobile",
+                "Type": "text"
+              },
+              {
+                "Name": "Email",
+                "Type": "text"
+              },
+              {
+                "Name": "BirthDate",
+                "Type": "date"
+              },
+              {
+                "Name": "Description",
+                "Type": "text"
+              }
+            ]
+          },
+          {
+            "TableName": "Procedures",
+            "ObjectName": "famoser\\crm\\Models\\Database\\ProcedureModel",
+            "Properties": [
+              {
+                "Name": "PaymentPerHour",
+                "Type": "double"
+              },
+              {
+                "Name": "StartDateTime",
+                "Type": "datetime"
+              },
+              {
+                "Name": "EndDateTime",
+                "Type": "datetime"
+              },
+              {
+                "Name": "ProcedureType",
+                "Type": "enum"
+              },
+              {
+                "Name": "MilestoneId",
+                "Type": "__n1Relation",
+                "TargetObjectName": "famoser\\crm\\Models\\Database\\MilestoneModel",
+                "TargetPropertyName": "Milestone"
+              }
+            ]
+          },
+          {
+            "TableName": "Projects",
+            "ObjectName": "famoser\\crm\\Models\\Database\\ProjectModel",
+            "Properties": [
+              {
+                "Name": "CustomerId",
+                "Type": "__n1Relation",
+                "TargetObjectName": "famoser\\crm\\Models\\Database\\CustomerModel",
+                "TargetPropertyName": "Customer"
+              },
+              {
+                "Name": "Milestones",
+                "Type": "__1nRelation",
+                "TargetObjectName": "famoser\\crm\\Models\\Database\\MilestoneModel"
+              },
+              {
+                "Name": "ProjectRelations",
+                "Type": "__1nRelation",
+                "TargetObjectName": "famoser\\crm\\Models\\Database\\ProjectRelationModel"
+              }
+            ]
+          },
+          {
+            "TableName": "ProjectPersonRelations",
+            "ObjectName": "famoser\\crm\\Models\\Database\\ProjectPersonRelationModel",
+            "Properties": [
+              {
+                "Name": "ProjectPersonRelationType",
+                "Type": "enum"
+              },
+              {
+                "Name": "ProjectId",
+                "Type": "__n1Relation",
+                "TargetObjectName": "famoser\\crm\\Models\\Database\\ProjectModel",
+                "TargetPropertyName": "Project"
+              }
+            ]
+          },
+          {
+            "TableName": "Users",
+            "ObjectName": "famoser\\crm\\Models\\Database\\UserModel",
+            "Properties": [
+              {
+                "Name": "RoleType",
+                "Type": "enum"
+              },
+              {
+                "Name": "PersonId",
+                "Type": "__n1Relation",
+                "TargetObjectName": "famoser\\crm\\Models\\Database\\PersonModel",
+                "TargetPropertyName": "Person"
+              }
+            ]
+          }
+        ],
+        "Objects": [
+          {
+            "ObjectName": "famoser\\crm\\Models\\Database\\Base\\NamedDatabaseModel",
+            "Properties": [
+              {
+                "Name": "Name",
+                "Type": "text"
+              },
+              {
+                "Name": "Description",
+                "Type": "text"
+              }
+            ]
+          },
+          {
+            "ObjectName": "famoser\\crm\\Models\\Database\\Base\\NamedPersonalDatabaseModel",
+            "Properties": [
+              {
+                "Name": "Name",
+                "Type": "text"
+              },
+              {
+                "Name": "Description",
+                "Type": "text"
+              }
+            ]
+          },
+          {
+            "ObjectName": "famoser\\crm\\Models\\Database\\Base\\PersonalDatabaseModel",
+            "Properties": [
+              {
+                "Name": "PersonId",
+                "Type": "__n1Relation",
+                "TargetObjectName": "famoser\\crm\\Models\\Database\\PersonModel",
+                "TargetPropertyName": "Person"
+              }
+            ]
+          },
+          {
+            "ObjectName": "famoser\\crm\\Models\\Database\\Base\\ProjectInfoModel",
+            "Properties": [
+              {
+                "Name": "ProjectId",
+                "Type": "__n1Relation",
+                "TargetObjectName": "famoser\\crm\\Models\\Database\\ProjectModel",
+                "TargetPropertyName": "Project"
+              }
+            ]
+          },
+          {
+            "ObjectName": "famoser\\crm\\Models\\Database\\Base\\TimeTaskModel",
+            "Properties": [
+              {
+                "Name": "StartDate",
+                "Type": "date"
+              },
+              {
+                "Name": "DeadLineDate",
+                "Type": "date"
+              },
+              {
+                "Name": "EndDate",
+                "Type": "date"
+              },
+              {
+                "Name": "CostCeiling",
+                "Type": "double"
+              },
+              {
+                "Name": "FixPrice",
+                "Type": "double"
+              },
+              {
+                "Name": "IsCompleted",
+                "Type": "bool"
+              },
+              {
+                "Name": "CompletedPercentage",
+                "Type": "int"
+              },
+              {
+                "Name": "FinalPrice",
+                "Type": "double"
+              },
+              {
+                "Name": "BillingPrice",
+                "Type": "double"
+              },
+              {
+                "Name": "IsPayed",
+                "Type": "bool"
+              },
+              {
+                "Name": "IsArchived",
+                "Type": "bool"
+              },
+              {
+                "Name": "PaymentId",
+                "Type": "__n1Relation",
+                "TargetObjectName": "famoser\\crm\\Models\\Database\\PaymentModel",
+                "TargetPropertyName": "Payment"
+              }
+            ]
+          },
+          {
+            "ObjectName": "famoser\\phpFrame\\Models\\Database\\BaseDatabaseModel",
+            "Properties": [
+              {
+                "Name": "Id",
+                "Type": "int",
+                "AutoIncrement": true,
+                "PrimaryKey": true
+              },
+              {
+                "Name": "CreatedById",
+                "Type": "__n1Relation",
+                "TargetObjectName": "famoser\\phpFrame\\Models\\Database\\LoginModel",
+                "TargetPropertyName": "CreatedBy"
+              },
+              {
+                "Name": "CreateDateTime",
+                "Type": "datetime"
+              },
+              {
+                "Name": "ChangedById",
+                "Type": "__n1Relation",
+                "TargetObjectName": "famoser\\phpFrame\\Models\\Database\\LoginModel",
+                "TargetPropertyName": "ChangedBy"
+              },
+              {
+                "Name": "ChangedDateTime",
+                "Type": "datetime"
+              }
+            ]
+          },
+          {
+            "ObjectName": "famoser\\phpFrame\\Models\\Database\\LoginDatabaseModel",
+            "Properties": [
+              {
+                "Name": "Email",
+                "Type": "text",
+                "InputType": "email"
+              },
+              {
+                "Name": "PasswordHash",
+                "Type": "text"
+              },
+              {
+                "Name": "AuthHash",
+                "Type": "text"
+              },
+              {
+                "Name": "Password",
+                "Type": "text",
+                "InputType": "password"
+              },
+              {
+                "Name": "ConfirmPassword",
+                "Type": "text",
+                "InputType": "password"
+              }
+            ]
+          },
+          {
+            "ObjectName": "famoser\\phpFrame\\Models\\Database\\BasePersonalDatabaseModel",
+            "Properties": []
+          },
+          {
+            "ObjectName": "famoser\\phpFrame\\Models\\BasePersonalModel",
+            "Properties": []
+          },
+          {
+            "ObjectName": "famoser\\phpFrame\\Models\\BaseModel",
+            "Properties": []
           }
         ]
       },

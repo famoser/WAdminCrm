@@ -15,7 +15,7 @@ use famoser\phpFrame\Services\RouteService;
 use famoser\phpFrame\Services\SettingsService;
 use famoser\phpFrame\Views\ViewBase;
 
-class MenuController extends ControllerBase
+abstract class MenuControllerBase extends ControllerBase
 {
     private $subMenu = array();
     private $mainMenu = array();

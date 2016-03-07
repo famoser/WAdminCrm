@@ -9,9 +9,9 @@
 namespace famoser\crm\Models\Database;
 
 
-use famoser\crm\Models\Database\Base\BaseProjectInfo;
+use famoser\crm\Models\Database\Base\ProjectInfoModel;
 
-class NewsEntry extends BaseProjectInfo
+class NewsEntryModel extends ProjectInfoModel
 {
 
 }

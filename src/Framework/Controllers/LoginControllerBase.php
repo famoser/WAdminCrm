@@ -13,7 +13,7 @@ use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\PasswordHelper;
 use famoser\phpFrame\Helpers\ReflectionHelper;
 use famoser\phpFrame\Helpers\RequestHelper;
-use famoser\phpFrame\Models\Database\LoginModel;
+use famoser\phpFrame\Models\Database\LoginDatabaseModel;
 use famoser\phpFrame\Services\AuthenticationService;
 use famoser\phpFrame\Services\EmailService;
 use famoser\phpFrame\Services\GenericDatabaseService;
@@ -21,13 +21,13 @@ use famoser\phpFrame\Services\LocaleService;
 use famoser\phpFrame\Services\RuntimeService;
 use famoser\phpFrame\Views\GenericCenterView;
 
-class LoginController extends ControllerBase
+abstract class LoginControllerBase extends ControllerBase
 {
     private $instance;
     private $authService;
     private $loggedInRedirect;
 
-    public function __construct($request, $params, $files, LoginModel $implementation, AuthenticationService $authService, $loggedInRedirect)
+    public function __construct($request, $params, $files, LoginDatabaseModel $implementation, AuthenticationService $authService, $loggedInRedirect)
     {
         parent::__construct($request, $params, $files);
         $this->instance = $implementation;
@@ -51,8 +51,8 @@ class LoginController extends ControllerBase
                     //fill object
                     ReflectionHelper::getInstance()->writeFromPostArrayToObjectProperties($this->instance, $this->request);
 
-                    $admin = GenericDatabaseService::getInstance()->getSingle($this->instance, array("Username" => $this->instance->getUsername()), true);
-                    if ($admin instanceof LoginModel && PasswordHelper::getInstance()->validatePasswort($this->instance->getPassword(), $admin->getPasswordHash())) {
+                    $admin = GenericDatabaseService::getInstance()->getSingle($this->instance, array("Username" => $this->instance->getEmail()), true);
+                    if ($admin instanceof LoginDatabaseModel && PasswordHelper::getInstance()->validatePasswort($this->instance->getPassword(), $admin->getPasswordHash())) {
                         AuthenticationService::getInstance()->setUser($admin);
                         $this->exitWithRedirect($this->loggedInRedirect);
                     } else {
@@ -73,7 +73,7 @@ class LoginController extends ControllerBase
         } else if (count($this->params) > 1) {
             if ($this->params[0] == "activateAccount" && PasswordHelper::getInstance()->checkIfHashIsValid($this->params[1])) {
                 $admin = GenericDatabaseService::getInstance()->getSingle($this->instance, array("AuthHash" => $this->params[1]), true);
-                if ($admin instanceof LoginModel) {
+                if ($admin instanceof LoginDatabaseModel) {
                     if (isset($this->request["activateAccount"]) && $this->request["activateAccount"] == true) {
                         ReflectionHelper::getInstance()->writeFromPostArrayToObjectProperties($this->request, $admin);
 
@@ -96,7 +96,7 @@ class LoginController extends ControllerBase
 
                     $newHash = PasswordHelper::getInstance()->createUniqueHash();
                     $admin = GenericDatabaseService::getInstance()->getSingle($this->instance, array("Username" => $this->request["Username"]));
-                    if ($admin instanceof LoginModel) {
+                    if ($admin instanceof LoginDatabaseModel) {
                         $admin->setAuthHash($newHash);
                         GenericDatabaseService::getInstance()->update($admin, array("Id", "AuthHash"));
                         return EmailService::getInstance()->sendEmailFromServer(
@@ -133,7 +133,7 @@ class LoginController extends ControllerBase
         return false;
     }
 
-    private function canSetPassword(LoginModel $model)
+    private function canSetPassword(LoginDatabaseModel $model)
     {
         if ($model->getPassword() != $model->getConfirmPassword()) {
             LogHelper::getInstance()->logUserError("passwords do not match");

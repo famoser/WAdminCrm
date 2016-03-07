@@ -6,7 +6,7 @@
  * Time: 12:21
  */
 
-namespace famoser\phpFrame\Models\Database;
+namespace famoser\phpFrame\Models;
 
 
 use famoser\phpFrame\Interfaces\Models\IModel;

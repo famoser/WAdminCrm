@@ -9,11 +9,15 @@
 namespace famoser\crm\Models\Database;
 
 
-use famoser\crm\Models\Database\Base\BasePersonalThing;
+use famoser\crm\Models\Database\Base\NamedPersonalDatabaseModel;
+use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\FormatHelper;
 
-class Procedure extends BasePersonalThing
+class ProcedureModel extends NamedPersonalDatabaseModel
 {
+    const PROCEDURE_PAYED = 1;
+    const PROCEDURE_NOT_PAYED = 2;
+
     private $PaymentPerHour;
     private $StartDateTime;
     private $EndDateTime;
@@ -22,6 +26,18 @@ class Procedure extends BasePersonalThing
 
     private $MilestoneId;
     private $Milestone;
+
+
+    public function getPaymentTypeText($const)
+    {
+        if ($const == ProcedureModel::PROCEDURE_PAYED)
+            return "payed";
+        if ($const == ProcedureModel::PROCEDURE_NOT_PAYED)
+            return "not payed";
+
+        LogHelper::getInstance()->logError("unknown const: " . $const);
+        return "unknown";
+    }
 
     public function totalCost()
     {
@@ -40,18 +56,6 @@ class Procedure extends BasePersonalThing
         if ($this->getMilestone() != null)
             return $this->getName() . " (" . $this->getMilestone()->getName() . ")";
         return $this->getName();
-    }
-
-    public function getDatabaseArray()
-    {
-        $props = array("PaymentPerHour" => $this->getPaymentPerHour(),
-            "StartDateTime" => $this->getStartDateTime(),
-            "EndDateTime" => $this->getEndDateTime(),
-            "ProcedureType" => $this->getProcedureType(),
-            "MilestoneId" => $this->getMilestoneId(),
-            "AdminId" => $this->getPersonId()
-        );
-        return array_merge($props, parent::getDatabaseArray());
     }
 
     /**
@@ -119,7 +123,7 @@ class Procedure extends BasePersonalThing
     }
 
     /**
-     * @return Milestone
+     * @return MilestoneModel
      */
     public function getMilestone()
     {
@@ -127,7 +131,7 @@ class Procedure extends BasePersonalThing
     }
 
     /**
-     * @param Milestone $Milestone
+     * @param MilestoneModel $Milestone
      */
     public function setMilestone($Milestone)
     {

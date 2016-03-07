@@ -9,20 +9,12 @@
 namespace famoser\crm\Models\Database\Base;
 
 
-use famoser\crm\Models\Database\Project;
+use famoser\crm\Models\Database\ProjectModel;
 
-class BaseProjectInfo extends BasePersonalThing
+abstract class ProjectInfoModel extends NamedPersonalDatabaseModel
 {
     private $ProjectId;
     private $Project;
-
-    public function getDatabaseArray()
-    {
-        $props = array(
-            "ProjectId" => $this->getProjectId()
-        );
-        return array_merge($props, parent::getDatabaseArray());
-    }
 
     /**
      * @return mixed
@@ -41,7 +33,7 @@ class BaseProjectInfo extends BasePersonalThing
     }
 
     /**
-     * @return Project
+     * @return ProjectModel
      */
     public function getProject()
     {
@@ -49,7 +41,7 @@ class BaseProjectInfo extends BasePersonalThing
     }
 
     /**
-     * @param Project $Project
+     * @param ProjectModel $Project
      */
     public function setProject($Project)
     {

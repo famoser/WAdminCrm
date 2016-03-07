@@ -10,11 +10,14 @@ namespace famoser\phpFrame\Services;
 
 
 use famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Models\Services\DatabaseService\ConnectionModel;
 use PDO;
 
 class DatabaseService extends ServiceBase
 {
+    /* @var $objects ConnectionModel[] */
     private $PDOs;
+    /* @var $objects ConnectionModel */
     private $defaultPdo;
 
     const DRIVER_TYPE_MYSQL = 1;
@@ -129,7 +132,19 @@ class DatabaseService extends ServiceBase
      * @param string|null $name
      * @return PDO
      */
-    protected function getDatabaseConnection($name = null)
+    private function getDatabaseConnection($name = null)
+    {
+        $model = $this->getDatabaseConnectionModel($name);
+        if ($model != null)
+            return $model->getConnection();
+        return null;
+    }
+
+    /**
+     * @param null $name
+     * @return ConnectionModel|null
+     */
+    private function getDatabaseConnectionModel($name = null)
     {
         if ($name == null) {
             if ($this->defaultPdo == null) {
@@ -156,6 +171,18 @@ class DatabaseService extends ServiceBase
         return null;
     }
 
+    /**
+     * @param string|null $name
+     * @return PDO
+     */
+    protected function getDatabaseDriver($name = null)
+    {
+        $model = $this->getDatabaseConnectionModel($name);
+        if ($model != null)
+            return $model->getConnectionDriver();
+        return null;
+    }
+
     private function resolveConfig($name = null)
     {
         if ($name == null) {
@@ -179,9 +206,22 @@ class DatabaseService extends ServiceBase
     private function getConnection($connection)
     {
         if ($connection["Type"] == "MySql") {
-            return $this->makePdo("mysql:host=" . $connection["Host"] . ";dbname=" . $connection["Database"] . ";charset=utf8", $connection["User"], $connection["Password"], DatabaseService::DRIVER_TYPE_MYSQL);
+            return new ConnectionModel(
+                $this->makePdo(
+                    "mysql:host=" . $connection["Host"] . ";dbname=" . $connection["Database"] . ";charset=utf8",
+                    $connection["User"],
+                    $connection["Password"],
+                    DatabaseService::DRIVER_TYPE_MYSQL),
+                $connection["Name"],
+                DatabaseService::DRIVER_TYPE_MYSQL);
         } else if ($connection["Type"] = "Sqlite") {
-            return $this->makePdo("sqlite:" . $_SERVER["DOCUMENT_ROOT"] . "/" . $connection["Path"] . "", $connection["User"], $connection["Password"], DatabaseService::DRIVER_TYPE_SQLITE);
+            return new ConnectionModel(
+                $this->makePdo("sqlite:" . $_SERVER["DOCUMENT_ROOT"] . "/" . $connection["Path"] . "",
+                    $connection["User"],
+                    $connection["Password"],
+                    DatabaseService::DRIVER_TYPE_SQLITE),
+                $connection["Name"],
+                DatabaseService::DRIVER_TYPE_SQLITE);
         } else {
             LogHelper::getInstance()->logError("Unknown connection type: " . $connection["Type"], $connection);
             return null;
@@ -200,5 +240,46 @@ class DatabaseService extends ServiceBase
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         return $db;
+    }
+
+    /**
+     * @param $sql
+     * @param array|null $preparedArray
+     * @param bool $returnStmt
+     * @return bool|\PDOStatement
+     */
+    public function executeSql($sql, $preparedArray = null, $returnStmt = false)
+    {
+        try {
+            $db = $this->getDatabaseConnection();
+            if ($db != null) {
+                $stmt = $db->prepare($sql);
+                if ($stmt->execute($preparedArray)) {
+                    if ($returnStmt)
+                        return $stmt;
+                    else
+                        return true;
+                }
+            }
+        } catch (\Exception $ex) {
+            LogHelper::getInstance()->logException($ex);
+        }
+        return false;
+    }
+
+    /**
+     * @return int|bool
+     */
+    public function getLastInsertedId()
+    {
+        try {
+            $db = $this->getDatabaseConnection();
+            if ($db != null) {
+                return $db->lastInsertId();
+            }
+        } catch (\Exception $ex) {
+            LogHelper::getInstance()->logException($ex);
+        }
+        return false;
     }
 }

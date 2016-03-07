@@ -20,6 +20,8 @@ class RuntimeService extends ServiceBase
     private $frameworkDirectory;
     private $templatesDirectory;
 
+    private $request;
+
     /**
      * @param string $uri
      * @param ControllerModel $controller
@@ -122,5 +124,21 @@ class RuntimeService extends ServiceBase
     public function setTemplatesDirectory($templatesDirectory)
     {
         $this->templatesDirectory = $templatesDirectory;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * @param array $request
+     */
+    public function setRequest($request)
+    {
+        $this->request = $request;
     }
 }

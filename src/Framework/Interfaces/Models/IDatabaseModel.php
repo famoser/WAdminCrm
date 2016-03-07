@@ -11,5 +11,5 @@ namespace famoser\phpFrame\Interfaces\Models;
 
 interface IDatabaseModel
 {
-    public function getDatabaseArray();
+
 }

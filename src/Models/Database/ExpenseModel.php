@@ -8,38 +8,30 @@
 
 namespace famoser\crm\Models\Database;
 
-use famoser\crm\Models\Database\Base\BaseProjectInfo;
+use famoser\crm\Models\Database\Base\ProjectInfoModel;
 use famoser\phpFrame\Core\Logging\LogHelper;
 
-class Expense extends BaseProjectInfo
+class ExpenseModel extends ProjectInfoModel
 {
     const EXPENSE_CONSUMABLE = 1;
     const EXPENSE_HARDWARE = 2;
     const EXPENSE_SOFTWARE = 3;
+    const EXPENSE_EXTERNAL_SALARY = 4;
 
-    private $IsExternal;
     private $ExpenseType;
 
     private $Amount;
 
-    public function getDatabaseArray()
-    {
-        $props = array(
-            "IsExternal" => $this->getIsExternal(),
-            "ExpenseType" => $this->getExpenseType(),
-            "Amount" => $this->getAmount(),
-        );
-        return array_merge($props, parent::getDatabaseArray());
-    }
-
     public function getExpenseTypeText($const)
     {
-        if ($const == Expense::EXPENSE_CONSUMABLE)
+        if ($const == ExpenseModel::EXPENSE_CONSUMABLE)
             return "consumable";
-        if ($const == Expense::EXPENSE_HARDWARE)
+        if ($const == ExpenseModel::EXPENSE_HARDWARE)
             return "hardware";
-        if ($const == Expense::EXPENSE_SOFTWARE)
+        if ($const == ExpenseModel::EXPENSE_SOFTWARE)
             return "software";
+        if ($const == ExpenseModel::EXPENSE_EXTERNAL_SALARY)
+            return "external salary";
 
         LogHelper::getInstance()->logError("unknown const: " . $const);
         return "unknown";

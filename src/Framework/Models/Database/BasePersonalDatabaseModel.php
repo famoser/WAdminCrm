@@ -11,7 +11,7 @@ namespace famoser\phpFrame\Models\Database;
 
 use famoser\phpFrame\Interfaces\Models\IPersonalModel;
 
-abstract class BasePersonalModel extends BaseDatabaseModel implements IPersonalModel
+abstract class BasePersonalDatabaseModel extends BaseDatabaseModel implements IPersonalModel
 {
 
 }

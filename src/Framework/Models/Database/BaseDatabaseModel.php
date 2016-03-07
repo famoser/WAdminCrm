@@ -10,14 +10,18 @@ namespace famoser\phpFrame\Models\Database;
 
 
 use famoser\phpFrame\Interfaces\Models\IDatabaseModel;
+use famoser\phpFrame\Models\BaseModel;
 
 abstract class BaseDatabaseModel extends BaseModel implements IDatabaseModel
 {
     private $Id;
-    private $ChangedById;
     private $CreatedById;
-    private $ChangeDateTime;
     private $CreateDateTime;
+    private $ChangedById;
+    private $ChangeDateTime;
+
+    private $CreatedBy;
+    private $ChangedBy;
 
     public function getId()
     {
@@ -27,11 +31,6 @@ abstract class BaseDatabaseModel extends BaseModel implements IDatabaseModel
     public function setId($id)
     {
         $this->Id = $id;
-    }
-
-    public function getDatabaseArray()
-    {
-        return array("Id" => $this->getId());
     }
 
     /**
@@ -64,5 +63,37 @@ abstract class BaseDatabaseModel extends BaseModel implements IDatabaseModel
     public function getCreatedById()
     {
         return $this->CreatedById;
+    }
+
+    /**
+     * @return LoginDatabaseModel
+     */
+    public function getCreatedBy()
+    {
+        return $this->CreatedBy;
+    }
+
+    /**
+     * @param LoginDatabaseModel $CreatedBy
+     */
+    public function setCreatedBy($CreatedBy)
+    {
+        $this->CreatedBy = $CreatedBy;
+    }
+
+    /**
+     * @return LoginDatabaseModel
+     */
+    public function getChangedBy()
+    {
+        return $this->ChangedBy;
+    }
+
+    /**
+     * @param LoginDatabaseModel $ChangedBy
+     */
+    public function setChangedBy($ChangedBy)
+    {
+        $this->ChangedBy = $ChangedBy;
     }
 }

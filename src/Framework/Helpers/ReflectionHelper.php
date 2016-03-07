@@ -142,6 +142,11 @@ class ReflectionHelper extends HelperBase
         return substr($class, strrpos($class, "\\") + 1);
     }
 
+    public function getInheritanceTree($model)
+    {
+        return get_class_lineage($model);
+    }
+
     public function getNamespace($model)
     {
         $class = get_class($model);

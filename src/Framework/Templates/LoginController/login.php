@@ -6,7 +6,7 @@
  * Time: 16:32
  */
 use famoser\phpFrame\Helpers\PartHelper;
-use famoser\phpFrame\Models\Database\LoginModel;
+use famoser\phpFrame\Models\Database\LoginDatabaseModel;
 use famoser\phpFrame\Services\LocaleService;
 use famoser\phpFrame\Services\RouteService;
 use famoser\phpFrame\Views\ViewBase;

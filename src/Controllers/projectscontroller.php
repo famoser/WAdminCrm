@@ -2,12 +2,12 @@
 namespace famoser\crm\Controllers;
 
 use famoser\crm\Controllers\Base\TimeTaskController;
-use famoser\crm\Models\Database\Customer;
-use famoser\crm\Models\Database\Milestone;
-use famoser\crm\Models\Database\Procedure;
-use famoser\crm\Models\Database\Project;
+use famoser\crm\Models\Database\CustomerModel;
+use famoser\crm\Models\Database\MilestoneModel;
+use famoser\crm\Models\Database\ProcedureModel;
+use famoser\crm\Models\Database\ProjectModel;
 use famoser\phpFrame\Controllers\ControllerBase;
-use famoser\phpFrame\Controllers\GenericController;
+use famoser\phpFrame\Controllers\GenericControllerBase;
 use famoser\phpFrame\Helpers\FormatHelper;
 use famoser\phpFrame\Models\Controllers\ControllerConfigModel;
 use famoser\phpFrame\Services\GenericDatabaseService;
@@ -22,16 +22,16 @@ class ProjectsController extends TimeTaskController
 {
     public function __construct($request, $params, $files)
     {
-        parent::__construct($request, $params, $files, "Project", array(GenericController::CRUD_CREATE => GenericController::CRUD_READ));
+        parent::__construct($request, $params, $files, "Project", array(GenericControllerBase::CRUD_CREATE => GenericControllerBase::CRUD_READ));
 
-        $project = new ControllerConfigModel(new Project(), "Project");
+        $project = new ControllerConfigModel(new ProjectModel(), "Project");
         $project->configureList(null, null, null, "StartDate DESC");
         $project->configureCrud(array("StartDate" => FormatHelper::getInstance()->dateFromString("today")));
 
-        $customer = new ControllerConfigModel(new Customer(), "Customer");
+        $customer = new ControllerConfigModel(new CustomerModel(), "Customer");
         $project->addOneNParent($customer);
 
-        $milestone = new ControllerConfigModel(new Milestone(), "Milestone");
+        $milestone = new ControllerConfigModel(new MilestoneModel(), "Milestone");
         $project->addOneNChild($milestone);
 
         $this->addControllerConfig($project);

@@ -1,8 +1,8 @@
 <?php
 namespace famoser\crm\Models\Database;
 
-use famoser\crm\Models\Database\Base\BasePerson;
-use famoser\phpFrame\Models\Database\BasePersonalModel;
+use famoser\crm\Models\Database\Base\PersonalDatabaseModel;
+use famoser\phpFrame\Models\Database\BasePersonalDatabaseModel;
 
 
 /**
@@ -11,32 +11,24 @@ use famoser\phpFrame\Models\Database\BasePersonalModel;
  * Date: 5/18/2015
  * Time: 7:44 PM
  */
-class Customer extends BasePerson
+class CustomerModel extends PersonalDatabaseModel
 {
     private $Company;
     private $CustomerSinceDate;
 
     private $Url;
+    private $UrlAccessCode;
 
     private $Projects;
 
     public function getPersonalIdentification()
     {
-        if ($this->getPerson() != null) {
-            return $this->getPerson()->getPersonalIdentification() . " (" . $this->getCompany() . ")";
-        }
-        return $this->getCompany();
+        return $this->getPerson()->getIdentification();
     }
 
     public function getIdentification()
     {
         return $this->getPerson()->getIdentification() . " (" . $this->getCompany() . ")";
-    }
-
-    public function getDatabaseArray()
-    {
-        $props = array("Company" => $this->getCustomerSinceDate(), "CustomerSinceDate" => $this->getCustomerSinceDate());
-        return array_merge($props, parent::getDatabaseArray());
     }
 
     /**
@@ -72,7 +64,7 @@ class Customer extends BasePerson
     }
 
     /**
-     * @return Project[]
+     * @return ProjectModel[]
      */
     public function getProjects()
     {
@@ -80,7 +72,7 @@ class Customer extends BasePerson
     }
 
     /**
-     * @param Project[] $Projects
+     * @param ProjectModel[] $Projects
      */
     public function setProjects($Projects)
     {
@@ -101,5 +93,21 @@ class Customer extends BasePerson
     public function setUrl($Url)
     {
         $this->Url = $Url;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUrlAccessCode()
+    {
+        return $this->UrlAccessCode;
+    }
+
+    /**
+     * @param mixed $UrlAccessCode
+     */
+    public function setUrlAccessCode($UrlAccessCode)
+    {
+        $this->UrlAccessCode = $UrlAccessCode;
     }
 }
