@@ -10,7 +10,6 @@
     overflow: hidden;
     text-indent: 100%;
     white-space: nowrap;
-    background: url("../../images/elements/go-to-top-arrow.svg") center 50% no-repeat;
     visibility: hidden;
     opacity: 0;
     cursor: pointer;

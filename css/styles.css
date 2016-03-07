@@ -117,55 +117,6 @@ header .support {
     display: none;
 }
 
-.tiles {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    height: 105px;
-}
-
-.tiles li {
-    float: left;
-    border-top: solid 2px rgba(255, 255, 255, 0);
-}
-
-.tiles li a {
-    text-align: center;
-    color: rgb(80, 83, 88);
-
-    padding: 0 20px 28px 20px;
-    display: block;
-    font-size: 20px;
-}
-
-.tiles li:hover,
-.tiles li:focus,
-.tiles li:active,
-.tiles li.active:hover,
-.tiles li.active:focus,
-.tiles li.active:active {
-    border-top: solid 2px rgb(186, 197, 227);
-    color: rgb(80, 83, 88);
-}
-
-.tiles li.active {
-    border-top: solid 2px rgb(56, 84, 113);
-    background: #ffffff;
-}
-
-.tiles span {
-    font-size: 40px;
-    margin: -5px;
-    display: block;
-}
-
-.tiles [class^="flaticon-"]:before,
-.tiles [class*=" flaticon-"]:before,
-.tiles [class^="flaticon-"]:after,
-.tiles [class*=" flaticon-"]:after {
-    font-size: 40px;
-}
-
 .oneline-nav {
     list-style: none;
     padding: 0;
@@ -259,67 +210,6 @@ table td .btn-group {
 table .tilebutton {
     padding: 2px 6px;
     float: left;
-}
-
-textarea.interactive {
-    height: 50px;
-}
-
-textarea.expanded {
-    height: auto;
-    min-height: 200px;
-    min-width: 100%;
-    max-width: 100%;
-}
-
-.btn {
-    padding: 10px 12px;
-}
-
-.btn-group a {
-    float: left;
-}
-
-.btn-group:last-child {
-    float: right;
-}
-
-form.no-replace > * {
-    position: relative;
-    -webkit-transition: opacity 0.3s ease-in-out;
-    -moz-transition: opacity 0.3s ease-in-out;
-    -ms-transition: opacity 0.3s ease-in-out;
-    -o-transition: opacity 0.3s ease-in-out;
-    transition: opacity 0.3s ease-in-out;
-
-    opacity: 1;
-}
-
-form.no-replace.submitting > * {
-    opacity: 0;
-}
-
-form.no-replace input[type=submit] {
-    margin-bottom: 0;
-}
-
-form.no-replace .loading-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-left: -25px;
-    margin-top: -25px;
-
-    opacity: 0;
-}
-
-form.no-replace .loading-content img {
-    width: 50px;
-    height: 50px;
-}
-
-form.no-replace.submitting .loading-content{
-    opacity: 1;
 }
 
 @media (max-width: 991px) {

@@ -59,38 +59,6 @@ table thead tr th.buttons5 {
     top: 0;
 }
 
-.no-margin {
-    margin: 0;
-}
-
-.no-margin-top {
-    margin-top: 0;
-}
-
-.no-margin-bot {
-    margin-bottom: 0;
-}
-
-.no-padding {
-    padding: 0;
-}
-
-.border-left {
-    border-left: solid 1px #b7bac7;
-}
-
-.border-right {
-    border-right: solid 1px #b7bac7;
-}
-
-.border-top {
-    border-top: solid 1px #b7bac7;
-}
-
-.border-bottom {
-    /*exists already!*/
-}
-
 table.procedures tbody tr td:nth-child(2) {
     width: 105px;
 }
@@ -133,18 +101,3 @@ div.message.content,
     height: 50px;
 }
 
-form.no-replace.submitting .loading-content,
-.loading-content.show {
-    opacity: 1;
-}
-
-form.submitting {
-    opacity: 0.6;
-}
-
-form.submitting input,
-form.submitting select,
-form.submitting textarea {
-    pointer-events: none;
-    tab-index: -1;
-}

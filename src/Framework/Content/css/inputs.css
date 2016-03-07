@@ -40,6 +40,15 @@ textarea {
     max-width: 100%;
 }
 
+textarea.interactive {
+    height: 50px;
+}
+
+textarea.expanded {
+    height: auto;
+    min-height: 200px;
+}
+
 input[type=submit] {
 
 }

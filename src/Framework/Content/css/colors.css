@@ -1,6 +1,6 @@
 /*
 colors:
-    background: rgb(255,255,255); (white)
+    background: #ffffff; (white)
     accent-light: rgb(186, 197, 227); (light-blue)
     accent: rgb(45, 101, 161); (blue)
     accent-dark: rgb(56, 84, 113); (dark-blue)
@@ -8,6 +8,7 @@ colors:
     text primary: rgb(183, 186, 199); (light grey)
     text secondary: rgb(80, 83, 88); (grey)
     border: rgb(183, 186, 199); (light grey);
+    border-dark: #000000;
 
     menu: rgb(241, 241, 244);
 
@@ -85,20 +86,11 @@ hr {
 }
 
 /* classes */
-.border-bottom {
-    border-bottom: solid 1px rgb(183, 186, 199);;
-}
-
-.border-top {
-    border-top: solid 1px rgb(183, 186, 199);;
-}
-
-.border-left {
-    border-left: solid 1px rgb(183, 186, 199);;
-}
-
+.border-bottom,
+.border-top,
+.border-left,
 .border-right {
-    border-right: solid 1px rgb(183, 186, 199);;
+    border-color: rgb(183, 186, 199);;
 }
 
 /* nodes */
@@ -143,4 +135,28 @@ textarea:focus {
 /* elements */
 #loading-bar {
     background-color: rgb(186, 197, 227);
+}
+
+/* elements/menu/tiles */
+.tiles li {
+    border-color: #000000;
+}
+
+.tiles li a {
+    color: rgb(80, 83, 88);
+}
+
+.tiles li:hover,
+.tiles li:focus,
+.tiles li:active,
+.tiles li.active:hover,
+.tiles li.active:focus,
+.tiles li.active:active {
+    border-top-color: rgb(186, 197, 227);
+    color: rgb(80, 83, 88);
+}
+
+.tiles li.active {
+    border-color: rgb(56, 84, 113);
+    background: #ffffff;
 }
