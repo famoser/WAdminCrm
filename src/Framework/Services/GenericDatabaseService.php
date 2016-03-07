@@ -66,12 +66,36 @@ class GenericDatabaseService extends DatabaseService
             }
         }
 
-        //create tables, first with random name
+        //create tables, recover data from existing table, drop table, recreate, and fill again
         foreach ($this->getTables() as $table) {
-            $sql = $table->getCreateTableSql($this->getDatabaseDriver(), $table->getTempTableName());
+            //get data from old table;
+            $sql = "SELECT * FROM " . $table->getTableName();
+            $stmt = $this->executeSql($sql, null, true, true);
+            $oldContent = null;
+            if ($stmt !== false) {
+                $oldContent = $this->fetchAllToArray($stmt);
+            }
+
+            //drop table
+            if (!$this->dropTableInternal($table->getTableName())) {
+                LogHelper::getInstance()->logError("Cannot drop table " . $table->getTableName());
+                continue;
+            }
+
+            //create new table
+            $sql = $table->getCreateTableSql($this->getDatabaseDriver(), $table->getTableName());
             if (!$this->executeSql($sql)) {
-                LogHelper::getInstance()->logError("executing " . $sql . " failed");
-                return false;
+                LogHelper::getInstance()->logError("Cannot create table " . $table->getTableName());
+                continue;
+            }
+
+            //fill new table if old values exist
+            if (is_array($oldContent)) {
+                foreach ($oldContent as $entry) {
+                    $values = $table->getPreparedValues($this->getDatabaseDriver(), $entry);
+                    if (!$this->insertInternal($table->getTableName(), $values))
+                        LogHelper::getInstance()->logError("could not insert values", $values);
+                }
             }
         }
 
@@ -180,6 +204,15 @@ class GenericDatabaseService extends DatabaseService
 
     /**
      * @param \PDOStatement $stmt
+     * @return array[]
+     */
+    private function fetchAllToArray(\PDOStatement $stmt)
+    {
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @param \PDOStatement $stmt
      * @param BaseDatabaseModel $model
      * @param boolean $addRelationships
      * @return BaseDatabaseModel
@@ -193,6 +226,18 @@ class GenericDatabaseService extends DatabaseService
             return $result[0];
         } else
             return false;
+    }
+
+    /**
+     * @param \PDOStatement $stmt
+     * @return array
+     */
+    private function fetchSingleToArray(\PDOStatement $stmt)
+    {
+        $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (count($res) > 0)
+            return $res[0];
+        return false;
     }
 
     public function getPropertyByCondition(BaseDatabaseModel $model, $property, $condition = null, $orderBy = null)
@@ -232,7 +277,7 @@ class GenericDatabaseService extends DatabaseService
         if (isset($arr["Id"])) {
             unset($arr["Id"]);
         }
-        $resp = $this->createInternal($table, $arr);
+        $resp = $this->insertInternal($table, $arr);
         if ($resp !== false) {
             $model->setId($resp);
             return true;
@@ -294,28 +339,31 @@ class GenericDatabaseService extends DatabaseService
         }
     }
 
-    private function createInternal($table, $arr)
+    private function insertInternal($table, $arr)
     {
         $excludedArray = array();
-        $params = $this->cleanUpGenericArray($arr);
-        $sql = 'INSERT INTO ' . $table . ' ' . $this->constructMiddleSQL("insert", $params, $excludedArray);
-        if ($this->executeSql($sql, $params))
+        $sql = 'INSERT INTO ' . $table . ' ' . $this->constructMiddleSQL("insert", $arr, $excludedArray);
+        if ($this->executeSql($sql, $arr))
             return $this->getLastInsertedId();
         return false;
     }
 
     private function updateInternal($table, $arr)
     {
-        $params = $this->cleanUpGenericArray($arr);
         $excludedArray = array();
         $excludedArray[] = "Id";
-        $sql = 'UPDATE ' . $table . ' SET ' . $this->constructMiddleSQL("update", $params, $excludedArray) . ' WHERE Id = :Id';
-        return $this->executeSql($sql, $params);
+        $sql = 'UPDATE ' . $table . ' SET ' . $this->constructMiddleSQL("update", $arr, $excludedArray) . ' WHERE Id = :Id';
+        return $this->executeSql($sql, $arr);
     }
 
     private function deleteInternal($table, $id)
     {
         return $this->executeSql('DELETE FROM ' . $table . ' WHERE Id = :Id', array("Id" => $id));
+    }
+
+    private function dropTableInternal($table)
+    {
+        return $this->executeSql('DROP TABLE ' . $table);
     }
 
     private function constructConditionSQL($params)
@@ -331,12 +379,12 @@ class GenericDatabaseService extends DatabaseService
         return $sql;
     }
 
-    private function constructMiddleSQL($mode, $params, $excluded)
+    private function constructMiddleSQL($mode, $params, $excluded = null)
     {
         $sql = "";
         if ($mode == "update") {
             foreach ($params as $key => $val) {
-                if (!in_array($key, $excluded))
+                if (!is_array($excluded) || !in_array($key, $excluded))
                     $sql .= $key . " = :" . $key . ", ";
             }
             $sql = substr($sql, 0, -2);
@@ -344,7 +392,7 @@ class GenericDatabaseService extends DatabaseService
             $part1 = "(";
             $part2 = "VALUES (";
             foreach ($params as $key => $val) {
-                if (!in_array($key, $excluded)) {
+                if (!is_array($excluded) || !in_array($key, $excluded)) {
                     $part1 .= $key . ", ";
                     $part2 .= ":" . $key . ", ";
                 }
@@ -357,49 +405,5 @@ class GenericDatabaseService extends DatabaseService
             $sql = $part1 . $part2;
         }
         return $sql;
-    }
-
-    private function prepareGenericArray($params)
-    {
-        if (is_object($params)) {
-            $properties = get_object_vars($params);
-            $params = array();
-            foreach ($properties as $key => $val) {
-                if ($val != null && !is_object($val))
-                    $params[$key] = $val;
-            }
-        }
-        return $params;
-    }
-
-    private function cleanUpGenericArray($params, $removeNull = false)
-    {
-        $params = $this->prepareGenericArray($params);
-        $deleteKeys = array();
-
-        foreach ($params as $key => $val) {
-            if (strpos($key, "DateTime") !== false)
-                $params[$key] = FormatHelper::getInstance()->dateTimeDatabase($val);
-
-            else if (strpos($key, "Date") !== false)
-                $params[$key] = FormatHelper::getInstance()->dateDatabase($val);
-
-            else if (strpos($key, "PasswordHash") !== false)
-                $params[$key] = PasswordHelper::getInstance()->convertToPasswordHash($val);
-
-            if ($removeNull && $params[$key] == null)
-                $deleteKeys[] = $key;
-        }
-        foreach ($deleteKeys as $notValidKey) {
-            unset($params[$notValidKey]);
-        }
-
-        return $params;
-    }
-
-    private function getTableName(BaseDatabaseModel $model)
-    {
-        $modelName = $table = ReflectionHelper::getInstance()->getObjectName($model);
-        return $modelName;
     }
 }

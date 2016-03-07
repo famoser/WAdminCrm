@@ -45,7 +45,7 @@ class TableModel
                     $prop = new InputPropertyModel();
                     $res = $prop->setConfig($item);
                     if ($res === true)
-                        $this->properties[] = $prop;
+                        $this->properties[$config["Name"]] = $prop;
                     else {
                         return $res + TableModel::TABLE_PROPERTY_CONST_ADD;
                     }
@@ -64,14 +64,6 @@ class TableModel
     public function getTableName()
     {
         return $this->tableName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTempTableName()
-    {
-        return $this->tableName . "Temp";
     }
 
     /**
@@ -115,6 +107,20 @@ class TableModel
         else if ($error == TableModel::ERROR_TABLE_NAME_NOT_SET)
             return "table name not set";
         return "unknown error";
+    }
+
+    public function getPreparedValues($driver, array $values, $removeNull = false, array $ignore = null)
+    {
+        $res = array();
+        foreach ($values as $key => $value) {
+            if ((!is_array($ignore) || !in_array($key, $ignore)) && isset($this->getProperties()[$key])) {
+                if (!$removeNull || $value != null) {
+                    $prop = $this->getProperties()[$key];
+                    $res[$prop->getDatabaseName()] = $prop->convertToDatabaseValue($driver, $value);
+                }
+            }
+        }
+        return $res;
     }
 
     public function getCreateTableSql($driverType, $tableName = null)

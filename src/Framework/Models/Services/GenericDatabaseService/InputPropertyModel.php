@@ -9,34 +9,85 @@
 namespace famoser\phpFrame\Models\Services\GenericDatabaseService;
 
 
+use famoser\phpFrame\Helpers\FormatHelper;
+
 class InputPropertyModel extends TablePropertyModel
 {
     private $inputType;
+    private $inputName;
 
     public function setConfig($config)
     {
         $res = parent::setConfig($config);
         if (isset($config["InputType"])) {
             $this->inputType = $config["InputType"];
-        } else {
-            $this->inputType = "text";
+        }
+        if (isset($config["InputName"]))
+            $this->inputName = $config["InputName"];
+
+        return $res;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getInputType()
+    {
+        if (!is_null($this->inputType))
+            return $this->inputType;
+        else {
             if ($this->getType() == TablePropertyModel::TYPE_INTEGER ||
                 $this->getType() == TablePropertyModel::TYPE_DOUBLE
             )
-                $this->inputType = "number";
+                return "number";
             else if ($this->getType() == TablePropertyModel::TYPE_BOOLEAN)
-                $this->inputType = "checkbox";
+                return "checkbox";
             else if ($this->getType() == TablePropertyModel::TYPE_DATE)
-                $this->inputType = "date";
+                return "date";
             else if ($this->getType() == TablePropertyModel::TYPE_DATETIME)
-                $this->inputType = "datetime";
+                return "datetime";
             else if ($this->getType() == TablePropertyModel::TYPE_TIME)
-                $this->inputType = "time";
+                return "time";
             else if ($this->getType() == TablePropertyModel::TYPE_N1_RELATION)
-                $this->inputType = "select";
+                return "select";
             else if ($this->getType() == TablePropertyModel::TYPE_1N_RELATION)
-                $this->inputType = "hidden";
+                return "hidden";
+            return "text";
         }
-        return $res;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInputName()
+    {
+        if (!is_null($this->inputName))
+            return $this->inputName;
+        return $this->getDatabaseName();
+    }
+
+    public function getInputValue($value)
+    {
+        if (TablePropertyModel::TYPE_TEXT == $this->getType())
+            return $value;
+        else if (TablePropertyModel::TYPE_INTEGER == $this->getType())
+            return is_numeric($value) ? $value : "";
+        else if (TablePropertyModel::TYPE_DOUBLE == $this->getType())
+            return is_numeric($value) ? $value : "";
+        else if (TablePropertyModel::TYPE_BOOLEAN == $this->getType()) {
+            if (is_bool($value))
+                return $value;
+            $parsedVal = strtolower($value);
+            return $parsedVal == "true" || $value == 1 ? true : false;
+        } else if (TablePropertyModel::TYPE_DATE == $this->getType())
+            return FormatHelper::getInstance()->dateInput($value);
+        else if (TablePropertyModel::TYPE_DATETIME == $this->getType())
+            return FormatHelper::getInstance()->dateTimeInput($value);
+        else if (TablePropertyModel::TYPE_TIME == $this->getType())
+            return FormatHelper::getInstance()->timeInput($value);
+        else if (TablePropertyModel::TYPE_N1_RELATION == $this->getType())
+            return is_numeric($value) ? $value : 0;
+        return null;
     }
 }

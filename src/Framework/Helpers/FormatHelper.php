@@ -41,6 +41,11 @@ class FormatHelper extends HelperBase
 
     public function dateTime($input)
     {
+        return $this->dateTimeInput($input);
+    }
+
+    public function dateTimeInput($input)
+    {
         $res = "";
         $time = $this->parseDateTimeObject($input);
         if ($time !== false) {
@@ -95,6 +100,11 @@ class FormatHelper extends HelperBase
 
     public function date($input)
     {
+        return $this->dateInput($input);
+    }
+
+    public function dateInput($input)
+    {
         $res = "";
         $time = $this->parseDateTimeObject($input);
         if ($time !== false) {
@@ -128,6 +138,11 @@ class FormatHelper extends HelperBase
     }
 
     public function time($input)
+    {
+        return $this->timeInput($input);
+    }
+
+    public function timeInput($input)
     {
         $res = "";
         $time = $this->parseDateTimeObject($input);

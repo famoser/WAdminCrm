@@ -13,7 +13,7 @@ namespace famoser\phpFrame\Helpers;
 class FileHelper extends HelperBase
 {
     const FAILURE_FILE_NOT_FOUND = 10;
-    const FAILURE_FILE_UPLOAD_FILED = 11;
+    const FAILURE_FILE_UPLOAD_FAILED = 11;
     const FAILURE_FILE_SAVE_FAILED = 12;
 
     public function getFileTypeUploadedFile($tempfilename)
@@ -28,7 +28,7 @@ class FileHelper extends HelperBase
             return FileHelper::FAILURE_FILE_NOT_FOUND;
         }
         if ($_FILES[$tempfilename]["error"] != UPLOAD_ERR_OK)
-            return FileHelper::FAILURE_FILE_UPLOAD_FILED;
+            return FileHelper::FAILURE_FILE_UPLOAD_FAILED;
 
         if (!move_uploaded_file($_FILES[$tempfilename]["tmp_name"], $newpath))
             return FileHelper::FAILURE_FILE_SAVE_FAILED;
@@ -56,7 +56,12 @@ class FileHelper extends HelperBase
 
     public function evaluateFailure($const)
     {
-        //todo
-        return "Faillure";
+        if ($const == FileHelper::FAILURE_FILE_NOT_FOUND)
+            return "file not found";
+        else if ($const == FileHelper::FAILURE_FILE_SAVE_FAILED)
+            return "file could not be saved";
+        else if ($const == FileHelper::FAILURE_FILE_UPLOAD_FAILED)
+            return "file upload failed";
+        return "unknown failure occurred";
     }
 }

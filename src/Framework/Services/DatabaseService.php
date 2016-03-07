@@ -248,7 +248,7 @@ class DatabaseService extends ServiceBase
      * @param bool $returnStmt
      * @return bool|\PDOStatement
      */
-    public function executeSql($sql, $preparedArray = null, $returnStmt = false)
+    public function executeSql($sql, $preparedArray = null, $returnStmt = false, $swallowFailures = false)
     {
         try {
             $db = $this->getDatabaseConnection();
@@ -262,7 +262,8 @@ class DatabaseService extends ServiceBase
                 }
             }
         } catch (\Exception $ex) {
-            LogHelper::getInstance()->logException($ex);
+            if (!$swallowFailures)
+                LogHelper::getInstance()->logException($ex);
         }
         return false;
     }

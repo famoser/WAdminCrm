@@ -10,6 +10,7 @@ namespace famoser\phpFrame\Models\Services\GenericDatabaseService;
 
 
 use famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Helpers\FormatHelper;
 use famoser\phpFrame\Services\GenericDatabaseService;
 
 class TablePropertyModel
@@ -190,5 +191,34 @@ class TablePropertyModel
             return $sql;
         }
         return false;
+    }
+
+    public function getDatabaseName()
+    {
+        return $this->name;
+    }
+
+    public function convertToDatabaseValue($driverType, $value)
+    {
+        if (TablePropertyModel::TYPE_TEXT == $this->getType())
+            return $value;
+        else if (TablePropertyModel::TYPE_INTEGER == $this->getType())
+            return is_numeric($value) ? $value : null;
+        else if (TablePropertyModel::TYPE_DOUBLE == $this->getType())
+            return is_numeric($value) ? $value : null;
+        else if (TablePropertyModel::TYPE_BOOLEAN == $this->getType()) {
+            if (is_bool($value))
+                return $value;
+            $parsedVal = strtolower($value);
+            return $parsedVal == "true" || $value == 1 ? true : false;
+        } else if (TablePropertyModel::TYPE_DATE == $this->getType())
+            return FormatHelper::getInstance()->dateDatabase($value);
+        else if (TablePropertyModel::TYPE_DATETIME == $this->getType())
+            return FormatHelper::getInstance()->dateTimeDatabase($value);
+        else if (TablePropertyModel::TYPE_TIME == $this->getType())
+            return FormatHelper::getInstance()->timeDatabase($value);
+        else if (TablePropertyModel::TYPE_N1_RELATION == $this->getType())
+            return is_numeric($value) ? $value : 0;
+        return null;
     }
 }
