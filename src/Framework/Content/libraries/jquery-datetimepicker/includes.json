@@ -1,0 +1,8 @@
+{
+  "required": [
+    "jquery"
+  ],
+  "css": [
+    "jquery.datetimepicker.css"
+  ]
+}

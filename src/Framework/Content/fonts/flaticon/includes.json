@@ -1,0 +1,18 @@
+{
+  "family": "Flaticon",
+  "fonts": [
+    {
+      "weight": "normal",
+      "style": "normal",
+      "files": [
+        "flaticon.eot",
+        "flaticon.svg",
+        "flaticon.ttf",
+        "flaticon.woff"
+      ]
+    }
+  ],
+  "css": [
+    "flaticon.css"
+  ]
+}
