@@ -10,6 +10,7 @@ namespace famoser\phpFrame\Services;
 
 
 use famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Helpers\FileHelper;
 use famoser\phpFrame\Models\Locale\Language;
 use famoser\phpFrame\Models\Locale\ResourceWrapper;
 
@@ -31,7 +32,7 @@ class LocaleService extends ServiceBase
             $this->activeLangShort = $this->getConfig("DefaultLanguage");
 
         foreach ($this->getConfig("LanguageResources") as $languageResource) {
-            $this->languages[$languageResource["Language"]] = new Language($languageResource["Language"], $languageResource, SettingsService::getInstance()->getConfig(array("Framework", "FrameworkAssetsDirectory")) . "/Locale/");
+            $this->languages[$languageResource["Language"]] = new Language($languageResource["Language"], $languageResource, RuntimeService::getInstance()->getLocaleDirectory());
         }
 
         if (isset($this->languages[$this->activeLangShort]))

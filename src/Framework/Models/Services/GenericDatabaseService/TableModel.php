@@ -45,7 +45,7 @@ class TableModel
                     $prop = new InputPropertyModel();
                     $res = $prop->setConfig($item);
                     if ($res === true)
-                        $this->properties[$config["Name"]] = $prop;
+                        $this->properties[$item["Name"]] = $prop;
                     else {
                         return $res + TableModel::TABLE_PROPERTY_CONST_ADD;
                     }
@@ -116,7 +116,25 @@ class TableModel
             if ((!is_array($ignore) || !in_array($key, $ignore)) && isset($this->getProperties()[$key])) {
                 if (!$removeNull || $value != null) {
                     $prop = $this->getProperties()[$key];
-                    $res[$prop->getDatabaseName()] = $prop->convertToDatabaseValue($driver, $value);
+                    $val = $prop->convertToDatabaseValue($driver, $value);
+                    if ($val != null || !$removeNull)
+                        $res[$prop->getDatabaseName()] = $val;
+                }
+            }
+        }
+        return $res;
+    }
+
+    public function getPreparedValuesFromObject($driver, $obj, $removeNull = false, array $ignore = null)
+    {
+        $res = array();
+        foreach ($this->getProperties() as $property) {
+            if (!is_array($ignore) || !in_array($property->getDatabaseName(), $ignore)) {
+                $value = $property->getValueFromObject($obj);
+                if (!$removeNull || $value != null) {
+                    $val = $property->convertToDatabaseValue($driver, $value);
+                    if ($val != null || !$removeNull)
+                        $res[$property->getDatabaseName()] = $val;
                 }
             }
         }

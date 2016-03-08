@@ -246,6 +246,7 @@ class DatabaseService extends ServiceBase
      * @param $sql
      * @param array|null $preparedArray
      * @param bool $returnStmt
+     * @param bool $swallowFailures
      * @return bool|\PDOStatement
      */
     public function executeSql($sql, $preparedArray = null, $returnStmt = false, $swallowFailures = false)

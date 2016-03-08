@@ -31,10 +31,8 @@ function hi_framework()
         }
     }
 
-
     $val = SettingsService::getInstance()->tryGetValueFor(array("Framework", "DebugMode"));
     RuntimeService::getInstance()->setFrameworkDirectory(__DIR__);
-    RuntimeService::getInstance()->setTemplatesDirectory($_SERVER["DOCUMENT_ROOT"] . "/" . SettingsService::getInstance()->getValueFor(array("Framework", "TemplatesDirectory")));
     if ($val === true) {
         error_reporting(E_ALL);
         ini_set('display_errors', 1);

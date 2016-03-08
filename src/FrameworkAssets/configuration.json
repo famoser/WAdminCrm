@@ -46,8 +46,6 @@
     "AutoLoader": {
       "famoser\\crm\\": "src"
     },
-    "TemplatesDirectory": "src/Templates",
-    "FrameworkAssetsDirectory": "src/FrameworkAssets",
     "Services": {
       "EmailService": {
         "SenderEmail": "server@florianalexandermoser.ch",
@@ -579,6 +577,12 @@
             ]
           }
         ]
+      },
+      "RuntimeService": {
+        "DocumentRootConnect": "/",
+        "TemplatesDirectory": "src/Templates",
+        "FrameworkAssetsDirectory": "src/FrameworkAssets",
+        "CacheDirectory": "cache"
       }
     }
   }
