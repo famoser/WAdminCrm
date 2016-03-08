@@ -51,7 +51,7 @@ class FileHelper extends HelperBase
         return false;
     }
 
-    public function include_all_files_in_dir($path, $fileEnding)
+    public function includeAllFilesInDir($path, $fileEnding)
     {
         foreach (glob($path . "/*." . $fileEnding) as $filename) {
             require_once $filename;
@@ -93,5 +93,15 @@ class FileHelper extends HelperBase
         if ($str !== false && strlen($str) > 0)
             return json_decode($str, true);
         return null;
+    }
+
+    public function getALlSubFolders($folder)
+    {
+        return glob($folder . DIRECTORY_SEPARATOR . "*", GLOB_ONLYDIR);
+    }
+
+    public function getALlFilesInFolders($folder, $fileType = "*")
+    {
+        return glob($folder . DIRECTORY_SEPARATOR . "*." . $fileType);
     }
 }

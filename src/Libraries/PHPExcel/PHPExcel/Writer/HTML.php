@@ -56,7 +56,7 @@ class PHPExcel_Writer_HTML extends PHPExcel_Writer_Abstract implements PHPExcel_
 	private $_imagesRoot	= '.';
 
 	/**
-	 * embed images, or link to images
+	 * embed img, or link to img
 	 *
 	 * @var boolean
 	 */
@@ -568,7 +568,7 @@ class PHPExcel_Writer_HTML extends PHPExcel_Writer_Abstract implements PHPExcel_
 		// Construct HTML
 		$html = '';
 
-		// Write images
+		// Write img
 		foreach ($pSheet->getDrawingCollection() as $drawing) {
 			if ($drawing instanceof PHPExcel_Worksheet_Drawing) {
 				if ($drawing->getCoordinates() == $coordinates) {
@@ -579,7 +579,7 @@ class PHPExcel_Writer_HTML extends PHPExcel_Writer_Abstract implements PHPExcel_
 						$filename = substr($filename, 1);
 					}
 
-					// Prepend images root
+					// Prepend img root
 					$filename = $this->getImagesRoot() . $filename;
 
 					// Strip off eventual '.'
@@ -1326,7 +1326,7 @@ class PHPExcel_Writer_HTML extends PHPExcel_Writer_Abstract implements PHPExcel_
 	}
 
 	/**
-	 * Get images root
+	 * Get img root
 	 *
 	 * @return string
 	 */
@@ -1335,7 +1335,7 @@ class PHPExcel_Writer_HTML extends PHPExcel_Writer_Abstract implements PHPExcel_
 	}
 
 	/**
-	 * Set images root
+	 * Set img root
 	 *
 	 * @param string $pValue
 	 * @return PHPExcel_Writer_HTML
@@ -1346,7 +1346,7 @@ class PHPExcel_Writer_HTML extends PHPExcel_Writer_Abstract implements PHPExcel_
 	}
 
 	/**
-	 * Get embed images
+	 * Get embed img
 	 *
 	 * @return boolean
 	 */
@@ -1355,7 +1355,7 @@ class PHPExcel_Writer_HTML extends PHPExcel_Writer_Abstract implements PHPExcel_
 	}
 
 	/**
-	 * Set embed images
+	 * Set embed img
 	 *
 	 * @param boolean $pValue
 	 * @return PHPExcel_Writer_HTML

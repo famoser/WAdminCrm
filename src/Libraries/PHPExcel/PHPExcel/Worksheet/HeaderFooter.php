@@ -174,7 +174,7 @@ class PHPExcel_Worksheet_HeaderFooter
 	private $_alignWithMargins	= true;
 
 	/**
-	 * Header/footer images
+	 * Header/footer img
 	 *
 	 * @var PHPExcel_Worksheet_HeaderFooterDrawing[]
 	 */
@@ -415,7 +415,7 @@ class PHPExcel_Worksheet_HeaderFooter
     }
 
     /**
-     * Set header/footer images
+	 * Set header/footer img
      *
      * @param PHPExcel_Worksheet_HeaderFooterDrawing[] $images
      * @throws PHPExcel_Exception
@@ -431,7 +431,7 @@ class PHPExcel_Worksheet_HeaderFooter
     }
 
     /**
-     * Get header/footer images
+	 * Get header/footer img
      *
      * @return PHPExcel_Worksheet_HeaderFooterDrawing[]
      */

@@ -44,8 +44,8 @@ try {
     $mail->msgHTML(file_get_contents('../examples/contents.html'));
     // optional - msgHTML will create an alternate automatically
     $mail->AltBody = 'To view the message, please use an HTML compatible email viewer!';
-    $mail->addAttachment('../examples/images/phpmailer.png'); // attachment
-    $mail->addAttachment('../examples/images/phpmailer_mini.png'); // attachment
+    $mail->addAttachment('../examples/img/phpmailer.png'); // attachment
+    $mail->addAttachment('../examples/img/phpmailer_mini.png'); // attachment
     $mail->action_function = 'callbackAction';
     $mail->send();
     echo "Message Sent OK</p>\n";

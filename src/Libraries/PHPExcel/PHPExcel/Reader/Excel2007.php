@@ -1359,7 +1359,7 @@ class PHPExcel_Reader_Excel2007 extends PHPExcel_Reader_Abstract implements PHPE
 									}
 								}
 
-								// Header/footer images
+								// Header/footer img
 								if ($xmlSheet && $xmlSheet->legacyDrawingHF && !$this->_readDataOnly) {
 									if ($zip->locateName(dirname("$dir/$fileWorksheet") . "/_rels/" . basename($fileWorksheet) . ".rels")) {
 										$relsWorksheet = simplexml_load_string($this->_getFromZipArchive($zip,  dirname("$dir/$fileWorksheet") . "/_rels/" . basename($fileWorksheet) . ".rels") , 'SimpleXMLElement', PHPExcel_Settings::getLibXmlLoaderOptions()); //~ http://schemas.openxmlformats.org/package/2006/relationships");
@@ -1372,7 +1372,7 @@ class PHPExcel_Reader_Excel2007 extends PHPExcel_Reader_Abstract implements PHPE
 										}
 
 										if ($vmlRelationship != '') {
-											// Fetch linked images
+											// Fetch linked img
 											$relsVML = simplexml_load_string($this->_getFromZipArchive($zip,  dirname($vmlRelationship) . '/_rels/' . basename($vmlRelationship) . '.rels' ), 'SimpleXMLElement', PHPExcel_Settings::getLibXmlLoaderOptions()); //~ http://schemas.openxmlformats.org/package/2006/relationships");
 											$drawings = array();
 											foreach ($relsVML->Relationship as $ele) {

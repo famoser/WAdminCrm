@@ -467,7 +467,7 @@ class PHPExcel_Writer_Excel5 extends PHPExcel_Writer_Abstract implements PHPExce
 		$bstoreContainer = new PHPExcel_Shared_Escher_DggContainer_BstoreContainer();
 		$dggContainer->setBstoreContainer($bstoreContainer);
 
-		// the BSE's (all the images)
+		// the BSE's (all the img)
 		foreach ($this->_phpExcel->getAllsheets() as $sheet) {
 			foreach ($sheet->getDrawingCollection() as $drawing) {
 				if ($drawing instanceof PHPExcel_Worksheet_Drawing) {

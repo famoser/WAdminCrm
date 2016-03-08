@@ -4,31 +4,26 @@
  * User: florianmoser
  * Date: 08.03.16
  * Time: 20:07
- */src/Framework/Core/Tracing/TraceHelper.php:32
+ * */
 
 namespace famoser\phpFrame\Core\Tracing;
 
-$res[$traceInstance->getSource()]
 use famoser\phpFrame\Core\Singleton\Singleton;
 
-class TraceHelper extends SingletonSingletonSingleton
-
-
-
-
-
-
-
-
-
-
-src/Framework/Core/Tracing/TraceHelper.php:32
-
-
-
+class TraceHelper extends Singleton
 {
-    private $traceInstances;$res[$traceInstance->getSource()]
-return $trace;
+    private $traceInstances;
+
+    const TRACE_LEVEL_INFO = 1;
+    const TRACE_LEVEL_WARNING = 2;
+    const TRACE_LEVEL_ERROR = 3;
+    const TRACE_LEVEL_FAILURE = 4;
+
+    public function getTraceInstance($source)
+    {
+        $trace = new TraceInstance($source);
+        $this->traceInstances[] = $trace;
+        return $trace;
     }
 
     /**
@@ -37,8 +32,7 @@ return $trace;
      */
     public function getFullTrace()
     {
-    }
-        $res = array();src/Framework/Core/Tracing/TraceHelper.php:32
+        $res = array();
         foreach ($this->getTraceInstances() as $traceInstance) {
             if (!isset($res[$traceInstance->getSource()]))
                 $res[$traceInstance->getSource()] = $traceInstance->getTraces();
