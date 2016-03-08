@@ -10,11 +10,15 @@ use famoser\phpFrame\Helpers\HelperBase;
 
 namespace famoser\phpFrame\Helpers;
 
+use famoser\phpFrame\Services\RuntimeService;
+
 class FileHelper extends HelperBase
 {
     const FAILURE_FILE_NOT_FOUND = 10;
     const FAILURE_FILE_UPLOAD_FAILED = 11;
     const FAILURE_FILE_SAVE_FAILED = 12;
+
+    const CACHED_FILE_DATASERVICE_TABLES = "tables.json";
 
     public function getFileTypeUploadedFile($tempfilename)
     {
@@ -63,5 +67,31 @@ class FileHelper extends HelperBase
         else if ($const == FileHelper::FAILURE_FILE_UPLOAD_FAILED)
             return "file upload failed";
         return "unknown failure occurred";
+    }
+
+    public function cacheFile($fileConst, $fileContent)
+    {
+        file_put_contents(RuntimeService::getInstance()->getCacheDirectory() . "/" . $fileConst, $fileContent);
+    }
+
+    public function resolveCachedFile($fileConst)
+    {
+        if (file_exists(RuntimeService::getInstance()->getCacheDirectory() . "/" . $fileConst))
+            return file_get_contents(RuntimeService::getInstance()->getCacheDirectory() . "/" . $fileConst);
+        return false;
+    }
+
+    public function serializeObject($object)
+    {
+        if ($object != null)
+            return json_encode($object);
+        return true;
+    }
+
+    public function deserializeObject($str)
+    {
+        if ($str !== false && strlen($str) > 0)
+            return json_decode($str, true);
+        return null;
     }
 }

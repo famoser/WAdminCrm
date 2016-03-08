@@ -9,6 +9,7 @@
 namespace famoser\phpFrame\Services;
 
 use famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Helpers\FileHelper;
 use famoser\phpFrame\Helpers\FormatHelper;
 use famoser\phpFrame\Helpers\PasswordHelper;
 use famoser\phpFrame\Helpers\ReflectionHelper;
@@ -20,6 +21,16 @@ use PDO;
 class GenericDatabaseService extends DatabaseService
 {
     private $tables;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->tables = FileHelper::getInstance()->deserializeObject(FileHelper::getInstance()->resolveCachedFile(FileHelper::CACHED_FILE_DATASERVICE_TABLES));
+        if ($this->tables == null) {
+            LogHelper::getInstance()->logError("The service to communicate with your database is not configured. Please run the setup before proceeding to use the application");
+            $this->tables = array();
+        }
+    }
 
     public function setup()
     {
@@ -77,9 +88,11 @@ class GenericDatabaseService extends DatabaseService
             }
 
             //drop table
-            if (!$this->dropTableInternal($table->getTableName())) {
-                LogHelper::getInstance()->logError("Cannot drop table " . $table->getTableName());
-                continue;
+            if (!$this->dropTableInternal($table->getTableName(), true)) {
+                if (is_array($oldContent)) {
+                    LogHelper::getInstance()->logError("Cannot drop table " . $table->getTableName());
+                    continue;
+                }
             }
 
             //create new table
@@ -99,6 +112,7 @@ class GenericDatabaseService extends DatabaseService
             }
         }
 
+        FileHelper::getInstance()->cacheFile(FileHelper::CACHED_FILE_DATASERVICE_TABLES, FileHelper::getInstance()->serializeObject($this->tables));
         return true;
     }
 
@@ -132,11 +146,13 @@ class GenericDatabaseService extends DatabaseService
     public function getAll(BaseDatabaseModel $model, $condition = null, $addRelationships = true, $orderBy = null, $additionalSql = null)
     {
         $table = $this->getTableName($model);
+        if ($table != null) {
+            if ($orderBy != null)
+                $orderBy = " ORDER BY " . $orderBy;
 
-        if ($orderBy != null)
-            $orderBy = " ORDER BY " . $orderBy;
-
-        return $this->getAllWithQuery($model, 'SELECT * FROM ' . $table . " " . $this->constructConditionSQL($condition) . $orderBy . " " . $additionalSql, $condition, $addRelationships);
+            return $this->getAllWithQuery($model, 'SELECT * FROM ' . $table->getTableName() . " " . $this->constructConditionSQL($condition) . $orderBy . " " . $additionalSql, $condition, $addRelationships);
+        }
+        return array();
     }
 
     /**
@@ -164,11 +180,13 @@ class GenericDatabaseService extends DatabaseService
     public function getSingle(BaseDatabaseModel $model, $condition = null, $addRelationships = true, $orderBy = "")
     {
         $table = $this->getTableName($model);
+        if ($table != null) {
+            if ($orderBy != "")
+                $orderBy = " ORDER BY " . $orderBy;
 
-        if ($orderBy != "")
-            $orderBy = " ORDER BY " . $orderBy;
-
-        return $this->getSingleWithQuery($model, 'SELECT * FROM ' . $table . $this->constructConditionSQL($condition) . $orderBy . " LIMIT 1", $condition, $addRelationships);
+            return $this->getSingleWithQuery($model, 'SELECT * FROM ' . $table->getTableName() . $this->constructConditionSQL($condition) . $orderBy . " LIMIT 1", $condition, $addRelationships);
+        }
+        return false;
     }
 
     /**
@@ -244,43 +262,46 @@ class GenericDatabaseService extends DatabaseService
     {
         $table = $this->getTableName($model);
 
-        if ($orderBy != null)
-            $orderBy = " ORDER BY " . $orderBy;
-        else
-            $orderBy = " ORDER BY " . $property;
+        if ($table != null) {
+            if ($orderBy != null)
+                $orderBy = " ORDER BY " . $orderBy;
+            else
+                $orderBy = " ORDER BY " . $property;
 
-        $sql = 'SELECT ' . $property . ' FROM ' . $table . $this->constructConditionSQL($condition) . $orderBy;
-        $stmt = $this->executeSql($sql, $condition, true);
-        if ($stmt != false) {
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC, $model);
-            $resArray = array();
-            foreach ($result as $res) {
-                $resArray[] = $res[$property];
+            $sql = 'SELECT ' . $property . ' FROM ' . $table->getTableName() . $this->constructConditionSQL($condition) . $orderBy;
+            $stmt = $this->executeSql($sql, $condition, true);
+            if ($stmt != false) {
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC, $model);
+                $resArray = array();
+                foreach ($result as $res) {
+                    $resArray[] = $res[$property];
+                }
+
+                return $resArray;
             }
-
-            return $resArray;
         }
         return array();
     }
 
     public function create(BaseDatabaseModel $model)
     {
-        $arr = $model->getDatabaseArray();
-        $arr["ChangeDateTime"] = FormatHelper::getInstance()->dateTimeFromString("now");
-        $arr["CreateDateTime"] = FormatHelper::getInstance()->dateTimeFromString("now");
-        $arr["ChangedById"] = AuthenticationService::getInstance()->getUser()->getId();
-        $arr["CreatedById"] = AuthenticationService::getInstance()->getUser()->getId();
-
         $table = $this->getTableName($model);
+        if ($table != null) {
+            $arr = $table->getPreparedValuesFromObject(parent::getDatabaseDriver(), $model);
+            $arr["ChangeDateTime"] = FormatHelper::getInstance()->dateTimeFromString("now");
+            $arr["CreateDateTime"] = FormatHelper::getInstance()->dateTimeFromString("now");
+            $arr["ChangedById"] = AuthenticationService::getInstance()->getUser()->getId();
+            $arr["CreatedById"] = AuthenticationService::getInstance()->getUser()->getId();
 
-        $arr = $this->cleanUpGenericArray($arr);
-        if (isset($arr["Id"])) {
-            unset($arr["Id"]);
-        }
-        $resp = $this->insertInternal($table, $arr);
-        if ($resp !== false) {
-            $model->setId($resp);
-            return true;
+            $arr = $this->cleanUpGenericArray($arr);
+            if (isset($arr["Id"])) {
+                unset($arr["Id"]);
+            }
+            $resp = $this->insertInternal($table, $arr);
+            if ($resp !== false) {
+                $model->setId($resp);
+                return true;
+            }
         }
         return false;
     }
@@ -361,9 +382,14 @@ class GenericDatabaseService extends DatabaseService
         return $this->executeSql('DELETE FROM ' . $table . ' WHERE Id = :Id', array("Id" => $id));
     }
 
-    private function dropTableInternal($table)
+    /**
+     * @param $table
+     * @param bool $swallowFailures
+     * @return bool|\PDOStatement
+     */
+    private function dropTableInternal($table, $swallowFailures = false)
     {
-        return $this->executeSql('DROP TABLE ' . $table);
+        return $this->executeSql('DROP TABLE ' . $table, null, false, $swallowFailures);
     }
 
     private function constructConditionSQL($params)
@@ -405,5 +431,17 @@ class GenericDatabaseService extends DatabaseService
             $sql = $part1 . $part2;
         }
         return $sql;
+    }
+
+    /**
+     * @param $model
+     * @return bool|TableModel
+     */
+    private function getTableName($model)
+    {
+        $nameSpace = get_class($model);
+        if (isset($this->tables[$nameSpace]))
+            return $this->tables[$nameSpace];
+        return false;
     }
 }

@@ -18,9 +18,19 @@ class RuntimeService extends ServiceBase
     private $controllerParams;
 
     private $frameworkDirectory;
+    private $frameworkAssetsDirectory;
     private $templatesDirectory;
+    private $cacheDirectory;
 
     private $request;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->templatesDirectory = $_SERVER["DOCUMENT_ROOT"] . $this->getConfig("DocumentRootConnect") . $this->getConfig("TemplatesDirectory");
+        $this->frameworkAssetsDirectory = $_SERVER["DOCUMENT_ROOT"] . $this->getConfig("DocumentRootConnect") . $this->getConfig("FrameworkAssetsDirectory");
+        $this->cacheDirectory = $_SERVER["DOCUMENT_ROOT"] . $this->getConfig("DocumentRootConnect") . $this->getConfig("CacheDirectory");
+    }
 
     /**
      * @param string $uri
@@ -33,15 +43,14 @@ class RuntimeService extends ServiceBase
         $controllerParams = remove_empty_entries(explode("/", substr($uri, strlen($controller->getUrl()))));
 
         if (count($controllerParams) > 0) {
-            $paramnumber = count($controllerParams) - 1;
-            $lastparam = $controllerParams[$paramnumber];
-            if (($index = strpos($lastparam, "?_=")) !== false)
-                $controllerParams[$paramnumber] = substr($lastparam, 0, $index);
+            $paramNumber = count($controllerParams) - 1;
+            $lastParam = $controllerParams[$paramNumber];
+            if (($index = strpos($lastParam, "?_=")) !== false)
+                $controllerParams[$paramNumber] = substr($lastParam, 0, $index);
         }
         $this->controllerParams = $controllerParams;
         $this->totalParams = array_merge($this->routeParams, $this->controllerParams);
     }
-
 
     /**
      * @return array $params
@@ -119,14 +128,6 @@ class RuntimeService extends ServiceBase
     }
 
     /**
-     * @param mixed $templatesDirectory
-     */
-    public function setTemplatesDirectory($templatesDirectory)
-    {
-        $this->templatesDirectory = $templatesDirectory;
-    }
-
-    /**
      * @return array
      */
     public function getRequest()
@@ -140,5 +141,29 @@ class RuntimeService extends ServiceBase
     public function setRequest($request)
     {
         $this->request = $request;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCacheDirectory()
+    {
+        return $this->cacheDirectory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFrameworkAssetsDirectory()
+    {
+        return $this->frameworkAssetsDirectory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocaleDirectory()
+    {
+        return $this->getFrameworkAssetsDirectory() . DIRECTORY_SEPARATOR . "Locale";
     }
 }

@@ -221,4 +221,39 @@ class TablePropertyModel
             return is_numeric($value) ? $value : 0;
         return null;
     }
+
+    private function getSetMethod()
+    {
+        return "set" . $this->getDatabaseName();
+    }
+
+    private function getGetMethod()
+    {
+        return "get" . $this->getDatabaseName();
+    }
+
+    public function assertObjectProperties($object)
+    {
+        if (method_exists($object, $this->getSetMethod())) {
+            LogHelper::getInstance()->logError("Method not defined: " . $this->getSetMethod());
+            return false;
+        }
+        if (method_exists($object, $this->getGetMethod())) {
+            LogHelper::getInstance()->logError("Method not defined: " . $this->getGetMethod());
+            return false;
+        }
+        return true;
+    }
+
+    public function getValueFromObject($object)
+    {
+        $methodName = $this->getGetMethod();
+        return $object->$methodName();
+    }
+
+    public function setValueToObject($object, $value)
+    {
+        $methodName = $this->getSetMethod();
+        return $object->$methodName($value);
+    }
 }
