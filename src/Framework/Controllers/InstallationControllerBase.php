@@ -22,10 +22,7 @@ abstract class InstallationControllerBase extends ControllerBase
         } else if (count($this->params) > 0) {
             if ($this->params[0] == "setup") {
                 if (ControllerHelper::getInstance()->isPostRequest($this->request, "setup")) {
-                    if (!GenericDatabaseService::getInstance()->setup())
-                        LogHelper::getInstance()->logError("GenericDatabaseService could not initialize");
-                    else
-                        LogHelper::getInstance()->logUserInfo("GenericDatabaseService initialized");
+                    
                 }
                 $view = new GenericCenterView("InstallationController", "setup", null, true);
                 return $this->returnView($view);

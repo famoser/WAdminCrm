@@ -187,24 +187,29 @@ class LogHelper extends Singleton
     }
 
     /**
+     * @param $shortenUserMessages
      * @return string as string with \n line divisors formatted logs
      */
-    public function getLogsAsText()
+    public function getLogsAsText($shortenUserMessages = true)
     {
         $str = "";
         foreach ($this->getLogs() as $logItem) {
-            $str .= $this->renderLogItemAsText($logItem) . "\n\n";
+            $str .= $this->renderLogItemAsText($logItem, $shortenUserMessages) . "\n\n";
         }
         return $str;
     }
 
-    public function renderLogItemAsText(LogItem $log)
+    public function renderLogItemAsText(LogItem $log, $shortenUserMessages = true)
     {
+        if (($log->getLogLevel() == LogHelper::LOG_USER_INFO || $log->getLogLevel() == LogHelper::LOG_USER_ERROR) && $shortenUserMessages)
+            return $this->getLogLevelAsString($log->getLogLevel() . ": " . $log->getMessage());
         return $this->getLogLevelAsString($log->getLogLevel()) . ": " . $log->getMessage() . "\n" . $log->getSource();
     }
 
-    public function renderLogItemAsHtml(LogItem $log)
+    public function renderLogItemAsHtml(LogItem $log, $shortenUserMessages = true)
     {
+        if (($log->getLogLevel() == LogHelper::LOG_USER_INFO || $log->getLogLevel() == LogHelper::LOG_USER_ERROR) && $shortenUserMessages)
+            return nl2br("<b>" . $this->getLogLevelAsString($log->getLogLevel()) . "</b>: " . $log->getMessage());
         return nl2br("<b>" . $this->getLogLevelAsString($log->getLogLevel()) . "</b>: " . $log->getMessage() . "<br/>" . $log->getSource());
     }
 

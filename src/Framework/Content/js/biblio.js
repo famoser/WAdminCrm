@@ -167,7 +167,7 @@ function optimizeModals() {
 }
 
 var MSG_TYPE = {
-    INFO: 1,
+    USER_INFO: 1,
     USER_ERROR: 2,
     SYSTEM_ERROR: 3
 };

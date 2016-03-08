@@ -4,5 +4,8 @@
   ],
   "css": [
     "jquery.datetimepicker.css"
+  ],
+  "js": [
+    "jquery.datetimepicker.js"
   ]
 }

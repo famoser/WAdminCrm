@@ -166,4 +166,12 @@ class RuntimeService extends ServiceBase
     {
         return $this->getFrameworkAssetsDirectory() . DIRECTORY_SEPARATOR . "Locale";
     }
+
+    /**
+     * @return string
+     */
+    public function getFrameworkContentDirectory()
+    {
+        return $this->getFrameworkDirectory() . DIRECTORY_SEPARATOR . "Content";
+    }
 }

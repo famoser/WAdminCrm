@@ -160,3 +160,60 @@ textarea:focus {
     border-color: rgb(56, 84, 113);
     background: #ffffff;
 }
+
+/*elements/scrollbar */
+::-webkit-scrollbar-track {
+    background: #ffffff;
+    border-left-color: rgb(186, 197, 227);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(186, 197, 227);
+}
+
+::-webkit-scrollbar-thumb:window-inactive {
+    background: rgb(186, 197, 227);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(56, 84, 113);
+}
+
+/* elements/modals */
+.modal-backdrop {
+    background: #ffffff;
+}
+
+.modal-content {
+    background: #ffffff;
+    color: rgb(80, 83, 88);
+    border-color: rgb(183, 186, 199);
+}
+
+/*elements/menu */
+.primary-menu-items .tiles li {
+    border-right-color: rgb(255, 255, 255);
+}
+
+.secondary-menu-items .tiles li {
+    border-left-color: rgb(255, 255, 255);
+}
+
+/*elements/table */
+table.sortable thead th a {
+    color: rgb(56, 84, 113);
+}
+
+/* elements/header */
+header {
+    background-color: #ffffff;
+    border-bottom-color: rgb(183, 186, 199);
+}
+
+header .brand {
+    color: rgb(56, 84, 113);
+}
+
+header .application {
+    color: rgb(80, 83, 88);
+}

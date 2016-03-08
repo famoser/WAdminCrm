@@ -10,5 +10,8 @@
   "img": [
     "chosen-sprite.png",
     "chose-sprite@2x.png"
+  ],
+  "js": [
+    "chosen.jquery.min.js"
   ]
 }

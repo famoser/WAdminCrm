@@ -10,10 +10,10 @@ function register() {
     registerComponents();
 }
 
-function registerComponents(docheckLog) {
+function registerComponents(doCheckLog) {
     if (debug) console.log("registerComponents() called");
 
-    if (docheckLog == undefined || docheckLog == true)
+    if (doCheckLog != undefined || doCheckLog == true)
         checkLog();
 
     //AJAX Script für RefreshButtons
@@ -445,24 +445,22 @@ function registerComponents(docheckLog) {
     });
 
     /* HELPERS */
-    //grab the "back to top" link
-    var $top_arrow = $('.arrow-top');
-
     //hide or show the "back to top" link
     $(window).scroll(function () {
         ($(this).scrollTop() > 300 ) ? $top_arrow.addClass('arrow-is-visible') : $top_arrow.removeClass('arrow-is-visible arrow-fade-out');
         if ($(this).scrollTop() > 1200) {
-            $top_arrow.addClass('arrow-fade-out');
+            $('.arrow-top').addClass('arrow-fade-out');
         }
     });
 
     //smooth scroll to top
-    $top_arrow.unbind('click').bind("click", function (event) {
-        $top_arrow.removeClass('arrow-is-visible');
+    $('.arrow-top').unbind('click').bind("click", function (event) {
+        $('.arrow-top').removeClass('arrow-is-visible');
         event.preventDefault();
         $('body,html').animate({
                 scrollTop: 0
             }, 300
         );
+        return false;
     });
 }
