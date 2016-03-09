@@ -22,7 +22,7 @@ if ($this instanceof ViewBase) { ?>
             <div class="clearfix">
                 <div class="col-md-6">
                     <a href="/">
-                        <img class="brand" width="111" height="33" alt="Admin Logo" src="/src/Framework/Content/images/Logo.png">
+                        <img class="brand" width="111" height="33" alt="Admin Logo" src="/img/Logo.png">
                     </a>
                 </div>
                 <div class="col-md-6">

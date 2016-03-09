@@ -437,11 +437,11 @@ class PartHelper extends HelperBase
     {
         $logType = LogHelper::getInstance()->convertToLogType($log->getLogLevel());
         if ($logType == LogHelper::LOG_TYPE_USER_ERROR)
-            return "user-error";
+            return "warning-message";
         if ($logType == LogHelper::LOG_TYPE_USER_INFO)
-            return "info";
+            return "info-message";
         if ($logType == LogHelper::LOG_TYPE_SYSTEM_ERROR)
-            return "system-error";
+            return "danger-message";
         LogHelper::getInstance()->logError("Unknown logtype", $log);
         return "";
     }

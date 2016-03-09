@@ -21,15 +21,20 @@ class RuntimeService extends ServiceBase
     private $frameworkAssetsDirectory;
     private $templatesDirectory;
     private $cacheDirectory;
+    private $baseDirectory;
 
     private $request;
 
     public function __construct()
     {
         parent::__construct();
-        $this->templatesDirectory = $_SERVER["DOCUMENT_ROOT"] . $this->getConfig("DocumentRootConnect") . $this->getConfig("TemplatesDirectory");
-        $this->frameworkAssetsDirectory = $_SERVER["DOCUMENT_ROOT"] . $this->getConfig("DocumentRootConnect") . $this->getConfig("FrameworkAssetsDirectory");
-        $this->cacheDirectory = $_SERVER["DOCUMENT_ROOT"] . $this->getConfig("DocumentRootConnect") . $this->getConfig("CacheDirectory");
+        $documentRoot = $this->getConfig("DocumentRootConnect");
+        if (str_ends_with($documentRoot, "/"))
+            $documentRoot = substr($documentRoot, 0, -1);
+        $this->templatesDirectory = $_SERVER["DOCUMENT_ROOT"] . $documentRoot . DIRECTORY_SEPARATOR . $this->getConfig("TemplatesDirectory");
+        $this->frameworkAssetsDirectory = $_SERVER["DOCUMENT_ROOT"] . $documentRoot . DIRECTORY_SEPARATOR . $this->getConfig("FrameworkAssetsDirectory");
+        $this->cacheDirectory = $_SERVER["DOCUMENT_ROOT"] . $documentRoot . DIRECTORY_SEPARATOR . $this->getConfig("CacheDirectory");
+        $this->baseDirectory = $_SERVER["DOCUMENT_ROOT"] . $documentRoot;
     }
 
     /**
@@ -173,5 +178,13 @@ class RuntimeService extends ServiceBase
     public function getFrameworkContentDirectory()
     {
         return $this->getFrameworkDirectory() . DIRECTORY_SEPARATOR . "Content";
+    }
+
+    /**
+     * @return string
+     */
+    public function getBaseDirectory()
+    {
+        return $this->baseDirectory;
     }
 }

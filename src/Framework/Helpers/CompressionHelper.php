@@ -9,6 +9,8 @@
 namespace famoser\phpFrame\Helpers;
 
 
+use famoser\phpFrame\Core\Tracing\TraceHelper;
+
 class CompressionHelper extends HelperBase
 {
     // CSS Minimizer => http://ideone.com/Q5USEF + improvement(s)
@@ -58,8 +60,10 @@ class CompressionHelper extends HelperBase
     // JavaScript Minimizer
     public function compressJavascript($input)
     {
+        $trace = TraceHelper::getInstance()->getTraceInstance("CompressionHelper");
+        $msg = "compressed file from " . strlen($input);
         if (trim($input) === "") return $input;
-        return preg_replace(
+        $output = preg_replace(
             array(
                 // Remove comment(s)
                 '#\s*("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')\s*|\s*\/\*(?!\!|@cc_on)(?>[\s\S]*?\*\/)\s*|\s*(?<![\:\=])\/\/.*(?=[\n\r]|$)|^\s*|\s*$#',
@@ -80,6 +84,9 @@ class CompressionHelper extends HelperBase
                 '$1.$3'
             ),
             $input);
+
+        $trace->trace(TraceHelper::TRACE_LEVEL_INFO, $msg . " to " . strlen($output));
+        return $output;
     }
 
 }

@@ -13,6 +13,7 @@ use famoser\phpFrame\Core\Logging\LogHelper;
 use famoser\phpFrame\Helpers\ControllerHelper;
 use famoser\phpFrame\Services\GenericDatabaseService;
 use famoser\phpFrame\Views\GenericCenterView;
+use famoser\phpFrame\WorkFlows\SetupWorkFlow;
 
 abstract class InstallationControllerBase extends ControllerBase
 {
@@ -22,7 +23,9 @@ abstract class InstallationControllerBase extends ControllerBase
         } else if (count($this->params) > 0) {
             if ($this->params[0] == "setup") {
                 if (ControllerHelper::getInstance()->isPostRequest($this->request, "setup")) {
-                    
+                    $exe = SetupWorkFlow::getInstance()->execute();
+                    if (!$exe)
+                        LogHelper::getInstance()->logUserError("setup failed!");
                 }
                 $view = new GenericCenterView("InstallationController", "setup", null, true);
                 return $this->returnView($view);

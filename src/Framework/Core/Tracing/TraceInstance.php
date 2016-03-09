@@ -13,7 +13,7 @@ class TraceInstance
 {
     private $source;
     private $highestTraceLevel;
-    private $traces;
+    private $traces = array();
 
     public function __construct($source)
     {

@@ -12,7 +12,7 @@ use famoser\phpFrame\Core\Singleton\Singleton;
 
 class TraceHelper extends Singleton
 {
-    private $traceInstances;
+    private $traceInstances = array();
 
     const TRACE_LEVEL_INFO = 1;
     const TRACE_LEVEL_WARNING = 2;
@@ -34,10 +34,12 @@ class TraceHelper extends Singleton
     {
         $res = array();
         foreach ($this->getTraceInstances() as $traceInstance) {
-            if (!isset($res[$traceInstance->getSource()]))
-                $res[$traceInstance->getSource()] = $traceInstance->getTraces();
-            else
-                $res[$traceInstance->getSource()] = array_merge($res[$traceInstance->getSource()], $traceInstance->getTraces());
+            if (count($traceInstance->getTraces()) > 0) {
+                if (!isset($res[$traceInstance->getSource()]))
+                    $res[$traceInstance->getSource()] = $traceInstance->getTraces();
+                else
+                    $res[$traceInstance->getSource()] = array_merge($res[$traceInstance->getSource()], $traceInstance->getTraces());
+            }
         }
         return $res;
     }

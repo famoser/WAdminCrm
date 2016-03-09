@@ -4,17 +4,17 @@
     {
       "weight": "normal",
       "style": "normal",
-      "files": "FrutigerNeueTW1G-Regular.otf"
+      "file": "FrutigerNeueLTW1G-Regular"
     },
     {
       "weight": "thin",
       "style": "normal",
-      "file": "FrutigerNeueTW1G-Thin.otf"
+      "file": "FrutigerNeueLTW1G-Thin"
     },
     {
       "weight": "ultra-light",
       "style": "normal",
-      "file": "FrutigerNeueTW1G-UltraLt.otf"
+      "file": "FrutigerNeueLTW1G-UltLt"
     }
   ]
 }

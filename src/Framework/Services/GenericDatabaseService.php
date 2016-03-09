@@ -9,6 +9,7 @@
 namespace famoser\phpFrame\Services;
 
 use famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Core\Tracing\TraceHelper;
 use famoser\phpFrame\Helpers\FileHelper;
 use famoser\phpFrame\Helpers\FormatHelper;
 use famoser\phpFrame\Helpers\PasswordHelper;
@@ -27,7 +28,6 @@ class GenericDatabaseService extends DatabaseService
         parent::__construct();
         $this->tables = FileHelper::getInstance()->deserializeObject(FileHelper::getInstance()->resolveCachedFile(FileHelper::CACHED_FILE_DATASERVICE_TABLES));
         if ($this->tables == null) {
-            LogHelper::getInstance()->logError("The service to communicate with your database is not configured. Please run the setup before proceeding to use the application");
             $this->tables = array();
         }
     }
@@ -37,6 +37,8 @@ class GenericDatabaseService extends DatabaseService
         $objectConfigs = $this->getConfig("Objects");
         $tableConfigs = $this->getConfig("Tables");
 
+        $trace = TraceHelper::getInstance()->getTraceInstance("Database Service");
+
         /* @var $objects TableModel[] */
         $objects = array();
         foreach ($objectConfigs as $objectConfig) {
@@ -45,7 +47,7 @@ class GenericDatabaseService extends DatabaseService
             if ($res === true) {
                 $objects[$objectConfig["ObjectName"]] = $tableModel;
             } else {
-                LogHelper::getInstance()->logError("Error in " . $objectConfig["ObjectName"] . ": " . TableModel::evaluateError($res));
+                $trace->trace(TraceHelper::TRACE_LEVEL_ERROR, "Error in " . $objectConfig["ObjectName"] . ": " . TableModel::evaluateError($res));
                 return false;
             }
         }
@@ -57,7 +59,7 @@ class GenericDatabaseService extends DatabaseService
             if ($res === true) {
                 $this->tables[$tableConfig["ObjectName"]] = $tableModel;
             } else {
-                LogHelper::getInstance()->logError("Error in " . $tableConfig["ObjectName"] . ": " . TableModel::evaluateError($res));
+                $trace->trace(TraceHelper::TRACE_LEVEL_ERROR, "Error in " . $tableConfig["ObjectName"] . ": " . TableModel::evaluateError($res));
                 return false;
             }
         }
@@ -71,10 +73,20 @@ class GenericDatabaseService extends DatabaseService
                 if (isset($objects[$class])) {
                     $table->addProperties($objects[$class]->getProperties());
                 } else {
-                    LogHelper::getInstance()->logError("Base Class not found: " . $class . " for object of type " . $table->getObjectName());
+                    $trace->trace(TraceHelper::TRACE_LEVEL_ERROR, "Base Class not found: " . $class . " for object of type " . $table->getObjectName());
                     return false;
                 }
             }
+        }
+
+        //assert models are correctly configured
+        $successful = true;
+        foreach ($this->getTables() as $table) {
+            $successful &= $table->testModel($trace);
+        }
+        if (!$successful) {
+            $trace->trace(TraceHelper::TRACE_LEVEL_ERROR, "not all objects could setup correctly.");
+            return false;
         }
 
         //create tables, recover data from existing table, drop table, recreate, and fill again
@@ -90,7 +102,7 @@ class GenericDatabaseService extends DatabaseService
             //drop table
             if (!$this->dropTableInternal($table->getTableName(), true)) {
                 if (is_array($oldContent)) {
-                    LogHelper::getInstance()->logError("Cannot drop table " . $table->getTableName());
+                    $trace->trace(TraceHelper::TRACE_LEVEL_ERROR, "Cannot drop table " . $table->getTableName());
                     continue;
                 }
             }
@@ -98,7 +110,7 @@ class GenericDatabaseService extends DatabaseService
             //create new table
             $sql = $table->getCreateTableSql($this->getDatabaseDriver(), $table->getTableName());
             if (!$this->executeSql($sql)) {
-                LogHelper::getInstance()->logError("Cannot create table " . $table->getTableName());
+                $trace->trace(TraceHelper::TRACE_LEVEL_ERROR, "Cannot create table " . $table->getTableName());
                 continue;
             }
 
@@ -107,12 +119,12 @@ class GenericDatabaseService extends DatabaseService
                 foreach ($oldContent as $entry) {
                     $values = $table->getPreparedValues($this->getDatabaseDriver(), $entry);
                     if (!$this->insertInternal($table->getTableName(), $values))
-                        LogHelper::getInstance()->logError("could not insert values", $values);
+                        $trace->trace(TraceHelper::TRACE_LEVEL_ERROR, "could not insert values: " . json_encode($values));
                 }
             }
         }
 
-        FileHelper::getInstance()->cacheFile(FileHelper::CACHED_FILE_DATASERVICE_TABLES, FileHelper::getInstance()->serializeObject($this->tables));
+        FileHelper::getInstance()->cacheFile(FileHelper::CACHED_FILE_DATASERVICE_TABLES, FileHelper::getInstance()->serializeObject($this->getTables()));
         return true;
     }
 

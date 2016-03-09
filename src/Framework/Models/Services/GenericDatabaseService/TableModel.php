@@ -9,9 +9,11 @@
 namespace famoser\phpFrame\Models\Services\GenericDatabaseService;
 
 
+use famoser\phpFrame\Core\Tracing\TraceHelper;
+use famoser\phpFrame\Core\Tracing\TraceInstance;
 use famoser\phpFrame\Services\GenericDatabaseService;
 
-class TableModel
+class TableModel implements \JsonSerializable
 {
     const ERROR_TABLE_NAME_NOT_SET = 1;
     const ERROR_OBJECT_NAME_NOT_SET = 2;
@@ -141,6 +143,20 @@ class TableModel
         return $res;
     }
 
+    public function testModel(TraceInstance $trace)
+    {
+        $instance = $this->getInstance();
+        if ($instance == null) {
+            $trace->trace(TraceHelper::TRACE_LEVEL_ERROR, "cannot create instance of " . $this->objectName);
+            return false;
+        }
+        $successful = true;
+        foreach ($this->getProperties() as $property) {
+            $successful &= $property->assertObjectProperties($instance, $trace);
+        }
+        return $successful;
+    }
+
     public function getCreateTableSql($driverType, $tableName = null)
     {
         if ($tableName == null)
@@ -152,5 +168,18 @@ class TableModel
                 $propSql[] = $property->getCreateTableSql($driverType);
         }
         return $sql . implode(",", $propSql) . ")";
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        $vars = get_object_vars($this);
+        return $vars;
     }
 }

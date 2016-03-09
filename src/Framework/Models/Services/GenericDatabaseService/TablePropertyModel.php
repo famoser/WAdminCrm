@@ -10,10 +10,12 @@ namespace famoser\phpFrame\Models\Services\GenericDatabaseService;
 
 
 use famoser\phpFrame\Core\Logging\LogHelper;
+use famoser\phpFrame\Core\Tracing\TraceHelper;
+use famoser\phpFrame\Core\Tracing\TraceInstance;
 use famoser\phpFrame\Helpers\FormatHelper;
 use famoser\phpFrame\Services\GenericDatabaseService;
 
-class TablePropertyModel
+class TablePropertyModel implements \JsonSerializable
 {
     const ERROR_NAME_UNDEFINED = 1;
     const ERROR_TYPE_UNDEFINED = 2;
@@ -232,14 +234,14 @@ class TablePropertyModel
         return "get" . $this->getDatabaseName();
     }
 
-    public function assertObjectProperties($object)
+    public function assertObjectProperties($object, TraceInstance $trace)
     {
-        if (method_exists($object, $this->getSetMethod())) {
-            LogHelper::getInstance()->logError("Method not defined: " . $this->getSetMethod());
+        if (!method_exists($object, $this->getSetMethod())) {
+            $trace->trace(TraceHelper::TRACE_LEVEL_ERROR, "Method not defined in class " . get_class($object) . ": " . $this->getSetMethod());
             return false;
         }
-        if (method_exists($object, $this->getGetMethod())) {
-            LogHelper::getInstance()->logError("Method not defined: " . $this->getGetMethod());
+        if (!method_exists($object, $this->getGetMethod())) {
+            $trace->trace(TraceHelper::TRACE_LEVEL_ERROR, "Method not defined in class " . get_class($object) . ": " . $this->getGetMethod());
             return false;
         }
         return true;
@@ -255,5 +257,18 @@ class TablePropertyModel
     {
         $methodName = $this->getSetMethod();
         return $object->$methodName($value);
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        $vars = get_object_vars($this);
+        return $vars;
     }
 }

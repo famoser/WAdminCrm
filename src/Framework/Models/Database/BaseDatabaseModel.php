@@ -18,7 +18,7 @@ abstract class BaseDatabaseModel extends BaseModel implements IDatabaseModel
     private $CreatedById;
     private $CreateDateTime;
     private $ChangedById;
-    private $ChangeDateTime;
+    private $ChangedDateTime;
 
     private $CreatedBy;
     private $ChangedBy;
@@ -44,9 +44,9 @@ abstract class BaseDatabaseModel extends BaseModel implements IDatabaseModel
     /**
      * @return string
      */
-    public function getChangeDateTime()
+    public function getChangedDateTime()
     {
-        return $this->ChangeDateTime;
+        return $this->ChangedDateTime;
     }
 
     /**
@@ -95,5 +95,37 @@ abstract class BaseDatabaseModel extends BaseModel implements IDatabaseModel
     public function setChangedBy($ChangedBy)
     {
         $this->ChangedBy = $ChangedBy;
+    }
+
+    /**
+     * @param mixed $CreatedById
+     */
+    public function setCreatedById($CreatedById)
+    {
+        $this->CreatedById = $CreatedById;
+    }
+
+    /**
+     * @param mixed $CreateDateTime
+     */
+    public function setCreateDateTime($CreateDateTime)
+    {
+        $this->CreateDateTime = $CreateDateTime;
+    }
+
+    /**
+     * @param mixed $ChangedById
+     */
+    public function setChangedById($ChangedById)
+    {
+        $this->ChangedById = $ChangedById;
+    }
+
+    /**
+     * @param mixed $ChangedDateTime
+     */
+    public function setChangedDateTime($ChangedDateTime)
+    {
+        $this->ChangedDateTime = $ChangedDateTime;
     }
 }

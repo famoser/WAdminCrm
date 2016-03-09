@@ -11,7 +11,7 @@ namespace famoser\phpFrame\Models\Services\GenericDatabaseService;
 
 use famoser\phpFrame\Helpers\FormatHelper;
 
-class InputPropertyModel extends TablePropertyModel
+class InputPropertyModel extends TablePropertyModel implements \JsonSerializable
 {
     private $inputType;
     private $inputName;
@@ -89,5 +89,19 @@ class InputPropertyModel extends TablePropertyModel
         else if (TablePropertyModel::TYPE_N1_RELATION == $this->getType())
             return is_numeric($value) ? $value : 0;
         return null;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        $arr = parent::jsonSerialize();
+        $vars = get_object_vars($this);
+        return array_merge($vars, $arr);
     }
 }
