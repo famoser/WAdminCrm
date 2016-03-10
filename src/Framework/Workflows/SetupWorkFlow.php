@@ -28,53 +28,59 @@ class SetupWorkFlow extends WorkFlowBase
 
     public function execute()
     {
-        $this->trace = TraceHelper::getInstance()->getTraceInstance("SetupWorkFlow");
-        if (!GenericDatabaseService::getInstance()->setup())
-            return false;
-        else
-            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "data service initialized");
+        try {
+            $this->trace = TraceHelper::getInstance()->getTraceInstance("SetupWorkFlow");
+            if (!GenericDatabaseService::getInstance()->setup())
+                return false;
+            else
+                $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "data service initialized");
 
-        if (!$this->processFontFolders())
-            return false;
-        else
-            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "fonts processed");
+            if (!$this->processFontFolders())
+                return false;
+            else
+                $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "fonts processed");
 
-        if (!$this->processLibraryFolders())
-            return false;
-        else
-            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "libraries processed");
+            if (!$this->processLibraryFolders())
+                return false;
+            else
+                $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "libraries processed");
 
-        if (!$this->processCssFolders())
-            return false;
-        else
-            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "css processed");
+            if (!$this->processCssFolders())
+                return false;
+            else
+                $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "css processed");
 
-        if (!$this->processJsFolders())
-            return false;
-        else
-            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "js processed");
+            if (!$this->processJsFolders())
+                return false;
+            else
+                $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "js processed");
 
-        if (!$this->processFileFolders())
-            return false;
-        else
-            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "files processed");
+            if (!$this->processFileFolders())
+                return false;
+            else
+                $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "files processed");
 
-        if (!$this->createCss())
-            return false;
-        else
-            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "css compressed & copied");
+            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "files processed 2");
+            if (!$this->createCss())
+                return false;
+            else
+                $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "css compressed & copied");
 
-        if (!$this->createJs())
-            return false;
-        else
-            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "js compressed & copied");
+            if (!$this->createJs())
+                return false;
+            else
+                $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "js compressed & copied");
 
-        if (!$this->copyFiles())
-            return false;
-        else
-            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "files copied");
+            if (!$this->copyFiles())
+                return false;
+            else
+                $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "files copied");
 
-        return true;
+            return true;
+        } catch (\Exception $ex) {
+            LogHelper::getInstance()->logException($ex, "setup failed :(");
+        }
+        return false;
     }
 
     private function addCopyFile($source, $destination)
@@ -249,11 +255,12 @@ class SetupWorkFlow extends WorkFlowBase
         );
         $successful = true;
         foreach ($folders as $folder) {
-            if (is_dir($folder)) {
-                $successful &= $this->processFileFolder(RuntimeService::getInstance()->getFrameworkContentDirectory() . DIRECTORY_SEPARATOR . $folder, $folder);
+            $fullFolder = RuntimeService::getInstance()->getFrameworkContentDirectory() . DIRECTORY_SEPARATOR . $folder;
+            if (is_dir($fullFolder)) {
+                $successful &= $this->processFileFolder($fullFolder, $folder);
             } else {
                 $successful = false;
-                $this->trace->trace(TraceHelper::TRACE_LEVEL_WARNING, "framework " . $folder . " folder does not exist");
+                $this->trace->trace(TraceHelper::TRACE_LEVEL_WARNING, "framework " . $folder . " folder does not exist at " . $fullFolder);
             }
         }
         return $successful;
@@ -356,7 +363,7 @@ class SetupWorkFlow extends WorkFlowBase
                     $css .= "src: ";
                 else
                     $css .= ", ";
-                $css .= "url('../" . $font["file"] . ".woff2') format('woff2')"; //Super Modern Browsers
+                $css .= "url('../" . $fontPath . "/" . $font["file"] . ".woff2') format('woff2')"; //Super Modern Browsers
                 $sourceSet = true;
                 $this->addCopyFile($baseFileName . ".woff2", $fontPath . DIRECTORY_SEPARATOR . $font["file"] . ".woff2");
             }
@@ -366,7 +373,7 @@ class SetupWorkFlow extends WorkFlowBase
                     $css .= "src: ";
                 else
                     $css .= ", ";
-                $css .= "url('../" . $font["file"] . ".woff') format('woff')"; //Pretty Modern Browsers
+                $css .= "url('../" . $fontPath . "/" . $font["file"] . ".woff') format('woff')"; //Pretty Modern Browsers
                 $sourceSet = true;
                 $this->addCopyFile($baseFileName . ".woff", $fontPath . DIRECTORY_SEPARATOR . $font["file"] . ".woff");
             }
@@ -376,7 +383,7 @@ class SetupWorkFlow extends WorkFlowBase
                     $css .= "src: ";
                 else
                     $css .= ", ";
-                $css .= "url('../" . $font["file"] . ".ttf') format('truetype')"; //Safari, Android, iOS
+                $css .= "url('../" . $fontPath . "/" . $font["file"] . ".ttf') format('truetype')"; //Safari, Android, iOS
                 $sourceSet = true;
                 $this->addCopyFile($baseFileName . ".ttf", $fontPath . DIRECTORY_SEPARATOR . $font["file"] . ".ttf");
             }
@@ -386,7 +393,7 @@ class SetupWorkFlow extends WorkFlowBase
                     $css .= "src: ";
                 else
                     $css .= ", ";
-                $css .= "url('../" . $font["file"] . ".otf') format('opentype')"; //Modern Browsers
+                $css .= "url('../" . $fontPath . "/" . $font["file"] . ".otf') format('opentype')"; //Modern Browsers
                 $sourceSet = true;
                 $this->addCopyFile($baseFileName . ".otf", $fontPath . DIRECTORY_SEPARATOR . $font["file"] . ".otf");
             }
@@ -396,7 +403,7 @@ class SetupWorkFlow extends WorkFlowBase
                     $css .= "src: ";
                 else
                     $css .= "";
-                $css .= "url('../" . $font["file"] . ".svg#svgFontName') format('svg')"; //Legacy iOS
+                $css .= "url('../" . $fontPath . "/" . $font["file"] . ".svg#svgFontName') format('svg')"; //Legacy iOS
                 $sourceSet = true;
                 $this->addCopyFile($baseFileName . ".svg", $fontPath . DIRECTORY_SEPARATOR . $font["file"] . ".svg");
             }
@@ -432,20 +439,23 @@ class SetupWorkFlow extends WorkFlowBase
         $allCss = implode(" ", $this->cssEntries);
         $compressedCss = CompressionHelper::getInstance()->compressCss($allCss);
         $cssFolder = RuntimeService::getInstance()->getBaseDirectory() . DIRECTORY_SEPARATOR . "css" . DIRECTORY_SEPARATOR;
+        $this->trace->trace(TraceHelper::TRACE_LEVEL_ERROR, $cssFolder);
         if (!is_dir($cssFolder))
             mkdir($cssFolder, 0755, true);
-        file_put_contents($cssFolder . "styles.css", $compressedCss);
+        file_put_contents($cssFolder . DIRECTORY_SEPARATOR . "styles.min.css", $compressedCss);
+        file_put_contents($cssFolder . DIRECTORY_SEPARATOR . "styles.css", $allCss);
         return true;
     }
 
     private function createJs()
     {
-        $allJson = implode(" ", $this->jsEntries);
-        $compressedJs = CompressionHelper::getInstance()->compressJavascript($allJson);
+        $allJs = implode(" ", $this->jsEntries);
+        $compressedJs = CompressionHelper::getInstance()->compressJavascript($allJs);
         $jsFolder = RuntimeService::getInstance()->getBaseDirectory() . DIRECTORY_SEPARATOR . "js" . DIRECTORY_SEPARATOR;
         if (!is_dir($jsFolder))
             mkdir($jsFolder, 0755, true);
-        file_put_contents($jsFolder . "scripts.js", $compressedJs);
+        file_put_contents($jsFolder . DIRECTORY_SEPARATOR . "scripts.min.js", $compressedJs);
+        file_put_contents($jsFolder . DIRECTORY_SEPARATOR . "scripts.js", $allJs);
         return true;
     }
 

@@ -30,7 +30,7 @@ class TraceHelper extends Singleton
      *
      * @return array[]
      */
-    public function getFullTrace()
+    public function getFullTrace($clearAfter = true)
     {
         $res = array();
         foreach ($this->getTraceInstances() as $traceInstance) {
@@ -41,6 +41,9 @@ class TraceHelper extends Singleton
                     $res[$traceInstance->getSource()] = array_merge($res[$traceInstance->getSource()], $traceInstance->getTraces());
             }
         }
+        if ($clearAfter)
+            $this->traceInstances = array();
+
         return $res;
     }
 

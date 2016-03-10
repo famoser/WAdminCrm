@@ -96,11 +96,12 @@ hr {
 /* nodes */
 body {
     background-size: cover;
-    background: url("../images/background.jpg") fixed center center;
+    background: url("../img/background.jpg") fixed center center;
 }
 
 h1, h2, h3, h4, h5 {
-    font-family: "Frutiger Thin", sans-serif;
+    font-family: "Frutiger Neue", sans-serif;
+    font-weight: 100;
     color: rgb(183, 186, 199);
 }
 
@@ -115,7 +116,8 @@ a:hover, a:active, a:focus {
 p,
 input, select, textarea,
 tr, td, th {
-    font-family: "Frutiger Regular", sans-serif;
+    font-family: "Frutiger Neue", sans-serif;
+    font-weight: 300;
     color: rgb(80, 83, 88);
 }
 

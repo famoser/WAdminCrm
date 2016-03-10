@@ -89,7 +89,7 @@ class TableModel implements \JsonSerializable
      */
     public function addProperties(array $props)
     {
-        $this->properties = array_merge($this->properties, $props);
+        $this->properties = array_merge($props, $this->properties);
     }
 
     public function getInstance()

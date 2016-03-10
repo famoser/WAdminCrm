@@ -137,6 +137,11 @@ class FormatHelper extends HelperBase
         return date($this->formats["Time"]["Display"], strtotime($str));
     }
 
+    public function timestamp()
+    {
+        return date("H:i:s.u", time());
+    }
+
     public function time($input)
     {
         return $this->timeInput($input);

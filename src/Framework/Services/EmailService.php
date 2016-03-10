@@ -20,7 +20,7 @@ class EmailService extends ServiceBase
     public function __construct()
     {
         parent::__construct();
-        $this->hook = new PhpMailerHook();
+        include_once RuntimeService::getInstance()->getFrameworkLibraryDirectory() . DIRECTORY_SEPARATOR . "PHPMailer/PHPMailerAutoload.php";
     }
 
     public function sendEmailFromServer($subject, $message, $emails, $names = '', $attachments = null, $ccEmails = null, $ccNames = null)

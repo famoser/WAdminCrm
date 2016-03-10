@@ -31,8 +31,8 @@ class AutoLoader extends Singleton
         foreach ($this->namespaceFolders as $namespace => $folder) {
             if (strpos($class, $namespace) === 0) {
                 $newPath = str_replace($namespace, "", $class);
-                $newPath = str_replace("\\", "/", $newPath);
-                $filePath = $_SERVER["DOCUMENT_ROOT"] . "/" . $folder . "/" . $newPath . ".php";
+                $newPath = str_replace("\\", DIRECTORY_SEPARATOR, $newPath);
+                $filePath = $folder . DIRECTORY_SEPARATOR . $newPath . ".php";
                 if (!file_exists($filePath)) {
                     LogHelper::getInstance()->logFatal("file for class name " . $class . " does not exist at " . $filePath);
                     return false;

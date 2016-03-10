@@ -37,8 +37,8 @@ class TablePropertyModel implements \JsonSerializable
 
     private $name;
     private $type;
-    private $autoIncrement;
-    private $primaryKey;
+    private $autoIncrement = false;
+    private $primaryKey = false;
     private $targetObjectName;
     private $targetPropertyName;
 

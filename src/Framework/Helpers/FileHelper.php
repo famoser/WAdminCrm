@@ -71,13 +71,15 @@ class FileHelper extends HelperBase
 
     public function cacheFile($fileConst, $fileContent)
     {
-        file_put_contents(RuntimeService::getInstance()->getCacheDirectory() . "/" . $fileConst, $fileContent);
+        if (!is_dir(RuntimeService::getInstance()->getCacheDirectory()))
+            mkdir(RuntimeService::getInstance()->getCacheDirectory());
+        file_put_contents(RuntimeService::getInstance()->getCacheDirectory() . DIRECTORY_SEPARATOR . $fileConst, $fileContent);
     }
 
     public function resolveCachedFile($fileConst)
     {
-        if (file_exists(RuntimeService::getInstance()->getCacheDirectory() . "/" . $fileConst))
-            return file_get_contents(RuntimeService::getInstance()->getCacheDirectory() . "/" . $fileConst);
+        if (file_exists(RuntimeService::getInstance()->getCacheDirectory() . DIRECTORY_SEPARATOR . $fileConst))
+            return file_get_contents(RuntimeService::getInstance()->getCacheDirectory() . DIRECTORY_SEPARATOR . $fileConst);
         return false;
     }
 

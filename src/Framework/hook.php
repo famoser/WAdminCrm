@@ -27,7 +27,7 @@ function hi_framework()
     $nameSpaces = SettingsService::getInstance()->tryGetValueFor(array("Framework", "AutoLoader"));
     if (is_array($nameSpaces)) {
         foreach ($nameSpaces as $nameSpace => $folder) {
-            AutoLoader::getInstance()->addNameSpace($nameSpace, $folder);
+            AutoLoader::getInstance()->addNameSpace($nameSpace, $_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . $folder);
         }
     }
 

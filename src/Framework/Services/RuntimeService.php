@@ -183,6 +183,14 @@ class RuntimeService extends ServiceBase
     /**
      * @return string
      */
+    public function getFrameworkLibraryDirectory()
+    {
+        return $this->getFrameworkDirectory() . DIRECTORY_SEPARATOR . "Libraries";
+    }
+
+    /**
+     * @return string
+     */
     public function getBaseDirectory()
     {
         return $this->baseDirectory;

@@ -17,7 +17,7 @@ if ($this instanceof ViewBase) { ?>
 <div class="row no-gutters content clearfix">
     <?php
     } else {
-    echo $this->includeFile(PartHelper::getInstance()->getPart(PartHelper::PART_HEADER_CONTENT)); ?>
+    $this->includeFile(PartHelper::getInstance()->getPart(PartHelper::PART_HEADER_CONTENT)); ?>
     <div class="row content">
         <?php
         }

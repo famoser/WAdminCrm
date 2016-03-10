@@ -22,8 +22,7 @@ if ($this instanceof ViewBase) { ?>
             <p>Copyright © <?= date("Y") ?> <a href="<?= $this->getPageAuthorUrl() ?>" target="_blank"><?= $this->getPageAuthor() ?></a></p>
         </div>
     </footer>
-    <script type="text/javascript" src="/js/minified.js"></script>
-    <script type="text/javascript" src="/js/scripts.js"></script>
+    <script type="text/javascript" src="/js/scripts.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             register()

@@ -9,6 +9,8 @@
 namespace famoser\phpFrame\Core\Tracing;
 
 
+use famoser\phpFrame\Helpers\FormatHelper;
+
 class TraceInstance
 {
     private $source;
@@ -25,7 +27,7 @@ class TraceInstance
         if ($state > $this->highestTraceLevel)
             $this->highestTraceLevel = $state;
 
-        $this->traces[] = "[" . TraceHelper::getInstance()->traceLevelToString($state) . "] " . $content;
+        $this->traces[] = FormatHelper::getInstance()->timestamp() . " [" . TraceHelper::getInstance()->traceLevelToString($state) . "] " . $content;
     }
 
     /**

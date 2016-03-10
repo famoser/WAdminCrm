@@ -7,12 +7,12 @@
       "file": "FrutigerNeueLTW1G-Regular"
     },
     {
-      "weight": "thin",
+      "weight": "300",
       "style": "normal",
       "file": "FrutigerNeueLTW1G-Thin"
     },
     {
-      "weight": "ultra-light",
+      "weight": "100",
       "style": "normal",
       "file": "FrutigerNeueLTW1G-UltLt"
     }
