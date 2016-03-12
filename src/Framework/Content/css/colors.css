@@ -67,7 +67,6 @@ colors:
 
 .neutral-message-before:before,
 .neutral-message,
-input[type=submit]:hover, input[type=submit]:active, input[type=submit]:focus,
 .arrow-top {
     background-color: rgb(186, 197, 227);
     color: rgb(80, 83, 88);
@@ -75,7 +74,6 @@ input[type=submit]:hover, input[type=submit]:active, input[type=submit]:focus,
 
 .neutral-action-before:before,
 .neutral-action,
-input[type=submit],
 .arrow-top:hover, .arrow-top:active, .arrow-top:focus {
     color: rgb(45, 101, 161);
     background-color: #ffffff;
@@ -99,39 +97,12 @@ body {
     background: url("../img/background.jpg") fixed center center;
 }
 
-h1, h2, h3, h4, h5 {
-    font-family: "Frutiger Neue", sans-serif;
-    font-weight: 100;
-    color: rgb(183, 186, 199);
-}
-
 a {
     color: rgb(45, 101, 161);
 }
 
 a:hover, a:active, a:focus {
     color: rgb(56, 84, 113);
-}
-
-p,
-input, select, textarea,
-tr, td, th {
-    font-family: "Frutiger Neue", sans-serif;
-    font-weight: 300;
-    color: rgb(80, 83, 88);
-}
-
-input, select, textarea {
-    border-color: rgb(183, 186, 199);
-}
-
-input:active,
-input:focus,
-select:active,
-select:focus,
-textarea:active,
-textarea:focus {
-    border-color: rgb(80, 83, 88);
 }
 
 /* elements */
