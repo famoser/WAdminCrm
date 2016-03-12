@@ -13,5 +13,9 @@ use famoser\phpFrame\Core\Singleton\Singleton;
 
 abstract class WorkFlowBase extends Singleton
 {
+    public function __construct()
+    {
+    }
+
     abstract function execute();
 }
