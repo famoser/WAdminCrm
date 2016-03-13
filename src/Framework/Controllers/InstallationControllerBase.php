@@ -29,6 +29,22 @@ abstract class InstallationControllerBase extends ControllerBase
                 }
                 $view = new GenericCenterView("InstallationController", "setup", null, true);
                 return $this->returnView($view);
+            } else if ($this->params[0] == "refreshCss") {
+                if (ControllerHelper::getInstance()->isPostRequest($this->request, "setup")) {
+                    $exe = SetupWorkFlow::getInstance()->refreshCss();
+                    if (!$exe)
+                        LogHelper::getInstance()->logUserError("setup failed!");
+                }
+                $view = new GenericCenterView("InstallationController", "setup", null, true);
+                return $this->returnView($view);
+            } else if ($this->params[0] == "refreshJs") {
+                if (ControllerHelper::getInstance()->isPostRequest($this->request, "setup")) {
+                    $exe = SetupWorkFlow::getInstance()->refreshJs();
+                    if (!$exe)
+                        LogHelper::getInstance()->logUserError("setup failed!");
+                }
+                $view = new GenericCenterView("InstallationController", "setup", null, true);
+                return $this->returnView($view);
             }
         }
         return parent::Display();

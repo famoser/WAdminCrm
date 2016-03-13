@@ -60,7 +60,6 @@ class SetupWorkFlow extends WorkFlowBase
             else
                 $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "files processed");
 
-            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "files processed 2");
             if (!$this->createCss())
                 return false;
             else
@@ -81,6 +80,52 @@ class SetupWorkFlow extends WorkFlowBase
             LogHelper::getInstance()->logException($ex, "setup failed :(");
         }
         return false;
+    }
+
+    public function refreshCss()
+    {
+
+        if (!$this->processFontFolders())
+            return false;
+        else
+            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "fonts processed");
+
+        if (!$this->processLibraryFolders())
+            return false;
+        else
+            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "libraries processed");
+
+        if (!$this->processCssFolders())
+            return false;
+        else
+            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "css processed");
+
+        if (!$this->createCss())
+            return false;
+        else
+            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "css compressed & copied");
+
+        return true;
+    }
+
+    public function refreshJs()
+    {
+        if (!$this->processLibraryFolders())
+            return false;
+        else
+            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "libraries processed");
+
+        if (!$this->processJsFolders())
+            return false;
+        else
+            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "js processed");
+
+        if (!$this->createJs())
+            return false;
+        else
+            $this->trace->trace(TraceHelper::TRACE_LEVEL_INFO, "js compressed & copied");
+
+        return true;
     }
 
     private function addCopyFile($source, $destination)
@@ -436,7 +481,10 @@ class SetupWorkFlow extends WorkFlowBase
 
     private function createCss()
     {
-        $allCss = implode(" ", $this->cssEntries);
+        $allCss = "";
+        foreach ($this->cssEntries as $cssEntry) {
+            $allCss .= " " . $cssEntry;
+        }
         $compressedCss = CompressionHelper::getInstance()->compressCss($allCss);
         $cssFolder = RuntimeService::getInstance()->getBaseDirectory() . DIRECTORY_SEPARATOR . "css" . DIRECTORY_SEPARATOR;
         $this->trace->trace(TraceHelper::TRACE_LEVEL_ERROR, $cssFolder);
@@ -449,7 +497,10 @@ class SetupWorkFlow extends WorkFlowBase
 
     private function createJs()
     {
-        $allJs = implode(" ", $this->jsEntries);
+        $allJs = "";
+        foreach ($this->jsEntries as $jsEntry) {
+            $allJs .= " " . $jsEntry;
+        }
         $compressedJs = CompressionHelper::getInstance()->compressJavascript($allJs);
         $jsFolder = RuntimeService::getInstance()->getBaseDirectory() . DIRECTORY_SEPARATOR . "js" . DIRECTORY_SEPARATOR;
         if (!is_dir($jsFolder))

@@ -244,7 +244,7 @@ class PartHelper extends HelperBase
 
     public function getSubmit($customText = "submit")
     {
-        return '<input type="submit" value="' . $customText . '" class="btn">';
+        return '<input type="submit" value="' . $customText . '">';
     }
 
     public function getText($text = "")
