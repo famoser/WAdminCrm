@@ -1,0 +1,24 @@
+{
+  "name": "famoser/cureme",
+  "type": "application",
+  "license": "MIT",
+  "description": "An easy to use customer relationship managment application, with a focus on project management",
+  "keywords": ["cureme", "customer", "relationship", "management"],
+  "authors": [
+    {
+      "name": "Florian Moser",
+      "email": "git@famoser.ch",
+      "homepage": "http://famoser.ch",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "famoser/php-frame": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "famoser\\cureme\\": "src/"
+    }
+  }
+}
