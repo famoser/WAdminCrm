@@ -1,4 +1,0 @@
-This are the required file which will be required for all versions of this framework:
-configuration.php
-images/Logo.png
-common/images/favicons/*

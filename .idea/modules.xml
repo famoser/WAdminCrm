@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/WAdminCrm.iml" filepath="$PROJECT_DIR$/.idea/WAdminCrm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/cureme.iml" filepath="$PROJECT_DIR$/.idea/cureme.iml" />
     </modules>
   </component>
 </project>
