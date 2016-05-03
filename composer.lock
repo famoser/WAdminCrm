@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b4c4a2004d5b6c920251529ac506e552",
+    "hash": "fdd225b75976a5be4c32459745b9570a",
     "content-hash": "0e28821133a4b1792f0ce20478a5c974",
     "packages": [
         {
@@ -72,12 +72,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/famoser/php-frame.git",
-                "reference": "7a6c171ae766eee205e59a49518b073d527dbb37"
+                "reference": "46a165c32baea9f63e5dcaf503fd94ecc0f354b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/famoser/php-frame/zipball/7a6c171ae766eee205e59a49518b073d527dbb37",
-                "reference": "7a6c171ae766eee205e59a49518b073d527dbb37",
+                "url": "https://api.github.com/repos/famoser/php-frame/zipball/46a165c32baea9f63e5dcaf503fd94ecc0f354b9",
+                "reference": "46a165c32baea9f63e5dcaf503fd94ecc0f354b9",
                 "shasum": ""
             },
             "require": {
@@ -103,14 +103,14 @@
                     "role": "Developer"
                 }
             ],
-            "description": "A very lightweight Framework in PHP for fast deployment of web applciations",
+            "description": "A very lightweight Framework in PHP for fast deployment of web applications",
             "keywords": [
                 "framework",
                 "php",
                 "php-frame",
                 "phpFrame"
             ],
-            "time": "2016-03-20 21:10:18"
+            "time": "2016-05-03 18:07:10"
         },
         {
             "name": "phpmailer/phpmailer",
